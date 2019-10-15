@@ -15,12 +15,13 @@ namespace Tea
         }
     }
 
-    public enum TokenType {
-        NORMARL,    // {}[],
-        STRING,     // string
-        BOOLEAN,    // true/false
-        NUMBER,     // number
-        EOF,        // EOF
+    public enum TokenType
+    {
+        NORMARL, // {}[],
+        STRING, // string
+        BOOLEAN, // true/false
+        NUMBER, // number
+        EOF, // EOF
     }
 
     public class Token
@@ -78,7 +79,8 @@ namespace Tea
 
         public Token scan()
         {
-            if (this.get() == -1) {
+            if (this.get() == -1)
+            {
                 return new Token(null, TokenType.EOF, null, null);
             }
 
@@ -94,7 +96,7 @@ namespace Tea
                 case ':':
                 case ',':
                     this.next();
-                    return new Token(((char)current).ToString(), TokenType.NORMARL, begin, this.getPosition());
+                    return new Token(((char) current).ToString(), TokenType.NORMARL, begin, this.getPosition());
                 case '0':
                 case '1':
                 case '2':
@@ -105,38 +107,46 @@ namespace Tea
                 case '7':
                 case '8':
                 case '9':
-                    var num = "" + (char)current;
+                    var num = "" + (char) current;
                     this.next();
-                    while (this.get() >= '0' && this.get() <= '9') {
-                        num += (char)this.get();
+                    while (this.get() >= '0' && this.get() <= '9')
+                    {
+                        num += (char) this.get();
                         this.next();
                     }
                     return new Token(num, TokenType.NUMBER, begin, this.getPosition());
                 case '"':
                     var str = "";
                     this.next();
-                    while (this.get() != '"') {
-                        str += (char)this.get();
+                    while (this.get() != '"')
+                    {
+                        str += (char) this.get();
                         this.next();
                     }
                     this.next();
                     return new Token(str, TokenType.STRING, begin, this.getPosition());
                 case 't':
                     // true
-                    if (this.get(1) == 'r' && this.get(2) == 'u' && this.get(3) == 'e') {
+                    if (this.get(1) == 'r' && this.get(2) == 'u' && this.get(3) == 'e')
+                    {
                         this.next(3);
                         var end = this.getPosition();
                         this.next();
                         return new Token("true", TokenType.BOOLEAN, begin, end);
-                    } else {
+                    }
+                    else
+                    {
                         throw this.error("unexpected token: ");
                     }
                 case 'f':
                     // false
-                    if (this.get(1) == 'a' && this.get(2) == 'l' && this.get(3) == 's' && this.get(4) == 'e') {
+                    if (this.get(1) == 'a' && this.get(2) == 'l' && this.get(3) == 's' && this.get(4) == 'e')
+                    {
                         this.next(4);
                         return new Token("false", TokenType.BOOLEAN, begin, this.getPosition());
-                    } else {
+                    }
+                    else
+                    {
                         throw this.error("unexpected token: ");
                     }
                 default:
@@ -157,20 +167,24 @@ namespace Tea
 
         public int get()
         {
-            if (this.index >= this.source.Length) {
+            if (this.index >= this.source.Length)
+            {
                 return -1;
             }
             return this.source[this.index];
         }
 
-        public char get(int offset) {
+        public char get(int offset)
+        {
             return this.source[this.index + offset];
         }
 
         public void skipWhitespaces()
         {
-            while (this.get() == ' ' || this.get() == '\n' || this.get() == '\r') {
-                if (this.get() == '\n') {
+            while (this.get() == ' ' || this.get() == '\n' || this.get() == '\r')
+            {
+                if (this.get() == '\n')
+                {
                     this.line++;
                     this.column = 0;
                 }
@@ -200,7 +214,8 @@ namespace Tea
             this.item = value;
         }
 
-        public JSONItem(string value) {
+        public JSONItem(string value)
+        {
             this.isString = true;
             this.item = value;
         }
@@ -219,12 +234,12 @@ namespace Tea
 
         public Dictionary<string, JSONItem> GetAsDictionary()
         {
-            return (Dictionary<string, JSONItem>)this.item;
+            return (Dictionary<string, JSONItem>) this.item;
         }
 
         public List<JSONItem> GetAsArray()
         {
-            return (List<JSONItem>)this.item;
+            return (List<JSONItem>) this.item;
         }
 
         public bool IsObject()
@@ -249,22 +264,23 @@ namespace Tea
 
         public bool GetAsBoolean()
         {
-            return (bool)this.item;
+            return (bool) this.item;
         }
 
         public bool IsNumber()
         {
             return isNumber;
         }
-        
+
         public int GetAsNumber()
         {
-            return (int)this.item;
+            return (int) this.item;
         }
 
         public object GetValue()
         {
-            if (IsObject()) {
+            if (IsObject())
+            {
                 var dict = new Dictionary<string, object>();
                 var value = this.GetAsDictionary();
                 foreach (var item in value)
@@ -274,10 +290,11 @@ namespace Tea
                 return dict;
             }
 
-            if (IsArray()) {
+            if (IsArray())
+            {
                 var list = new List<object>();
                 var value = this.GetAsArray();
-                foreach(var item in value)
+                foreach (var item in value)
                 {
                     list.Add(item.GetValue());
                 }
@@ -289,11 +306,12 @@ namespace Tea
 
         internal string GetAsString()
         {
-            return (string)this.item;
+            return (string) this.item;
         }
     }
 
-    public class JSONParser {
+    public class JSONParser
+    {
         private JSONLexer lexer;
         private Token look;
 
@@ -308,38 +326,53 @@ namespace Tea
             this.look = this.lexer.scan();
         }
 
-        private void match(string expected) {
+        private void match(string expected)
+        {
             if (this.look.lexeme == expected)
             {
                 this.next();
-            } else {
+            }
+            else
+            {
                 throw this.error(String.Format("unexpected token {0}, expected {1}", this.look.lexeme, expected), this.look);
             }
         }
 
-        public JSONItem parse() {
-            if (this.look.type == TokenType.NORMARL) {
-                if (this.look.lexeme == "{") {
+        public JSONItem parse()
+        {
+            if (this.look.type == TokenType.NORMARL)
+            {
+                if (this.look.lexeme == "{")
+                {
                     return parseObject();
                 }
-                if (this.look.lexeme == "[") {
+                if (this.look.lexeme == "[")
+                {
                     return parseArray();
                 }
                 throw this.error("expected { or [", this.look);
                 // throw new Exception("unexpected token");
-            } else if (this.look.type == TokenType.BOOLEAN) {
+            }
+            else if (this.look.type == TokenType.BOOLEAN)
+            {
                 var look = this.look;
                 this.next();
                 return new JSONItem(look.lexeme == "true");
-            } else if (this.look.type == TokenType.NUMBER) {
+            }
+            else if (this.look.type == TokenType.NUMBER)
+            {
                 var look = this.look;
                 this.next();
                 return new JSONItem(int.Parse(look.lexeme));
-            } else if (this.look.type == TokenType.STRING) {
+            }
+            else if (this.look.type == TokenType.STRING)
+            {
                 var look = this.look;
                 this.next();
                 return new JSONItem(look.lexeme);
-            } else {
+            }
+            else
+            {
                 throw this.error("unexpected token: ", this.look);
             }
         }
@@ -361,7 +394,8 @@ namespace Tea
                 this.match(":");
                 var value = this.parse();
                 dict.Add(key, value);
-                if (this.look.lexeme == ",") {
+                if (this.look.lexeme == ",")
+                {
                     this.next();
                 }
             }
@@ -369,14 +403,16 @@ namespace Tea
             return new JSONItem(dict);
         }
 
-        private JSONItem parseArray() {
+        private JSONItem parseArray()
+        {
             this.match("[");
             var list = new List<JSONItem>();
             while (this.look.lexeme != "]")
             {
                 var value = this.parse();
                 list.Add(value);
-                if (this.look.lexeme == ",") {
+                if (this.look.lexeme == ",")
+                {
                     this.next();
                 }
             }
@@ -384,7 +420,8 @@ namespace Tea
             return new JSONItem(list);
         }
 
-        private JSONItem parseString() {
+        private JSONItem parseString()
+        {
             return new JSONItem("");
         }
     }

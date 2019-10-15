@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
 
 namespace Tea
 {
     public class TeaRequest
     {
-        public TeaRequest() {
+        public TeaRequest()
+        {
 
         }
         public string Protocol;

@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 
-using Xunit;
-
 using Tea;
+
+using Xunit;
 
 namespace TeaTest
 {
-    public class TestObject {
+    public class TestObject
+    {
         public string t_string;
         public int t_int;
         public bool t_bool;
@@ -95,15 +96,15 @@ namespace TeaTest
             Assert.True(result.IsObject());
             var value = result.GetValue();
             Assert.IsType<Dictionary<string, object>>(value);
-            var returnValue = (Dictionary<string, object>)value;
+            var returnValue = (Dictionary<string, object>) value;
             Assert.Single(returnValue);
             Assert.True(returnValue.ContainsKey("data"));
             Assert.IsType<Dictionary<string, object>>(returnValue["data"]);
-            var dataDict = (Dictionary<string, object>)returnValue["data"];
+            var dataDict = (Dictionary<string, object>) returnValue["data"];
             Assert.Single(dataDict);
             Assert.True(dataDict.ContainsKey("message"));
             Assert.IsType<string>(dataDict["message"]);
-            var message = (string)dataDict["message"];
+            var message = (string) dataDict["message"];
             Assert.Equal("Hello world", message);
         }
 
@@ -114,19 +115,19 @@ namespace TeaTest
             Assert.True(result.IsArray());
             var value = result.GetValue();
             Assert.IsType<List<object>>(value);
-            var list = (List<object>)value;
+            var list = (List<object>) value;
             Assert.Single(list);
             var item = list[0];
             Assert.IsType<Dictionary<string, object>>(item);
-            var returnValue = (Dictionary<string, object>)item;
+            var returnValue = (Dictionary<string, object>) item;
             Assert.Single(returnValue);
             Assert.True(returnValue.ContainsKey("data"));
             Assert.IsType<Dictionary<string, object>>(returnValue["data"]);
-            var dataDict = (Dictionary<string, object>)returnValue["data"];
+            var dataDict = (Dictionary<string, object>) returnValue["data"];
             Assert.Single(dataDict);
             Assert.True(dataDict.ContainsKey("message"));
             Assert.IsType<string>(dataDict["message"]);
-            var message = (string)dataDict["message"];
+            var message = (string) dataDict["message"];
             Assert.Equal("Hello world", message);
         }
 
@@ -145,7 +146,8 @@ namespace TeaTest
             var lexer = new JSONLexer("[]");
             List<Token> tokens = new List<Token>();
             Token token;
-            do {
+            do
+            {
                 token = lexer.scan();
                 tokens.Add(token);
             }
@@ -167,7 +169,8 @@ namespace TeaTest
             var lexer = new JSONLexer("{}");
             List<Token> tokens = new List<Token>();
             Token token;
-            do {
+            do
+            {
                 token = lexer.scan();
                 tokens.Add(token);
             }
@@ -183,7 +186,8 @@ namespace TeaTest
             Assert.Equal(TokenType.EOF, token3.type);
         }
 
-        private void check(Token token, string lexeme, TokenType type) {
+        private void check(Token token, string lexeme, TokenType type)
+        {
             Assert.Equal(lexeme, token.lexeme);
             Assert.Equal(type, token.type);
         }
@@ -194,7 +198,8 @@ namespace TeaTest
             var lexer = new JSONLexer("{\"t_int\":10,\"t_bool\":true}");
             List<Token> tokens = new List<Token>();
             Token token;
-            do {
+            do
+            {
                 token = lexer.scan();
                 tokens.Add(token);
             }
