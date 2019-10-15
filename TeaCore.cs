@@ -8,18 +8,21 @@ namespace Tea
     public class TeaCore
     {
         private static readonly int bufferLength = 1024;
-        public static string ComposeUrl(TeaRequest request) {
+        public static string ComposeUrl(TeaRequest request)
+        {
             var urlBuilder = new StringBuilder("");
 
             urlBuilder.Append(request.Protocol.ToLower()).Append("://");
             urlBuilder.Append(request.Headers["host"]);
-            if (request.Port > 0) {
+            if (request.Port > 0)
+            {
                 urlBuilder.Append(":");
                 urlBuilder.Append(request.Port);
             }
             urlBuilder.Append(request.Pathname);
 
-            if (request.Query != null && request.Query.Count > 0) {
+            if (request.Query != null && request.Query.Count > 0)
+            {
                 urlBuilder.Append("?");
                 var i = 0;
                 foreach (var entry in request.Query)
@@ -33,7 +36,8 @@ namespace Tea
                         urlBuilder.Append("=").Append(val);
                     }
 
-                    if (i < request.Query.Count - 1) {
+                    if (i < request.Query.Count - 1)
+                    {
                         urlBuilder.Append("&");
                     }
                     i = i + 1;
@@ -43,9 +47,10 @@ namespace Tea
             return urlBuilder.ToString();
         }
 
-        public static TeaResponse DoAction(TeaRequest request) {
+        public static TeaResponse DoAction(TeaRequest request)
+        {
             var url = TeaCore.ComposeUrl(request);
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest httpWebRequest = (HttpWebRequest) WebRequest.Create(url);
             httpWebRequest.Method = request.Method;
             httpWebRequest.KeepAlive = true;
 
@@ -58,7 +63,7 @@ namespace Tea
             httpWebRequest.ContentLength = bytes.Length;
             httpWebRequest.GetRequestStream().Write(bytes, 0, bytes.Length);
 
-            HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
             return new TeaResponse(httpWebResponse);
         }
 
