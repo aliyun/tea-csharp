@@ -12,10 +12,9 @@ install:
   - cmd: dotnet --version
   - cmd: dotnet tool install --global altcover.visualizer
   - cmd: cd TeaUnitTests/ && dotnet add package AltCover && cd ../
+  - cmd: dotnet restore && dotnet build
 test_script:
   # Dotnet Test
-  - dotnet restore
-  - dotnet build tea-csharp.sln
   - dotnet test TeaUnitTests/ /p:AltCover=true
 on_finish:
   - ps: |
