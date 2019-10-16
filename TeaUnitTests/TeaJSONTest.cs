@@ -6,7 +6,7 @@ using Xunit;
 
 namespace TeaTest
 {
-    public class TestObject
+    public class JsonTestObject
     {
         public string t_string;
         public int t_int;
@@ -18,7 +18,7 @@ namespace TeaTest
         [Fact]
         public void TestStringifyForEmptyObject()
         {
-            TestObject obj = new TestObject();
+            JsonTestObject obj = new JsonTestObject();
             var output = TeaJSON.Stringify(obj);
             Assert.Equal("{\"t_int\":0,\"t_bool\":false}", output);
         }
@@ -26,7 +26,7 @@ namespace TeaTest
         [Fact]
         public void TestStringifyFullSet()
         {
-            TestObject obj = new TestObject();
+            JsonTestObject obj = new JsonTestObject();
             obj.t_string = "JacksonTian";
             obj.t_int = 1024;
             obj.t_bool = true;
@@ -37,8 +37,8 @@ namespace TeaTest
         [Fact]
         public void TestStringifyForArray()
         {
-            TestObject[] objects = new TestObject[1];
-            objects[0] = new TestObject();
+            JsonTestObject[] objects = new JsonTestObject[1];
+            objects[0] = new JsonTestObject();
             var output = TeaJSON.Stringify(objects);
             Assert.Equal("[{\"t_int\":0,\"t_bool\":false}]", output);
         }

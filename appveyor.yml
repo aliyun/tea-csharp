@@ -11,10 +11,10 @@ init:
 install:
   - cmd: dotnet --version
   - cmd: dotnet tool install --global altcover.visualizer
-  - cmd: dotnet add package AltCover
+  - cmd: cd TeaUnitTests/ && dotnet add package AltCover && cd ../
 test_script:
   # Dotnet Test
-  - dotnet test /p:AltCover=true
+  - dotnet test TeaUnitTests /p:AltCover=true
 on_finish:
   - ps: |
       $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH

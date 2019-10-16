@@ -1,0 +1,9 @@
+D:\MyProjects\tea-csharp\Tea\bin\Debug\netcoreapp2.2\tea.deps.json
+D:\MyProjects\tea-csharp\Tea\bin\Debug\netcoreapp2.2\tea.runtimeconfig.json
+D:\MyProjects\tea-csharp\Tea\bin\Debug\netcoreapp2.2\tea.runtimeconfig.dev.json
+D:\MyProjects\tea-csharp\Tea\bin\Debug\netcoreapp2.2\tea.dll
+D:\MyProjects\tea-csharp\Tea\bin\Debug\netcoreapp2.2\tea.pdb
+D:\MyProjects\tea-csharp\Tea\obj\Debug\netcoreapp2.2\tea.csprojAssemblyReference.cache
+D:\MyProjects\tea-csharp\Tea\obj\Debug\netcoreapp2.2\tea.csproj.CoreCompileInputs.cache
+D:\MyProjects\tea-csharp\Tea\obj\Debug\netcoreapp2.2\tea.dll
+D:\MyProjects\tea-csharp\Tea\obj\Debug\netcoreapp2.2\tea.pdb

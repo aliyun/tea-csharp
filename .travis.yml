@@ -8,8 +8,8 @@ branches:
     - master
 install:
   - dotnet tool install --global altcover.visualizer
-  - dotnet add package AltCover
+  - cd TeaUnitTests/ && dotnet add package AltCover && cd ../
 script:
-  - dotnet test /p:AltCover=true
+  - dotnet test TeaUnitTests /p:AltCover=true
 after_success:
   - bash <(curl -s https://codecov.io/bash) -c -F unittest

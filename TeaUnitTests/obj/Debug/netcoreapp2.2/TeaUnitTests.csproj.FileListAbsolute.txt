@@ -1,0 +1,17 @@
+D:\MyProjects\tea-csharp\TeaUnitTests\obj\Debug\netcoreapp2.2\TeaUnitTests.csprojAssemblyReference.cache
+D:\MyProjects\tea-csharp\TeaUnitTests\obj\Debug\netcoreapp2.2\TeaUnitTests.csproj.CoreCompileInputs.cache
+D:\MyProjects\tea-csharp\TeaUnitTests\obj\Debug\netcoreapp2.2\TeaUnitTests.AssemblyInfoInputs.cache
+D:\MyProjects\tea-csharp\TeaUnitTests\obj\Debug\netcoreapp2.2\TeaUnitTests.AssemblyInfo.cs
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\xunit.runner.reporters.netcoreapp10.dll
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\xunit.runner.utility.netcoreapp10.dll
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\TeaUnitTests.deps.json
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\TeaUnitTests.runtimeconfig.json
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\TeaUnitTests.runtimeconfig.dev.json
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\TeaUnitTests.dll
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\TeaUnitTests.pdb
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\tea.dll
+D:\MyProjects\tea-csharp\TeaUnitTests\bin\Debug\netcoreapp2.2\tea.pdb
+D:\MyProjects\tea-csharp\TeaUnitTests\obj\Debug\netcoreapp2.2\TeaUnitTests.csproj.CopyComplete
+D:\MyProjects\tea-csharp\TeaUnitTests\obj\Debug\netcoreapp2.2\TeaUnitTests.dll
+D:\MyProjects\tea-csharp\TeaUnitTests\obj\Debug\netcoreapp2.2\TeaUnitTests.pdb
