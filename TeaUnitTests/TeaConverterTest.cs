@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-
+using Tea;
 using Xunit;
 
-namespace Tea
+namespace TeaTest
 {
     public class TestObject
     {

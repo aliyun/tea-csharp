@@ -304,7 +304,7 @@ namespace Tea
             return this.item;
         }
 
-        internal string GetAsString()
+        public string GetAsString()
         {
             return (string) this.item;
         }
