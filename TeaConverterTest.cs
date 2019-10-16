@@ -6,7 +6,7 @@ namespace Tea
 {
     public class TestObject
     {
-        public string name;
+        public string name { get; set; }
     }
 
     public class TeaConverterTests
