@@ -1,0 +1,20 @@
+version: "1.0.{build}"
+image:
+  - Visual Studio 2015
+  - Visual Studio 2017
+  - Visual Studio 2019
+branches:
+  only:
+    - master
+init:
+  - cmd: git config --global core.autocrlf true
+install:
+  - cmd: dotnet --version
+  - cmd: dotnet tool install --global altcover.visualizer
+  - cmd: dotnet add package AltCover
+test_script:
+  # Dotnet Test
+  - dotnet test /p:AltCover=true
+on_finish:
+  - ps: |
+      $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH
