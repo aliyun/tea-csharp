@@ -1,5 +1,4 @@
-English | [简体中文](./README-CN.md)
-
+[English](./README.md) | 简体中文
 
 ![](https://aliyunsdk-pages.alicdn.com/icons/AlibabaCloud.svg)
 
@@ -11,27 +10,28 @@ English | [简体中文](./README-CN.md)
 [![Nuget Version](https://badge.fury.io/nu/Tea.svg)](https://badge.fury.io/nu/Tea)
 [![Nuget DownLoad](https://img.shields.io/nuget/dt/Tea.svg?label=Nuget%20Download&style=flat)](https://www.nuget.org/packages/Tea/)
 
-## Installation
+## 安装
 
-Use .NET CLI ( Recommand )
+通过 .NET CLI 工具来安装
 
     dotnet add package Tea
 
-Use Package Manager
+通过 NuGet 程序包管理器来安装：
 
-    Install-Package Tea
+* 在 `解决方案资源管理器面板` 中右击您的项目选择 `管理 NuGet 程序包` 菜单，在打开的 `NuGet 管理面板` 中点击 `浏览` 选项卡输入 `Tea`，在下方列表中选择 `Authors` 为 `Alibaba Cloud` 由官方发布的包点击 **安装** 即可。
 
-## Issues
-[Opening an Issue](https://github.com/aliyun/tea-csharp/issues/new), Issues not conforming to the guidelines may be closed immediately.
+## 问题
+[提交 Issue](https://github.com/aliyun/tea-csharp/issues/new)，不符合指南的问题可能会立即关闭。
 
-## Changelog
-Detailed changes for each release are documented in the [release notes](./ChangeLog.md).
+## 发行说明
+每个版本的详细更改记录在[发行说明](./ChangeLog.md)中。
 
-## References
+## 相关
 * [OpenAPI Explorer](https://api.aliyun.com/)
-* [Latest Release](https://github.com/aliyun/tea-csharp)
+* [最新源码](https://github.com/aliyun/tea-csharp)
 
-## License
+## 许可证
 [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-Copyright 1999-2019 Alibaba Group Holding Ltd.
+版权所有 1999-2019 阿里巴巴集团
+
