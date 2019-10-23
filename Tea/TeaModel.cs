@@ -106,5 +106,46 @@ namespace Tea
             return obj;
         }
 
+        public void Validate()
+        {
+            Type type = this.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                PropertyInfo p = properties[i];
+                Type propertyType = p.PropertyType;
+                object obj = p.GetValue(this);
+                ValidationAttribute attribute = p.GetCustomAttribute(typeof(ValidationAttribute)) as ValidationAttribute;
+                TeaValidator teaValidator = new TeaValidator(attribute, p.Name);
+                teaValidator.ValidateRequired(obj);
+                if (typeof(IList).IsAssignableFrom(propertyType))
+                {
+                    IList list = (IList) obj;
+                    if (list != null)
+                    {
+                        Type listType = propertyType.GetGenericArguments() [0];
+                        for (int j = 0; j < list.Count; j++)
+                        {
+                            if (typeof(TeaModel).IsAssignableFrom(listType))
+                            {
+                                ((TeaModel) list[j]).Validate();
+                            }
+                            else
+                            {
+                                teaValidator.ValidateRegex(list[j]);
+                            }
+                        }
+                    }
+                }
+                else if (typeof(TeaModel).IsAssignableFrom(propertyType))
+                {
+                    ((TeaModel) obj).Validate();
+                }
+                else
+                {
+                    teaValidator.ValidateRegex(obj);
+                }
+            }
+        }
     }
 }
