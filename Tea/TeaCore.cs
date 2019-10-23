@@ -76,7 +76,7 @@ namespace Tea
             httpWebRequest.GetRequestStream().Write(bytes, 0, bytes.Length);
             HttpWebResponse httpWebResponse;
 
-            httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
             return new TeaResponse(httpWebResponse);
 
         }
