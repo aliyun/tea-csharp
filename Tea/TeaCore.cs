@@ -1,8 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Tea
@@ -76,7 +79,7 @@ namespace Tea
             httpWebRequest.GetRequestStream().Write(bytes, 0, bytes.Length);
             HttpWebResponse httpWebResponse;
 
-            httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
             return new TeaResponse(httpWebResponse);
 
         }
@@ -163,6 +166,71 @@ namespace Tea
         public static bool IsRetryable(Exception e)
         {
             return e is WebException || e is OperationCanceledException;
+        }
+
+        public static void ValidateModel(TeaModel model)
+        {
+            Type type = model.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                PropertyInfo p = properties[i];
+                Type propertyType = p.PropertyType;
+
+                NameInMapAttribute attribute = p.GetCustomAttribute(typeof(NameInMapAttribute)) as NameInMapAttribute;
+                
+                if (typeof(IList).IsAssignableFrom(propertyType))
+                {
+                    IList list = (IList) p.GetValue(model);
+                    if (list != null)
+                    {
+                        Type listType = propertyType.GetGenericArguments() [0];
+                        for (int j = 0; j < list.Count; j++)
+                        {
+                            if (typeof(TeaModel).IsAssignableFrom(listType))
+                            {
+                                ValidateModel((TeaModel) list[j]);
+                            }
+                            else if (!RegexMatch(list[j], attribute))
+                            {
+                                throw new ArgumentException(string.Format("{0} is not match {1}", p.Name, attribute.Regexp));
+                            }
+                        }
+                    }
+                }
+                else if (typeof(TeaModel).IsAssignableFrom(propertyType))
+                {
+                    ValidateModel((TeaModel) p.GetValue(model));
+                }
+                else
+                {
+                    if (!RegexMatch(p.GetValue(model), attribute))
+                    {
+                        throw new ArgumentException(string.Format("{0} is not match {1}", p.Name, attribute.Regexp));
+                    }
+                }
+            }
+        }
+
+        public static bool RegexMatch(object obj, NameInMapAttribute attribute)
+        {
+            bool result = true;
+            if (attribute != null && !string.IsNullOrWhiteSpace(attribute.Regexp))
+            {
+                if (obj == null)
+                {
+                    result = false;
+                }
+                else
+                {
+                    Match match = Regex.Match(obj.ToString(), attribute.Regexp);
+                    if (!match.Success)
+                    {
+                        result = false;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

@@ -10,26 +10,7 @@ namespace Tea
 
         public string Example { get; set; }
 
-        public NameInMapAttribute()
-        {
+        public string Regexp { get; set; }
 
-        }
-
-        public NameInMapAttribute(string Name) : this(Name, null)
-        {
-
-        }
-
-        public NameInMapAttribute(string Name, string Description) : this(Name, Description, null)
-        {
-
-        }
-
-        public NameInMapAttribute(string Name, string Description, string Example)
-        {
-            this.Name = Name;
-            this.Description = Description;
-            this.Example = Example;
-        }
     }
 }
