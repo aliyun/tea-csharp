@@ -33,7 +33,7 @@ namespace Tea
                     var val = entry.Value;
 
                     urlBuilder.Append(key);
-                    if (val != null)
+                    if (!string.IsNullOrEmpty(val))
                     {
                         urlBuilder.Append("=").Append(val);
                     }
@@ -52,7 +52,7 @@ namespace Tea
         public static TeaResponse DoAction(TeaRequest request, Dictionary<string, object> runtimeOptions)
         {
             var url = TeaCore.ComposeUrl(request);
-            HttpWebRequest httpWebRequest = (HttpWebRequest) WebRequest.Create(url);
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.Method = request.Method;
             httpWebRequest.KeepAlive = true;
 
@@ -71,19 +71,23 @@ namespace Tea
                 httpWebRequest.Timeout = Convert.ToInt32(runtimeOptions["connectTimeout"]);
             }
 
-            byte[] bytes = Encoding.UTF8.GetBytes(request.Body);
-            httpWebRequest.ContentLength = bytes.Length;
-            httpWebRequest.GetRequestStream().Write(bytes, 0, bytes.Length);
+            if (request.Method == "POST" && request.Body != null)
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(request.Body);
+                httpWebRequest.ContentLength = bytes.Length;
+                httpWebRequest.GetRequestStream().Write(bytes, 0, bytes.Length);
+            }
+
             HttpWebResponse httpWebResponse;
 
-            httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             return new TeaResponse(httpWebResponse);
 
         }
 
         public static string GetResponseBody(TeaResponse response)
         {
-            using(var ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
                 var buffer = new byte[bufferLength];
                 var stream = response._Response.GetResponseStream();

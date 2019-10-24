@@ -7,6 +7,5 @@ namespace TeaUnitTests.Models
         [NameInMap("requestId")]
         [Validation(Pattern = "r", MaxLength = 0, Required = true)]
         public string RequestId { get; set; }
-
     }
 }
