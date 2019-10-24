@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+
 using Tea;
+
 using Xunit;
 
 namespace TeaTest
@@ -11,14 +13,20 @@ namespace TeaTest
 
     public class TeaConverterTests
     {
-
         [Fact]
-        public void TestToObject()
+        public void TestMerge()
         {
-            var dict = new Dictionary<string, object>();
-            dict.Add("name", "Jackson Tian");
-            TestObject obj = TeaModel.ToObject<TestObject>(dict);
-            Assert.Equal("Jackson Tian", obj.name);
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            Dictionary<string, object> dicNull = null;
+            Dictionary<string, object> dicMerge = new Dictionary<string, object>();
+            dic.Add("testNull", null);
+            dic.Add("testExist", "testExist");
+            dic.Add("test", "test");
+            dicMerge.Add("testMerge", "testMerge");
+            dicMerge.Add("testExist", "IsExist");
+            Dictionary<string, object> dicResult = TeaConverter.merge(dic, dicNull, dicMerge);
+            Assert.NotNull(dicResult);
+            Assert.Equal(4, dicResult.Count);
         }
 
     }

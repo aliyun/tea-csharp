@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 
-using TeaUnitTests.Models;
+using Tea;
 
 using Xunit;
 
@@ -10,39 +11,121 @@ namespace TeaUnitTests
     public class TeaCoreTest
     {
         [Fact]
-        public void TestValidator()
+        public void TestComposeUrl()
         {
-            TestRegModel successModel = new TestRegModel();
-            successModel.RequestId = "reTest";
-            successModel.NextMarker = "nextMarker";
-            successModel.testListStr = new List<string> { "listStr1" };
-            successModel.Items = new List<TestRegSubModel> { new TestRegSubModel { RequestId = "rTest" } };
-            successModel.Validate();
+            TeaRequest teaRequest = new TeaRequest();
+            teaRequest.Protocol = "http";
+            teaRequest.Headers = new Dictionary<string, string>();
+            teaRequest.Headers["host"] = "host";
+            teaRequest.Port = 8080;
+            teaRequest.Pathname = "/Pathname";
+            teaRequest.Query = new Dictionary<string, string>();
+            teaRequest.Query.Add("query", "query");
+            teaRequest.Query.Add("queryNull", null);
+            string url = TeaCore.ComposeUrl(teaRequest);
+            Assert.NotNull(url);
+            Assert.Equal("http://host:8080/Pathname?query=query&queryNull", url);
+        }
 
-            TestRegModel modelRequired = new TestRegModel();
-            Assert.Equal("RequestId is required.",
-                Assert.Throws<ArgumentException>(() => { modelRequired.Validate(); }).Message
-            );
+        [Fact]
+        public void TestDoAction()
+        {
+            TeaRequest teaRequest = new TeaRequest();
+            teaRequest.Protocol = "https";
+            teaRequest.Method = "GET";
+            teaRequest.Headers = new Dictionary<string, string>();
+            teaRequest.Headers["host"] = "www.alibabacloud.com";
+            teaRequest.Pathname = "/s/zh";
+            teaRequest.Query = new Dictionary<string, string>();
+            teaRequest.Query.Add("k", "ecs");
 
-            modelRequired.RequestId = "reTest";
-            modelRequired.NextMarker = "nextMarker";
-            Assert.Equal("Items is required.",
-                Assert.Throws<ArgumentException>(() => { modelRequired.Validate(); }).Message
-            );
+            Dictionary<string, object> runtime = new Dictionary<string, object>();
+            runtime.Add("readTimeout", 7000);
+            runtime.Add("connectTimeout", 7000);
 
-            TestRegModel modelReg = new TestRegModel();
-            modelReg.RequestId = "123";
-            modelReg.Items = new List<TestRegSubModel> { new TestRegSubModel { RequestId = "rTest" } };
-            modelReg.NextMarker = "nextMarker";
-            Assert.Equal("RequestId is not match re",
-                Assert.Throws<ArgumentException>(() => { modelReg.Validate(); }).Message
-            );
+            TeaResponse teaResponse = TeaCore.DoAction(teaRequest, runtime);
+            Assert.NotNull(teaResponse);
 
-            modelReg.RequestId = "reTest";
-            modelReg.testListStr = new List<string> { "test" };
-            Assert.Equal("testListStr is not match listStr",
-                Assert.Throws<ArgumentException>(() => { modelReg.Validate(); }).Message
-            );
+            string bodyStr = TeaCore.GetResponseBody(teaResponse);
+            Assert.NotNull(bodyStr);
+        }
+
+        [Fact]
+        public void TestConvertHeaders()
+        {
+            WebHeaderCollection headers = new WebHeaderCollection();
+            headers.Add("testKey", "testValue");
+            Dictionary<string, string> dic = TeaCore.ConvertHeaders(headers);
+            Assert.NotNull(dic);
+            Assert.True(dic.ContainsKey("testkey"));
+            Assert.Equal("testValue", dic["testkey"]);
+        }
+
+        [Fact]
+        public void TestAllowRetry()
+        {
+            long _now = System.DateTime.Now.Millisecond;
+            Assert.False(TeaCore.AllowRetry(null, 3, _now));
+
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            Assert.False(TeaCore.AllowRetry(dic, 3, _now));
+
+            dic.Add("maxAttempts", null);
+            Assert.False(TeaCore.AllowRetry(dic, 3, _now));
+
+            dic["maxAttempts"] = 5;
+            Assert.True(TeaCore.AllowRetry(dic, 3, _now));
+        }
+
+        [Fact]
+        public void TestGetBackoffTime()
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            Assert.Equal(0, TeaCore.GetBackoffTime(dic, 1));
+
+            dic.Add("policy", null);
+            Assert.Equal(0, TeaCore.GetBackoffTime(dic, 1));
+
+            dic["policy"] = string.Empty;
+            Assert.Equal(0, TeaCore.GetBackoffTime(dic, 1));
+
+            dic["policy"] = "no";
+            Assert.Equal(0, TeaCore.GetBackoffTime(dic, 1));
+
+            dic["policy"] = "yes";
+            Assert.Equal(0, TeaCore.GetBackoffTime(dic, 1));
+
+            dic.Add("period", null);
+            Assert.Equal(0, TeaCore.GetBackoffTime(dic, 1));
+
+            dic["period"] = -1;
+            Assert.Equal(1, TeaCore.GetBackoffTime(dic, 1));
+
+            dic["period"] = 1000;
+            Assert.Equal(1000, TeaCore.GetBackoffTime(dic, 1));
+        }
+
+        [Fact]
+        public void TestSleep()
+        {
+            TimeSpan tsBefore = new TimeSpan(DateTime.Now.Ticks);
+            TeaCore.Sleep(1000);
+            TimeSpan tsAfter = new TimeSpan(DateTime.Now.Ticks);
+            TimeSpan tsSubtract = tsBefore.Subtract(tsAfter).Duration();
+            Assert.InRange(tsSubtract.TotalMilliseconds, 1000, 1100);
+        }
+
+        [Fact]
+        public void TestIsRetryable()
+        {
+            Exception ex = new Exception();
+            Assert.False(TeaCore.IsRetryable(ex));
+
+            WebException webEx = new WebException();
+            Assert.True(TeaCore.IsRetryable(webEx));
+
+            OperationCanceledException opEx = new OperationCanceledException();
+            Assert.True(TeaCore.IsRetryable(opEx));
         }
     }
 }
