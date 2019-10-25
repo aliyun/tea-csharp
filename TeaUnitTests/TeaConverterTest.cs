@@ -4,7 +4,7 @@ using Tea;
 
 using Xunit;
 
-namespace TeaTest
+namespace TeaUnitTests
 {
     public class TestObject
     {
@@ -27,6 +27,8 @@ namespace TeaTest
             Dictionary<string, object> dicResult = TeaConverter.merge(dic, dicNull, dicMerge);
             Assert.NotNull(dicResult);
             Assert.Equal(4, dicResult.Count);
+
+            Assert.Empty(TeaConverter.merge(null));
         }
 
     }
