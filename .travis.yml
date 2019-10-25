@@ -8,8 +8,8 @@ branches:
     - master
 install:
   - dotnet tool install --global altcover.visualizer
-  - cd TeaUnitTests/ && dotnet add package AltCover && cd ../
-  - dotnet restore && dotnet build
+  - dotnet restore
+  - dotnet build
 script:
   - dotnet test TeaUnitTests/ /p:AltCover=true
 after_success:
