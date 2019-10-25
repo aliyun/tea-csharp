@@ -11,7 +11,6 @@ init:
 install:
   - cmd: dotnet --version
   - cmd: dotnet tool install --global altcover.visualizer
-  - cmd: cd TeaUnitTests/ && dotnet add package AltCover && cd ../
 build_script:
   - cmd: dotnet restore 
   - cmd: dotnet build 
