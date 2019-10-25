@@ -19,6 +19,7 @@ namespace TeaUnitTests
             model.Items = new List<TestRegSubModel> { new TestRegSubModel { RequestId = "sub" }, null };
             model.NextMarker = "next";
             model.testNoAttr = "noAttr";
+            model.subModel = new TestRegSubModel();
             model.testListStr = new List<string> { "str" };
             Dictionary<string, object> dic = model.ToMap();
             Assert.NotNull(dic);
@@ -37,6 +38,7 @@ namespace TeaUnitTests
 
             Dictionary<string, object> dicSub = new Dictionary<string, object>();
             dicSub.Add("requestId", "sub");
+            dicSub.Add("testInt", 100);
             Dictionary<string, object> dicSubNull = null;
             dicItems.Add(dicSub);
             dicItems.Add(dicSubNull);
@@ -44,7 +46,20 @@ namespace TeaUnitTests
 
             dic.Add("testListStr", testListStr);
 
+            Dictionary<string, object> dicSubModel = new Dictionary<string, object>();
+            dicSubModel.Add("requestId", "subModel");
+            dic.Add("subModel", dicSubModel);
+
             TestRegModel model = TeaModel.ToObject<TestRegModel>(dic);
+            Assert.NotNull(model);
+            Assert.Equal("requestID", model.RequestId);
+            Assert.Equal("next", model.NextMarker);
+            Assert.Equal("noAttr", model.testNoAttr);
+            Assert.Equal("sub", model.Items[0].RequestId);
+            Assert.Equal(100, model.Items[0].testInt);
+            Assert.Null(model.Items[1]);
+            Assert.Equal("str", model.testListStr[0]);
+            Assert.NotNull(model.subModel);
         }
 
         [Fact]
@@ -55,6 +70,7 @@ namespace TeaUnitTests
             successModel.NextMarker = "nextMarker";
             successModel.testListStr = new List<string> { "listStr1" };
             successModel.Items = new List<TestRegSubModel> { new TestRegSubModel { RequestId = "rTest" } };
+            successModel.subModel = new TestRegSubModel { RequestId = "rTest", testInt = 10 };
             successModel.Validate();
 
             TestRegModel modelRequired = new TestRegModel();
