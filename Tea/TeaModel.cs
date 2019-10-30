@@ -44,10 +44,22 @@ namespace Tea
                             result.Add(propertyInfo.Name, list);
                         }
                     }
+                    else
+                    {
+                        result.Add(propertyInfo.Name, null);
+                    }
                 }
                 else if (typeof(TeaModel).IsAssignableFrom(property))
                 {
-                    result.Add(propertyInfo.Name, ((TeaModel)propertyInfo.GetValue(this)).ToMap());
+                    TeaModel teaModel = (TeaModel)propertyInfo.GetValue(this);
+                    if (teaModel != null)
+                    {
+                        result.Add(propertyInfo.Name, ((TeaModel)propertyInfo.GetValue(this)).ToMap());
+                    }
+                    else
+                    {
+                        result.Add(propertyInfo.Name, null);
+                    }
                 }
                 else
                 {
