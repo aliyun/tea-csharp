@@ -73,7 +73,7 @@ namespace Tea
 
             if (request.Method == "POST" && request.Body != null)
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(request.Body);
+                byte[] bytes = request.Body;
                 httpWebRequest.ContentLength = bytes.Length;
                 httpWebRequest.GetRequestStream().Write(bytes, 0, bytes.Length);
             }
@@ -167,6 +167,17 @@ namespace Tea
         public static bool IsRetryable(Exception e)
         {
             return e is WebException || e is OperationCanceledException;
+        }
+
+        public static byte[] BytesReadable(string body)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(body);
+            return bytes;
+        }
+
+        public static byte[] BytesReadable(byte[] body)
+        {
+            return body;
         }
     }
 }

@@ -127,5 +127,15 @@ namespace TeaUnitTests
             OperationCanceledException opEx = new OperationCanceledException();
             Assert.True(TeaCore.IsRetryable(opEx));
         }
+
+        [Fact]
+        public void TestBytesReadable()
+        {
+            string str = "test";
+            byte[] buffer = TeaCore.BytesReadable(str);
+            Assert.NotNull(buffer);
+
+            Assert.Equal(buffer, TeaCore.BytesReadable(buffer));
+        }
     }
 }

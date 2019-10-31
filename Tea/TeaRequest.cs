@@ -20,6 +20,6 @@ namespace Tea
 
         public Dictionary<string, string> Headers;
 
-        public string Body;
+        public byte[] Body;
     }
 }
