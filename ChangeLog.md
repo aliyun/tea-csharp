@@ -1,3 +1,6 @@
+### 2019-10-25 Version 0.0.4
+* Upgrade `TeaCore.DoAction`
+
 ### 2019-10-25 Version 0.0.3
 * upgrade TeaRequest Construct
 
