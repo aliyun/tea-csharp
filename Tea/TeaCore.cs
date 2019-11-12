@@ -52,7 +52,7 @@ namespace Tea
         public static TeaResponse DoAction(TeaRequest request, Dictionary<string, object> runtimeOptions)
         {
             var url = TeaCore.ComposeUrl(request);
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest httpWebRequest = (HttpWebRequest) WebRequest.Create(url);
             httpWebRequest.Method = request.Method;
             httpWebRequest.KeepAlive = true;
 
@@ -73,21 +73,28 @@ namespace Tea
 
             if (request.Method == "POST" && request.Body != null)
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(request.Body);
-                httpWebRequest.ContentLength = bytes.Length;
-                httpWebRequest.GetRequestStream().Write(bytes, 0, bytes.Length);
+                Stream requestStream = httpWebRequest.GetRequestStream();
+                request.Body.Position = 0;
+                httpWebRequest.ContentLength = request.Body.Length;
+
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = request.Body.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    requestStream.Write(buffer, 0, bytesRead);
+                }
             }
 
             HttpWebResponse httpWebResponse;
 
-            httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
             return new TeaResponse(httpWebResponse);
 
         }
 
         public static string GetResponseBody(TeaResponse response)
         {
-            using (var ms = new MemoryStream())
+            using(var ms = new MemoryStream())
             {
                 var buffer = new byte[bufferLength];
                 var stream = response._Response.GetResponseStream();
