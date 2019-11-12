@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 
 namespace Tea
 {
@@ -21,6 +22,6 @@ namespace Tea
 
         public Dictionary<string, string> Headers;
 
-        public string Body;
+        public Stream Body;
     }
 }
