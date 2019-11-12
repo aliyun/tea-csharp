@@ -6,7 +6,8 @@ namespace Tea
     {
         public TeaRequest()
         {
-
+            Query = new Dictionary<string, string>();
+            Headers = new Dictionary<string, string>();
         }
         public string Protocol;
 
