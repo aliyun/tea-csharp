@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Text;
 
 using Tea;
 
@@ -126,6 +128,17 @@ namespace TeaUnitTests
 
             OperationCanceledException opEx = new OperationCanceledException();
             Assert.True(TeaCore.IsRetryable(opEx));
+        }
+
+        [Fact]
+        public void TestBytesReadable()
+        {
+            string str = "test";
+            Stream stream = TeaCore.BytesReadable(str);
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            string bytesStr = Encoding.UTF8.GetString(bytes);
+            Assert.Equal("test", bytesStr);
         }
     }
 }

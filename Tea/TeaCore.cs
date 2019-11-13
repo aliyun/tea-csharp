@@ -175,5 +175,18 @@ namespace Tea
         {
             return e is WebException || e is OperationCanceledException;
         }
+
+        public static Stream BytesReadable(string str)
+        {
+            return BytesReadable(Encoding.UTF8.GetBytes(str));
+        }
+
+        public static Stream BytesReadable(byte[] bytes)
+        {
+            MemoryStream stream = new MemoryStream();
+            stream.Write(bytes, 0, bytes.Length);
+            stream.Position = 0;
+            return stream;
+        }
     }
 }
