@@ -17,12 +17,14 @@ namespace Tea
             {
                 PropertyInfo propertyInfo = properties[i];
                 Type property = propertyInfo.PropertyType;
+                NameInMapAttribute attribute = propertyInfo.GetCustomAttribute(typeof(NameInMapAttribute)) as NameInMapAttribute;
+                string realName = attribute == null ? propertyInfo.Name : attribute.Name;
                 if (typeof(IList).IsAssignableFrom(property))
                 {
-                    IList list = (IList)propertyInfo.GetValue(this);
+                    IList list = (IList) propertyInfo.GetValue(this);
                     if (list != null)
                     {
-                        Type listType = property.GetGenericArguments()[0];
+                        Type listType = property.GetGenericArguments() [0];
                         if (typeof(TeaModel).IsAssignableFrom(listType))
                         {
                             IList dicList = new List<Dictionary<string, object>>();
@@ -34,36 +36,36 @@ namespace Tea
                                 }
                                 else
                                 {
-                                    dicList.Add(((TeaModel)list[j]).ToMap());
+                                    dicList.Add(((TeaModel) list[j]).ToMap());
                                 }
                             }
-                            result.Add(propertyInfo.Name, dicList);
+                            result.Add(realName, dicList);
                         }
                         else
                         {
-                            result.Add(propertyInfo.Name, list);
+                            result.Add(realName, list);
                         }
                     }
                     else
                     {
-                        result.Add(propertyInfo.Name, null);
+                        result.Add(realName, null);
                     }
                 }
                 else if (typeof(TeaModel).IsAssignableFrom(property))
                 {
-                    TeaModel teaModel = (TeaModel)propertyInfo.GetValue(this);
+                    TeaModel teaModel = (TeaModel) propertyInfo.GetValue(this);
                     if (teaModel != null)
                     {
-                        result.Add(propertyInfo.Name, ((TeaModel)propertyInfo.GetValue(this)).ToMap());
+                        result.Add(realName, ((TeaModel) propertyInfo.GetValue(this)).ToMap());
                     }
                     else
                     {
-                        result.Add(propertyInfo.Name, null);
+                        result.Add(realName, null);
                     }
                 }
                 else
                 {
-                    result.Add(propertyInfo.Name, propertyInfo.GetValue(this));
+                    result.Add(realName, propertyInfo.GetValue(this));
                 }
             }
 
@@ -97,12 +99,12 @@ namespace Tea
                     if (value is List<Dictionary<string, object>>)
                     {
                         var list = Activator.CreateInstance(propertyType);
-                        Type innerPropertyType = propertyType.GetGenericArguments()[0];
+                        Type innerPropertyType = propertyType.GetGenericArguments() [0];
                         var v = Activator.CreateInstance(innerPropertyType);
                         MethodInfo mAddList = propertyType.GetMethod("Add", new Type[] { innerPropertyType });
                         if (mAddList != null)
                         {
-                            foreach (Dictionary<string, object> dic in (List<Dictionary<string, object>>)value)
+                            foreach (Dictionary<string, object> dic in (List<Dictionary<string, object>>) value)
                             {
                                 var item = ToObject(dic, v);
                                 mAddList.Invoke(list, new object[] { item });
@@ -113,11 +115,11 @@ namespace Tea
                     else if (value is Dictionary<string, object>)
                     {
                         var v = Activator.CreateInstance(propertyType);
-                        p.SetValue(obj, ToObject((Dictionary<string, object>)value, v));
+                        p.SetValue(obj, ToObject((Dictionary<string, object>) value, v));
                     }
                     else if (propertyType.Equals(typeof(Int32)) && value is Int64)
                     {
-                        p.SetValue(obj, Convert.ToInt32((Int64)value));
+                        p.SetValue(obj, Convert.ToInt32((Int64) value));
                     }
                     else
                     {
@@ -142,15 +144,15 @@ namespace Tea
                 teaValidator.ValidateRequired(obj);
                 if (typeof(IList).IsAssignableFrom(propertyType))
                 {
-                    IList list = (IList)obj;
+                    IList list = (IList) obj;
                     if (list != null)
                     {
-                        Type listType = propertyType.GetGenericArguments()[0];
+                        Type listType = propertyType.GetGenericArguments() [0];
                         for (int j = 0; j < list.Count; j++)
                         {
                             if (typeof(TeaModel).IsAssignableFrom(listType))
                             {
-                                ((TeaModel)list[j]).Validate();
+                                ((TeaModel) list[j]).Validate();
                             }
                             else
                             {
@@ -161,7 +163,7 @@ namespace Tea
                 }
                 else if (typeof(TeaModel).IsAssignableFrom(propertyType))
                 {
-                    ((TeaModel)obj).Validate();
+                    ((TeaModel) obj).Validate();
                 }
                 else
                 {

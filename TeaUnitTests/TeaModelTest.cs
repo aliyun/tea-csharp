@@ -23,12 +23,12 @@ namespace TeaUnitTests
             model.testListStr = new List<string> { "str" };
             Dictionary<string, object> dic = model.ToMap();
             Assert.NotNull(dic);
-            Assert.IsType<List<Dictionary<string, object>>>(dic["Items"]);
+            Assert.IsType<List<Dictionary<string, object>>>(dic["items"]);
 
             TestRegModel modelNull = new TestRegModel();
             modelNull.RequestId = "1";
             Dictionary<string, object> dicNull = modelNull.ToMap();
-            Assert.Null(dicNull["Items"]);
+            Assert.Null(dicNull["items"]);
             Assert.Null(dicNull["subModel"]);
         }
 

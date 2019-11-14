@@ -185,7 +185,7 @@ namespace Tea
         {
             MemoryStream stream = new MemoryStream();
             stream.Write(bytes, 0, bytes.Length);
-            stream.Position = 0;
+            stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
     }
