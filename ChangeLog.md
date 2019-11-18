@@ -1,3 +1,7 @@
+### 2019-11-18 Version 0.0.5
+* Add `getReadable()`
+* Fix `ToMap()` supported `RealName`
+
 ### 2019-10-25 Version 0.0.4
 * Upgrade `TeaCore.DoAction`
 
