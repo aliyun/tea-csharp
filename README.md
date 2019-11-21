@@ -2,7 +2,7 @@ English | [简体中文](./README-CN.md)
 
 ![](https://aliyunsdk-pages.alicdn.com/icons/AlibabaCloud.svg)
 
-## Alibaba Cloud Tea for .NET
+## Alibaba Cloud Tea for .Net
 
 [![Travis Build Status](https://travis-ci.org/aliyun/tea-csharp.svg?branch=master)](https://travis-ci.org/aliyun/tea-csharp)
 [![Build status](https://ci.appveyor.com/api/projects/status/cjnm7itugqbuhum2/branch/master?svg=true)](https://ci.appveyor.com/project/aliyun/tea-csharp/branch/master)
@@ -12,7 +12,7 @@ English | [简体中文](./README-CN.md)
 
 ## Installation
 
-Use .NET CLI ( Recommand )
+Use .Net CLI ( Recommand )
 
     dotnet add package Tea
 
