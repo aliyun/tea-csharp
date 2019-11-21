@@ -100,16 +100,18 @@ namespace Tea
                     {
                         var list = Activator.CreateInstance(propertyType);
                         Type innerPropertyType = propertyType.GetGenericArguments() [0];
-                        var v = Activator.CreateInstance(innerPropertyType);
-                        MethodInfo mAddList = propertyType.GetMethod("Add", new Type[] { innerPropertyType });
-                        if (mAddList != null)
+                        
+                        foreach (Dictionary<string, object> dic in (List<Dictionary<string, object>>)value)
                         {
-                            foreach (Dictionary<string, object> dic in (List<Dictionary<string, object>>) value)
+                            var v = Activator.CreateInstance(innerPropertyType);
+                            MethodInfo mAddList = propertyType.GetMethod("Add", new Type[] { innerPropertyType });
+                            if (mAddList != null)
                             {
                                 var item = ToObject(dic, v);
                                 mAddList.Invoke(list, new object[] { item });
                             }
                         }
+
                         p.SetValue(obj, list);
                     }
                     else if (value is Dictionary<string, object>)
