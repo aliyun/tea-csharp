@@ -46,7 +46,11 @@ namespace TeaUnitTests
             dicSub.Add("requestId", "sub");
             dicSub.Add("testInt", 100);
             Dictionary<string, object> dicSubNull = null;
+            Dictionary<string, object> dicSubRe = new Dictionary<string, object>();
+            dicSubRe.Add("requestId", "subRe");
+            dicSubRe.Add("testInt", 500);
             dicItems.Add(dicSub);
+            dicItems.Add(dicSubRe);
             dicItems.Add(dicSubNull);
             dic.Add("items", dicItems);
 
@@ -63,9 +67,12 @@ namespace TeaUnitTests
             Assert.Equal("noAttr", model.testNoAttr);
             Assert.Equal("sub", model.Items[0].RequestId);
             Assert.Equal(100, model.Items[0].testInt);
-            Assert.Null(model.Items[1]);
+            Assert.NotNull(model.Items[1]);
+            Assert.NotEqual(model.Items[0].RequestId, model.Items[1].RequestId);
+            Assert.Null(model.Items[2]);
             Assert.Equal("str", model.testListStr[0]);
             Assert.NotNull(model.subModel);
+
         }
 
         [Fact]
