@@ -1,3 +1,7 @@
+### 2019-11-22 Version 0.0.6
+* fix `TeaModel.ToObject()`
+* fix `readme`
+
 ### 2019-11-18 Version 0.0.5
 * Add `getReadable()`
 * Fix `ToMap()` supported `RealName`
