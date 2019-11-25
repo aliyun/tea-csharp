@@ -100,8 +100,8 @@ namespace Tea
                     {
                         var list = Activator.CreateInstance(propertyType);
                         Type innerPropertyType = propertyType.GetGenericArguments() [0];
-                        
-                        foreach (Dictionary<string, object> dic in (List<Dictionary<string, object>>)value)
+
+                        foreach (Dictionary<string, object> dic in (List<Dictionary<string, object>>) value)
                         {
                             var v = Activator.CreateInstance(innerPropertyType);
                             MethodInfo mAddList = propertyType.GetMethod("Add", new Type[] { innerPropertyType });
@@ -144,22 +144,27 @@ namespace Tea
                 ValidationAttribute attribute = p.GetCustomAttribute(typeof(ValidationAttribute)) as ValidationAttribute;
                 TeaValidator teaValidator = new TeaValidator(attribute, p.Name);
                 teaValidator.ValidateRequired(obj);
+                if (obj == null)
+                {
+                    continue;
+                }
                 if (typeof(IList).IsAssignableFrom(propertyType))
                 {
                     IList list = (IList) obj;
-                    if (list != null)
+
+                    Type listType = propertyType.GetGenericArguments() [0];
+                    if (typeof(TeaModel).IsAssignableFrom(listType))
                     {
-                        Type listType = propertyType.GetGenericArguments() [0];
                         for (int j = 0; j < list.Count; j++)
                         {
-                            if (typeof(TeaModel).IsAssignableFrom(listType))
-                            {
-                                ((TeaModel) list[j]).Validate();
-                            }
-                            else
-                            {
-                                teaValidator.ValidateRegex(list[j]);
-                            }
+                            ((TeaModel) list[j]).Validate();
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < list.Count; j++)
+                        {
+                            teaValidator.ValidateRegex(list[j]);
                         }
                     }
                 }

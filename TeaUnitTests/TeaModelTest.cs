@@ -86,6 +86,9 @@ namespace TeaUnitTests
             successModel.subModel = new TestRegSubModel { RequestId = "rTest", testInt = 10 };
             successModel.Validate();
 
+            successModel.testListStr = null;
+            successModel.Validate();
+
             TestRegModel modelRequired = new TestRegModel();
             Assert.Equal("RequestId is required.",
                 Assert.Throws<ArgumentException>(() => { modelRequired.Validate(); }).Message

@@ -1,34 +1,73 @@
+using System;
 using System.Collections.Generic;
 
 namespace Tea
 {
     public class TeaConverter
     {
-        public static Dictionary<string, object> merge(params Dictionary<string, object>[] dics)
+        public static Dictionary<string, T> merge<T>(params object[] objs)
         {
-            Dictionary<string, object> dic = new Dictionary<string, object>();
-            if (dics == null)
+            Dictionary<string, T> dicResult = new Dictionary<string, T>();
+            if (objs == null)
             {
-                return dic;
+                return dicResult;
             }
 
-            foreach (Dictionary<string, object> dicItem in dics)
+            foreach (object obj in objs)
             {
-                if (dicItem == null) { continue; }
-
-                foreach (string key in dicItem.Keys)
+                if (obj == null)
                 {
-                    if (dic.ContainsKey(key))
+                    continue;
+                }
+                Dictionary<string, object> dicObj = new Dictionary<string, object>();
+                Type typeObj = obj.GetType();
+                if (typeof(TeaModel).IsAssignableFrom(typeObj))
+                {
+                    dicObj = ((TeaModel) obj).ToMap();
+                }
+                else if (obj is Dictionary<string, object>)
+                {
+                    dicObj = (Dictionary<string, object>) obj;
+                }
+                else if (obj is Dictionary<string, string>)
+                {
+                    Dictionary<string, string> dicString = (Dictionary<string, string>) obj;
+                    foreach (var keypair in dicString)
                     {
-                        dic[key] = dicItem[key];
+                        dicObj.Add(keypair.Key, keypair.Value);
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException(" inparams only support Dictionary or TeaModel. ");
+                }
+
+                foreach (var keypair in dicObj)
+                {
+                    T dicValue = (T) keypair.Value;
+                    if (dicResult.ContainsKey(keypair.Key))
+                    {
+                        dicResult[keypair.Key] = dicValue;
                     }
                     else
                     {
-                        dic.Add(key, dicItem[key]);
+                        dicResult.Add(keypair.Key, dicValue);
                     }
                 }
             }
-            return dic;
+            return dicResult;
+        }
+
+        public static string StrToLower(string str)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return str.ToLower();
+            }
         }
     }
 }
