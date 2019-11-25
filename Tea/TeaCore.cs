@@ -14,7 +14,7 @@ namespace Tea
         {
             var urlBuilder = new StringBuilder("");
 
-            urlBuilder.Append(request.Protocol.ToLower()).Append("://");
+            urlBuilder.Append(TeaConverter.StrToLower(request.Protocol)).Append("://");
             urlBuilder.Append(request.Headers["host"]);
             if (request.Port > 0)
             {
@@ -61,12 +61,12 @@ namespace Tea
                 httpWebRequest.Headers.Add(header.Key, header.Value);
             }
 
-            if (runtimeOptions.ContainsKey("readTimeout") && !string.IsNullOrWhiteSpace(runtimeOptions["readTimeout"].ToString()))
+            if (runtimeOptions.ContainsKey("readTimeout") && !string.IsNullOrWhiteSpace(runtimeOptions["readTimeout"].ToString()) && runtimeOptions["readTimeout"].ToString() != "0")
             {
                 httpWebRequest.ReadWriteTimeout = Convert.ToInt32(runtimeOptions["readTimeout"]);
             }
 
-            if (runtimeOptions.ContainsKey("connectTimeout") && !string.IsNullOrWhiteSpace(runtimeOptions["connectTimeout"].ToString()))
+            if (runtimeOptions.ContainsKey("connectTimeout") && !string.IsNullOrWhiteSpace(runtimeOptions["connectTimeout"].ToString()) && runtimeOptions["connectTimeout"].ToString() != "0")
             {
                 httpWebRequest.Timeout = Convert.ToInt32(runtimeOptions["connectTimeout"]);
             }
@@ -126,7 +126,7 @@ namespace Tea
             var result = new Dictionary<string, string>();
             for (int i = 0; i < headers.Count; i++)
             {
-                result.Add(headers.GetKey(i).ToLower(), headers.Get(i));
+                result.Add(TeaConverter.StrToLower(headers.GetKey(i)), headers.Get(i));
             }
             return result;
         }

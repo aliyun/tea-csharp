@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 using Tea;
+
+using TeaUnitTests.Models;
 
 using Xunit;
 
@@ -16,19 +19,34 @@ namespace TeaUnitTests
         [Fact]
         public void TestMerge()
         {
-            Dictionary<string, object> dic = new Dictionary<string, object>();
+            Assert.Empty(TeaConverter.merge<object>(null));
+
+            Dictionary<string, string> dic = new Dictionary<string, string>();
             Dictionary<string, object> dicNull = null;
             Dictionary<string, object> dicMerge = new Dictionary<string, object>();
+            TestRegModel model = new TestRegModel();
+
             dic.Add("testNull", null);
             dic.Add("testExist", "testExist");
             dic.Add("test", "test");
             dicMerge.Add("testMerge", "testMerge");
             dicMerge.Add("testExist", "IsExist");
-            Dictionary<string, object> dicResult = TeaConverter.merge(dic, dicNull, dicMerge);
+            Dictionary<string, string> dicResult = TeaConverter.merge<string>(dic, dicNull, dicMerge, null);
             Assert.NotNull(dicResult);
             Assert.Equal(4, dicResult.Count);
 
-            Assert.Empty(TeaConverter.merge(null));
+            Dictionary<string, object> dicModelMerge = TeaConverter.merge<object>(dic, dicNull, dicMerge, model);
+            Assert.NotNull(dicResult);
+
+            Assert.Throws<ArgumentException>(() => { TeaConverter.merge<object>(dic, 1); });
+        }
+
+        [Fact]
+        public void TestStrToLower()
+        {
+            Assert.Empty(TeaConverter.StrToLower(null));
+
+            Assert.Equal("test", TeaConverter.StrToLower("TEST"));
         }
 
     }
