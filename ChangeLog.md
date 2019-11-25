@@ -1,3 +1,8 @@
+### 2019-11-22 Version 0.0.7
+* Improved `merge`
+* Supported `StrToLower`
+* Improved `TeaRequest`
+
 ### 2019-11-22 Version 0.0.6
 * fix `TeaModel.ToObject()`
 * fix `readme`

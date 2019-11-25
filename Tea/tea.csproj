@@ -8,7 +8,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageReleaseNotes></PackageReleaseNotes>
     <AssemblyName>Tea</AssemblyName>
-    <Version>0.0.6</Version>
+    <Version>0.0.7</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
