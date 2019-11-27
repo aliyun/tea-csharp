@@ -114,5 +114,22 @@ namespace TeaUnitTests
                 Assert.Throws<ArgumentException>(() => { modelReg.Validate(); }).Message
             );
         }
+
+        [Fact]
+        public void TestBuildMap()
+        {
+            Assert.Empty(TeaModel.BuildMap(null));
+
+            TestRegModel model = new TestRegModel();
+            model.RequestId = "requestID";
+            model.Items = new List<TestRegSubModel> { new TestRegSubModel { RequestId = "sub" }, null };
+            model.NextMarker = "next";
+            model.testNoAttr = "noAttr";
+            model.subModel = new TestRegSubModel();
+            model.testListStr = new List<string> { "str" };
+            Dictionary<string, object> dic = TeaModel.BuildMap(model);
+            Assert.NotNull(dic);
+            Assert.IsType<List<Dictionary<string, object>>>(dic["items"]);
+        }
     }
 }
