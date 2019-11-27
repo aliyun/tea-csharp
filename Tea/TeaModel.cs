@@ -178,5 +178,15 @@ namespace Tea
                 }
             }
         }
+
+        public static Dictionary<string, object> BuildMap(TeaModel model)
+        {
+            if (model != null)
+            {
+                return model.ToMap();
+            }
+
+            return new Dictionary<string, object>();
+        }
     }
 }
