@@ -27,6 +27,13 @@ namespace TeaUnitTests
             string url = TeaCore.ComposeUrl(teaRequest);
             Assert.NotNull(url);
             Assert.Equal("http://host:8080/Pathname?query=query&queryNull", url);
+
+            teaRequest.Pathname = "/Pathname?test=1";
+            Assert.Equal("http://host:8080/Pathname?test=1&query=query&queryNull", TeaCore.ComposeUrl(teaRequest));
+
+            teaRequest.Query = null;
+            teaRequest.Pathname = "/Pathname";
+            Assert.Equal("http://host:8080/Pathname", TeaCore.ComposeUrl(teaRequest));
         }
 
         [Fact]

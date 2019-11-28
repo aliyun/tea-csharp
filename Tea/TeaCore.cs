@@ -25,7 +25,14 @@ namespace Tea
 
             if (request.Query != null && request.Query.Count > 0)
             {
-                urlBuilder.Append("?");
+                if (urlBuilder.ToString().Contains("?"))
+                {
+                    urlBuilder.Append("&");
+                }
+                else
+                {
+                    urlBuilder.Append("?");
+                }
                 var i = 0;
                 foreach (var entry in request.Query)
                 {
