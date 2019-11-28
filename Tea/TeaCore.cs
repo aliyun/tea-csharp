@@ -22,17 +22,17 @@ namespace Tea
                 urlBuilder.Append(request.Port);
             }
             urlBuilder.Append(request.Pathname);
-            if (urlBuilder.ToString().Contains("?"))
-            {
-                urlBuilder.Append("&");
-            }
-            else
-            {
-                urlBuilder.Append("?");
-            }
 
             if (request.Query != null && request.Query.Count > 0)
             {
+                if (urlBuilder.ToString().Contains("?"))
+                {
+                    urlBuilder.Append("&");
+                }
+                else
+                {
+                    urlBuilder.Append("?");
+                }
                 var i = 0;
                 foreach (var entry in request.Query)
                 {
