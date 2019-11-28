@@ -1,3 +1,7 @@
+### 2019-11-28 Version 0.0.8
+* Supported `BuildMap()`
+* Improved `ComposeUrl()`
+
 ### 2019-11-22 Version 0.0.7
 * Improved `merge`
 * Supported `StrToLower`
