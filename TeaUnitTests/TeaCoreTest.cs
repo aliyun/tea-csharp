@@ -57,6 +57,20 @@ namespace TeaUnitTests
 
             string bodyStr = TeaCore.GetResponseBody(teaResponse);
             Assert.NotNull(bodyStr);
+
+            TeaRequest teaRequest404 = new TeaRequest();
+            teaRequest404.Protocol = "https";
+            teaRequest404.Method = "GET";
+            teaRequest404.Headers = new Dictionary<string, string>();
+            teaRequest404.Headers["host"] = "www.alibabacloud404.com";
+            teaRequest404.Pathname = "/s/zh";
+            teaRequest404.Query = new Dictionary<string, string>();
+            teaRequest404.Query.Add("k", "ecs");
+            Dictionary<string, object> runtime404 = new Dictionary<string, object>();
+            runtime404.Add("readTimeout", 7000);
+            runtime404.Add("connectTimeout", 7000);
+            TeaResponse teaResponse404 = TeaCore.DoAction(teaRequest404, runtime);
+            Assert.NotNull(teaResponse404);
         }
 
         [Fact]
@@ -130,7 +144,7 @@ namespace TeaUnitTests
             Exception ex = new Exception();
             Assert.False(TeaCore.IsRetryable(ex));
 
-            WebException webEx = new WebException();
+            TeaException webEx = new TeaException(new Dictionary<string, object>());
             Assert.True(TeaCore.IsRetryable(webEx));
 
             OperationCanceledException opEx = new OperationCanceledException();

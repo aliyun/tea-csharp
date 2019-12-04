@@ -5,6 +5,8 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
+using Tea.Utils;
+
 namespace Tea
 {
     public class TeaCore
@@ -68,14 +70,15 @@ namespace Tea
                 httpWebRequest.Headers.Add(header.Key, header.Value);
             }
 
-            if (runtimeOptions.ContainsKey("readTimeout") && !string.IsNullOrWhiteSpace(runtimeOptions["readTimeout"].ToString()) && runtimeOptions["readTimeout"].ToString() != "0")
+            int readTimeout = DictUtils.GetDicValue(runtimeOptions, "readTimeout").ToSafeInt(0);
+            if (readTimeout != 0)
             {
-                httpWebRequest.ReadWriteTimeout = Convert.ToInt32(runtimeOptions["readTimeout"]);
+                httpWebRequest.ReadWriteTimeout = readTimeout;
             }
-
-            if (runtimeOptions.ContainsKey("connectTimeout") && !string.IsNullOrWhiteSpace(runtimeOptions["connectTimeout"].ToString()) && runtimeOptions["connectTimeout"].ToString() != "0")
+            int connectTimeout = DictUtils.GetDicValue(runtimeOptions, "connectTimeout").ToSafeInt(0);
+            if (connectTimeout != 0)
             {
-                httpWebRequest.Timeout = Convert.ToInt32(runtimeOptions["connectTimeout"]);
+                httpWebRequest.Timeout = connectTimeout;
             }
 
             if (request.Method == "POST" && request.Body != null)
@@ -93,10 +96,15 @@ namespace Tea
             }
 
             HttpWebResponse httpWebResponse;
-
-            httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-            return new TeaResponse(httpWebResponse);
-
+            try
+            {
+                httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+                return new TeaResponse(httpWebResponse);
+            }
+            catch (WebException ex)
+            {
+                return new TeaResponse((HttpWebResponse) ex.Response);
+            }
         }
 
         public static string GetResponseBody(TeaResponse response)
@@ -180,7 +188,7 @@ namespace Tea
 
         public static bool IsRetryable(Exception e)
         {
-            return e is WebException || e is OperationCanceledException;
+            return e is TeaException || e is OperationCanceledException;
         }
 
         public static Stream BytesReadable(string str)

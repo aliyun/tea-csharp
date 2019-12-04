@@ -15,10 +15,13 @@ namespace Tea
 
         public TeaResponse(HttpWebResponse response)
         {
-            this.StatusCode = (int) response.StatusCode;
-            this.StatusMessage = response.StatusDescription;
-            this.Headers = TeaCore.ConvertHeaders(response.Headers);
-            this._Response = response;
+            if (response != null)
+            {
+                this.StatusCode = (int) response.StatusCode;
+                this.StatusMessage = response.StatusDescription;
+                this.Headers = TeaCore.ConvertHeaders(response.Headers);
+                this._Response = response;
+            }
         }
     }
 }
