@@ -25,5 +25,7 @@ namespace TeaUnitTests.Models
         public List<string> testListStr { get; set; }
 
         public TestRegSubModel subModel { get; set; }
+
+        public Dictionary<string, object> dict { get; set; }
     }
 }
