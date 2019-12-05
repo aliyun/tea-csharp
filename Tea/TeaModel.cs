@@ -114,7 +114,7 @@ namespace Tea
 
                         p.SetValue(obj, list);
                     }
-                    else if (value is Dictionary<string, object>)
+                    else if (typeof(TeaModel).IsAssignableFrom(propertyType))
                     {
                         var v = Activator.CreateInstance(propertyType);
                         p.SetValue(obj, ToObject((Dictionary<string, object>) value, v));

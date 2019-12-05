@@ -60,6 +60,10 @@ namespace TeaUnitTests
             dicSubModel.Add("requestId", "subModel");
             dic.Add("subModel", dicSubModel);
 
+            Dictionary<string, object> dicDict = new Dictionary<string, object>();
+            dicDict.Add("test", 1);
+            dic.Add("dict", dicDict);
+
             TestRegModel model = TeaModel.ToObject<TestRegModel>(dic);
             Assert.NotNull(model);
             Assert.Equal("requestID", model.RequestId);
@@ -72,6 +76,7 @@ namespace TeaUnitTests
             Assert.Null(model.Items[2]);
             Assert.Equal("str", model.testListStr[0]);
             Assert.NotNull(model.subModel);
+            Assert.NotNull(model.dict);
 
         }
 
