@@ -69,8 +69,17 @@ namespace TeaUnitTests
             Dictionary<string, object> runtime404 = new Dictionary<string, object>();
             runtime404.Add("readTimeout", 7000);
             runtime404.Add("connectTimeout", 7000);
-            TeaResponse teaResponse404 = TeaCore.DoAction(teaRequest404, runtime);
-            Assert.NotNull(teaResponse404);
+            Assert.Throws<WebException>(() => { TeaCore.DoAction(teaRequest404, runtime); });
+
+            TeaRequest requestException = new TeaRequest
+            {
+                Protocol = "http",
+                Method = "GET",
+                Pathname = "/test"
+            };
+            Dictionary<string, object> runtimeException = new Dictionary<string, object>();
+            requestException.Headers["host"] = "www.aliyun.com";
+            TeaResponse responseException = TeaCore.DoAction(requestException, runtimeException);
         }
 
         [Fact]

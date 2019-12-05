@@ -103,7 +103,12 @@ namespace Tea
             }
             catch (WebException ex)
             {
-                return new TeaResponse((HttpWebResponse) ex.Response);
+                HttpWebResponse excepResp = (HttpWebResponse) ex.Response;
+                if (excepResp == null)
+                {
+                    throw ex;
+                }
+                return new TeaResponse(excepResp);
             }
         }
 
