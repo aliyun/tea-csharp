@@ -1,3 +1,8 @@
+### 2019-12-06 Version 0.0.9
+* Improved `ComposeUrl()`
+* Supported `TeaException`
+* Fixed `ToObject()`
+
 ### 2019-11-28 Version 0.0.8
 * Supported `BuildMap()`
 * Improved `ComposeUrl()`
