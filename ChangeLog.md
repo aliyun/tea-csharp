@@ -1,3 +1,6 @@
+### 2019-12-19 Version 0.0.10
+* Fixed put
+
 ### 2019-12-06 Version 0.0.9
 * Improved `ComposeUrl()`
 * Supported `TeaException`
