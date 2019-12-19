@@ -58,6 +58,10 @@ namespace TeaUnitTests
             string bodyStr = TeaCore.GetResponseBody(teaResponse);
             Assert.NotNull(bodyStr);
 
+            teaRequest.Method = "POST";
+            teaResponse = TeaCore.DoAction(teaRequest, runtime);
+            Assert.NotNull(teaResponse);
+
             TeaRequest teaRequest404 = new TeaRequest();
             teaRequest404.Protocol = "https";
             teaRequest404.Method = "GET";
