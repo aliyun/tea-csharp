@@ -5,22 +5,22 @@ namespace Tea
 {
     public class TeaResponse
     {
-        public int StatusCode;
+        public int StatusCode { get; set; }
 
-        public string StatusMessage;
+        public string StatusMessage { get; set; }
 
-        public Dictionary<string, string> Headers;
+        public Dictionary<string, string> Headers { get; set; }
 
-        public HttpWebResponse _Response;
+        public HttpWebResponse _Response { get; set; }
 
         public TeaResponse(HttpWebResponse response)
         {
             if (response != null)
             {
-                this.StatusCode = (int) response.StatusCode;
-                this.StatusMessage = response.StatusDescription;
-                this.Headers = TeaCore.ConvertHeaders(response.Headers);
-                this._Response = response;
+                StatusCode = (int) response.StatusCode;
+                StatusMessage = response.StatusDescription;
+                Headers = TeaCore.ConvertHeaders(response.Headers);
+                _Response = response;
             }
         }
     }

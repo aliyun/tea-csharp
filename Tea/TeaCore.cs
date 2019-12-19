@@ -12,6 +12,8 @@ namespace Tea
     public class TeaCore
     {
         private static readonly int bufferLength = 1024;
+        private static List<string> bodyMethod = new List<string> { "POST", "PUT", "PATCH" };
+
         public static string ComposeUrl(TeaRequest request)
         {
             var urlBuilder = new StringBuilder("");
@@ -81,7 +83,7 @@ namespace Tea
                 httpWebRequest.Timeout = connectTimeout;
             }
 
-            if (request.Method == "POST" && request.Body != null)
+            if (bodyMethod.Contains(request.Method) && request.Body != null)
             {
                 Stream requestStream = httpWebRequest.GetRequestStream();
                 request.Body.Position = 0;
