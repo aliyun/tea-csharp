@@ -1,3 +1,6 @@
+### 2019-12-19 Version 0.1.1
+* Supported `TeaResponse.Body`
+
 ### 2019-12-19 Version 0.0.10
 * Fixed put
 
