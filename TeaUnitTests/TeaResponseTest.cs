@@ -22,6 +22,9 @@ namespace TeaUnitTests
             Assert.Equal(200, teaResponse.StatusCode);
             Assert.Equal("StatusDescription", teaResponse.StatusMessage);
             Assert.Empty(teaResponse.Headers);
+
+            TeaResponse teaResponseNull = new TeaResponse(null);
+            Assert.Null(teaResponseNull.Body);
         }
     }
 }
