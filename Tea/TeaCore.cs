@@ -119,7 +119,7 @@ namespace Tea
             using(var ms = new MemoryStream())
             {
                 var buffer = new byte[bufferLength];
-                var stream = response._Response.GetResponseStream();
+                var stream = response.Body;
 
                 while (true)
                 {
