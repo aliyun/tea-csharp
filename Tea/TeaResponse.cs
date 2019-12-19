@@ -19,7 +19,14 @@ namespace Tea
         {
             get
             {
-                return _response.GetResponseStream();
+                if (_response != null)
+                {
+                    return _response.GetResponseStream();
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
