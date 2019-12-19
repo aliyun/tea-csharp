@@ -1,3 +1,6 @@
+### 2019-12-19 Version 0.1.2
+* Fixed `getBody`
+
 ### 2019-12-19 Version 0.1.1
 * Supported `TeaResponse.Body`
 
