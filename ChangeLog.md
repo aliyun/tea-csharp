@@ -1,3 +1,6 @@
+### 2019-12-31 Version 0.1.3
+* Supported `TeaRetryableException`
+
 ### 2019-12-19 Version 0.1.2
 * Fixed `getBody`
 
