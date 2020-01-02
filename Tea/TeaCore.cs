@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Tea.Utils;
 
@@ -60,6 +61,11 @@ namespace Tea
             return urlBuilder.ToString();
         }
 
+        public static TeaResponse DoAction(TeaRequest request)
+        {
+            return DoAction(request, new Dictionary<string, object>());
+        }
+
         public static TeaResponse DoAction(TeaRequest request, Dictionary<string, object> runtimeOptions)
         {
             var url = TeaCore.ComposeUrl(request);
@@ -101,6 +107,65 @@ namespace Tea
             try
             {
                 httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+                return new TeaResponse(httpWebResponse);
+            }
+            catch (WebException ex)
+            {
+                HttpWebResponse excepResp = (HttpWebResponse) ex.Response;
+                if (excepResp == null)
+                {
+                    throw ex;
+                }
+                return new TeaResponse(excepResp);
+            }
+        }
+
+        public static async Task<TeaResponse> DoActionAsync(TeaRequest request)
+        {
+            return await DoActionAsync(request, new Dictionary<string, object>());
+        }
+
+        public static async Task<TeaResponse> DoActionAsync(TeaRequest request, Dictionary<string, object> runtimeOptions)
+        {
+            var url = TeaCore.ComposeUrl(request);
+            HttpWebRequest httpWebRequest = (HttpWebRequest) WebRequest.Create(url);
+            httpWebRequest.Method = request.Method;
+            httpWebRequest.KeepAlive = false;
+
+            foreach (var header in request.Headers)
+            {
+                httpWebRequest.Headers.Add(header.Key, header.Value);
+            }
+
+            int readTimeout = DictUtils.GetDicValue(runtimeOptions, "readTimeout").ToSafeInt(0);
+            if (readTimeout != 0)
+            {
+                httpWebRequest.ReadWriteTimeout = readTimeout;
+            }
+            int connectTimeout = DictUtils.GetDicValue(runtimeOptions, "connectTimeout").ToSafeInt(0);
+            if (connectTimeout != 0)
+            {
+                httpWebRequest.Timeout = connectTimeout;
+            }
+
+            if (bodyMethod.Contains(request.Method) && request.Body != null)
+            {
+                Stream requestStream = httpWebRequest.GetRequestStream();
+                request.Body.Position = 0;
+                httpWebRequest.ContentLength = request.Body.Length;
+
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = request.Body.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    requestStream.Write(buffer, 0, bytesRead);
+                }
+            }
+
+            HttpWebResponse httpWebResponse;
+            try
+            {
+                httpWebResponse = (HttpWebResponse) await httpWebRequest.GetResponseAsync();
                 return new TeaResponse(httpWebResponse);
             }
             catch (WebException ex)
@@ -191,6 +256,14 @@ namespace Tea
         public static void Sleep(int backoffTime)
         {
             Thread.Sleep(backoffTime);
+        }
+
+        public static async Task SleepAsync(int backoffTime)
+        {
+            await Task.Run(() =>
+            {
+                Thread.Sleep(1000);
+            });
         }
 
         public static bool IsRetryable(Exception e)
