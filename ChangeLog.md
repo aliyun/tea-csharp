@@ -1,3 +1,7 @@
+### 2020-01-02 Version 0.1.4
+* Supported 'DoActionAsync()'
+* Supported 'SleepAsync()'
+
 ### 2019-12-31 Version 0.1.3
 * Supported `TeaRetryableException`
 
