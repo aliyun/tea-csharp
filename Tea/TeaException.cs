@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using Tea.Utils;
@@ -36,18 +38,20 @@ namespace Tea
             }
         }
 
-        public TeaException(Dictionary<string, object> dict)
+        public TeaException(IDictionary dict)
         {
-            code = DictUtils.GetDicValue(dict, "code").ToSafeString();
-            message = DictUtils.GetDicValue(dict, "message").ToSafeString();
-            object obj = DictUtils.GetDicValue(dict, "data");
+            Dictionary<string, object> dicObj = dict.Keys.Cast<string>().ToDictionary(key => key, key => dict[key]);
+            code = DictUtils.GetDicValue(dicObj, "code").ToSafeString();
+            message = DictUtils.GetDicValue(dicObj, "message").ToSafeString();
+            object obj = DictUtils.GetDicValue(dicObj, "data");
             if (obj == null)
             {
                 return;
             }
-            if (obj is Dictionary<string, object>)
+            if (typeof(IDictionary).IsAssignableFrom(obj.GetType()))
             {
-                data = (Dictionary<string, object>) obj;
+                IDictionary dicData = (IDictionary) obj;
+                data = dicData.Keys.Cast<string>().ToDictionary(key => key, key => dicData[key]);
                 return;
             }
 
