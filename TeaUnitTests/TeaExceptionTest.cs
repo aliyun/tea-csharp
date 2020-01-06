@@ -27,7 +27,7 @@ namespace TeaUnitTests
                 { "message", "message" },
                 {
                     "data",
-                    new Dictionary<string, object>
+                    new Dictionary<string, string>
                     { { "test", "test" }
                     }
                 }
@@ -48,6 +48,12 @@ namespace TeaUnitTests
             });
             Assert.NotNull(teaException);
             Assert.NotNull(teaException.Data);
+
+            teaException = new TeaException(new Dictionary<string, string>
+            { { "code", "200" }
+            });
+            Assert.NotNull(teaException);
+            Assert.Equal("200", teaException.Code);
         }
     }
 }

@@ -78,6 +78,15 @@ namespace TeaUnitTests
             Assert.NotNull(model.subModel);
             Assert.NotNull(model.dict);
 
+            Dictionary<string, string> dicString = null;
+            Assert.Null(TeaModel.ToObject<TestDicStringModel>(dicString));
+            dicString = new Dictionary<string, string>();
+            dicString.Add("requestId", "test");
+            dicString.Add("count", "1");
+            TestDicStringModel stringModel = TeaModel.ToObject<TestDicStringModel>(dicString);
+            Assert.NotNull(stringModel);
+            Assert.Equal("test", stringModel.RequestId);
+
         }
 
         [Fact]

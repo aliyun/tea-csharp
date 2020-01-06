@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Tea
@@ -72,10 +73,15 @@ namespace Tea
             return result;
         }
 
-        public static T ToObject<T>(Dictionary<string, object> dict) where T : class, new()
+        public static T ToObject<T>(IDictionary dict) where T : class, new()
         {
             var result = new T();
-            return ToObject(dict, result);
+            if (dict == null)
+            {
+                return null;
+            }
+            Dictionary<string, object> dicObj = dict.Keys.Cast<string>().ToDictionary(key => key, key => dict[key]);
+            return ToObject(dicObj, result);
         }
 
         public static T ToObject<T>(Dictionary<string, object> dict, T obj) where T : class
@@ -125,7 +131,7 @@ namespace Tea
                     }
                     else
                     {
-                        p.SetValue(obj, value);
+                        p.SetValue(obj, Convert.ChangeType(value, propertyType));
                     }
                 }
             }
