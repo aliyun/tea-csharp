@@ -1,3 +1,6 @@
+### 2020-01-06 Version 0.1.5
+* Fixed Dictionary convert method
+
 ### 2020-01-02 Version 0.1.4
 * Supported 'DoActionAsync()'
 * Supported 'SleepAsync()'
