@@ -14,6 +14,9 @@ namespace TeaUnitTests
         [Fact]
         public void TestToMap()
         {
+            TeaModel modelNull = null;
+            Assert.Empty(modelNull.ToMap());
+
             TestRegModel model = new TestRegModel();
             model.RequestId = "requestID";
             model.Items = new List<TestRegSubModel> { new TestRegSubModel { RequestId = "sub" }, null };
@@ -25,11 +28,11 @@ namespace TeaUnitTests
             Assert.NotNull(dic);
             Assert.IsType<List<Dictionary<string, object>>>(dic["items"]);
 
-            TestRegModel modelNull = new TestRegModel();
-            modelNull.RequestId = "1";
-            Dictionary<string, object> dicNull = modelNull.ToMap();
-            Assert.Null(dicNull["items"]);
-            Assert.Null(dicNull["subModel"]);
+            TestRegModel modelEmpty = new TestRegModel();
+            modelEmpty.RequestId = "1";
+            Dictionary<string, object> dicEmpty = modelEmpty.ToMap();
+            Assert.Null(dicEmpty["items"]);
+            Assert.Null(dicEmpty["subModel"]);
         }
 
         [Fact]
@@ -92,6 +95,9 @@ namespace TeaUnitTests
         [Fact]
         public void TestValidator()
         {
+            TeaModel modelNull = null;
+            Assert.Throws<ArgumentException>(() => { modelNull.Validate(); });
+
             TestRegModel successModel = new TestRegModel();
             successModel.RequestId = "reTest";
             successModel.NextMarker = "nextMarker";
@@ -127,23 +133,6 @@ namespace TeaUnitTests
             Assert.Equal("testListStr is not match listStr",
                 Assert.Throws<ArgumentException>(() => { modelReg.Validate(); }).Message
             );
-        }
-
-        [Fact]
-        public void TestBuildMap()
-        {
-            Assert.Empty(TeaModel.BuildMap(null));
-
-            TestRegModel model = new TestRegModel();
-            model.RequestId = "requestID";
-            model.Items = new List<TestRegSubModel> { new TestRegSubModel { RequestId = "sub" }, null };
-            model.NextMarker = "next";
-            model.testNoAttr = "noAttr";
-            model.subModel = new TestRegSubModel();
-            model.testListStr = new List<string> { "str" };
-            Dictionary<string, object> dic = TeaModel.BuildMap(model);
-            Assert.NotNull(dic);
-            Assert.IsType<List<Dictionary<string, object>>>(dic["items"]);
         }
     }
 }

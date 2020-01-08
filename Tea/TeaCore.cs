@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -218,24 +220,30 @@ namespace Tea
             return result;
         }
 
-        public static bool AllowRetry(Dictionary<string, object> dict, int retryTimes, long now)
+        public static bool AllowRetry(IDictionary dict, int retryTimes, long now)
         {
             int retry;
-            if (dict == null || !dict.ContainsKey("maxAttempts"))
+            if (dict == null)
+            {
+                return false;
+            }
+            Dictionary<string, object> dictObj = dict.Keys.Cast<string>().ToDictionary(key => key, key => dict[key]);
+            if (!dictObj.ContainsKey("maxAttempts"))
             {
                 return false;
             }
             else
             {
-                retry = dict["maxAttempts"] == null ? 0 : Convert.ToInt32(dict["maxAttempts"]);
+                retry = dictObj["maxAttempts"] == null ? 0 : Convert.ToInt32(dictObj["maxAttempts"]);
             }
 
             return retry >= retryTimes;
         }
 
-        public static int GetBackoffTime(Dictionary<string, object> dict, int retryTimes)
+        public static int GetBackoffTime(IDictionary Idict, int retryTimes)
         {
             int backOffTime = 0;
+            Dictionary<string, object> dict = Idict.Keys.Cast<string>().ToDictionary(key => key, key => Idict[key]);
             if (!dict.ContainsKey("policy") || dict["policy"] == null ||
                 string.IsNullOrWhiteSpace(dict["policy"].ToString()) || dict["policy"].ToString() == "no")
             {

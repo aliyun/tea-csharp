@@ -170,6 +170,9 @@ namespace TeaUnitTests
 
             dic["maxAttempts"] = 5;
             Assert.True(TeaCore.AllowRetry(dic, 3, _now));
+
+            Dictionary<string, int?> dicInt = new Dictionary<string, int?>();
+            Assert.False(TeaCore.AllowRetry(dicInt, 3, _now));
         }
 
         [Fact]
