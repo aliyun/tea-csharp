@@ -1,3 +1,8 @@
+### 2020-01-08 Version 0.2.1
+* Supported Extension method `Validate()`
+* Supported Extension method `ToMap()`
+* Remove `BuildMap()`
+
 ### 2020-01-06 Version 0.1.5
 * Fixed Dictionary convert method
 
