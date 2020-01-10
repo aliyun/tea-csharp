@@ -1,3 +1,7 @@
+### 2020-01-10 Version 0.2.2
+* Fixed `ComposeUrl()`
+* Supported `MapObj()`
+
 ### 2020-01-08 Version 0.2.1
 * Supported Extension method `Validate()`
 * Supported Extension method `ToMap()`
