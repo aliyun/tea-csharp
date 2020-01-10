@@ -66,11 +66,59 @@ namespace Tea
                     }
                     else
                     {
-                        p.SetValue(obj, Convert.ChangeType(value, propertyType));
+                        p.SetValue(obj, MapObj(propertyType, value));
                     }
                 }
             }
             return obj;
+        }
+
+        private static object MapObj(Type propertyType, object value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+            else if (propertyType == typeof(int?))
+            {
+                return Convert.ToInt32(value);
+            }
+            else if (propertyType == typeof(long?))
+            {
+                return Convert.ToInt64(value);
+            }
+            else if (propertyType == typeof(float?))
+            {
+                return Convert.ToSingle(value);
+            }
+            else if (propertyType == typeof(double?))
+            {
+                return Convert.ToDouble(value);
+            }
+            else if (propertyType == typeof(bool?))
+            {
+                return Convert.ToBoolean(value);
+            }
+            else if (propertyType == typeof(short?))
+            {
+                return Convert.ToInt16(value);
+            }
+            else if (propertyType == typeof(ushort?))
+            {
+                return Convert.ToUInt16(value);
+            }
+            else if (propertyType == typeof(uint?))
+            {
+                return Convert.ToUInt32(value);
+            }
+            else if (propertyType == typeof(ulong?))
+            {
+                return Convert.ToUInt64(value);
+            }
+            else
+            {
+                return Convert.ChangeType(value, propertyType);
+            }
         }
     }
 }
