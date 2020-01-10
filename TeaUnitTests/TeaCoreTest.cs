@@ -17,24 +17,45 @@ namespace TeaUnitTests
         public void TestComposeUrl()
         {
             TeaRequest teaRequest = new TeaRequest();
-            teaRequest.Protocol = "http";
-            teaRequest.Headers = new Dictionary<string, string>();
-            teaRequest.Headers["host"] = "host";
+
+            var url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://", url);
+
+            teaRequest.Headers["host"] = "fake.domain.com";
+            url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://fake.domain.com", url);
+
             teaRequest.Port = 8080;
-            teaRequest.Pathname = "/Pathname";
-            teaRequest.Query = new Dictionary<string, string>();
-            teaRequest.Query.Add("query", "query");
-            teaRequest.Query.Add("queryNull", null);
-            string url = TeaCore.ComposeUrl(teaRequest);
-            Assert.NotNull(url);
-            Assert.Equal("http://host:8080/Pathname?query=query&queryNull", url);
+            url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://fake.domain.com:8080", url);
 
-            teaRequest.Pathname = "/Pathname?test=1";
-            Assert.Equal("http://host:8080/Pathname?test=1&query=query&queryNull", TeaCore.ComposeUrl(teaRequest));
+            teaRequest.Pathname = "/index.html";
+            url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://fake.domain.com:8080/index.html", url);
 
-            teaRequest.Query = null;
-            teaRequest.Pathname = "/Pathname";
-            Assert.Equal("http://host:8080/Pathname", TeaCore.ComposeUrl(teaRequest));
+            teaRequest.Query["foo"] = "";
+            url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://fake.domain.com:8080/index.html", url);
+
+            teaRequest.Query["foo"] = "bar";
+            url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://fake.domain.com:8080/index.html?foo=bar", url);
+
+            teaRequest.Pathname = "/index.html?a=b";
+            url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://fake.domain.com:8080/index.html?a=b&foo=bar", url);
+
+            teaRequest.Pathname = "/index.html?a=b&";
+            url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://fake.domain.com:8080/index.html?a=b&foo=bar", url);
+
+            teaRequest.Query["fake"] = null;
+            url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://fake.domain.com:8080/index.html?a=b&foo=bar", url);
+
+            teaRequest.Query["fake"] = "val*";
+            url = TeaCore.ComposeUrl(teaRequest);
+            Assert.Equal("http://fake.domain.com:8080/index.html?a=b&foo=bar&fake=val%2A", url);
         }
 
         [Fact]

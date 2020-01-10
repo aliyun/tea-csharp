@@ -8,6 +8,6 @@ namespace TeaUnitTests.Models
         public string RequestId { get; set; }
 
         [NameInMap("count")]
-        public int Count { get; set; }
+        public int? Count { get; set; }
     }
 }

@@ -26,10 +26,6 @@ namespace Tea
                 {
                     throw new ArgumentException(string.Format("{0} is required.", PropertyName));
                 }
-                else if (obj is string && obj.ToString() == "")
-                {
-                    throw new ArgumentException(string.Format("{0} is required.", PropertyName));
-                }
             }
         }
 

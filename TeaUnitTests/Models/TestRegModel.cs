@@ -27,5 +27,24 @@ namespace TeaUnitTests.Models
         public TestRegSubModel subModel { get; set; }
 
         public Dictionary<string, object> dict { get; set; }
+
+        public int? testInt32 { get; set; }
+
+        public long? testLong { get; set; }
+
+        public float? testFloat { get; set; }
+
+        public double? testDouble { get; set; }
+
+        public bool? testBool { get; set; }
+
+        public short? testShort { get; set; }
+
+        public ushort? testUShort { get; set; }
+
+        public uint? testUInt { get; set; }
+
+        public ulong? testULong { get; set; }
+
     }
 }

@@ -41,9 +41,6 @@ namespace TeaUnitTests
             Assert.Equal("propertyName is required.",
                 Assert.Throws<ArgumentException>(() => { teaValidator.ValidateRequired(null); }).Message
             );
-            Assert.Equal("propertyName is required.",
-                Assert.Throws<ArgumentException>(() => { teaValidator.ValidateRequired(""); }).Message
-            );
         }
     }
 }

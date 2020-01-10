@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,7 +23,7 @@ namespace Tea
             var urlBuilder = new StringBuilder("");
 
             urlBuilder.Append(TeaConverter.StrToLower(request.Protocol)).Append("://");
-            urlBuilder.Append(request.Headers["host"]);
+            urlBuilder.Append(DictUtils.GetDicValue(request.Headers, "host"));
             if (request.Port > 0)
             {
                 urlBuilder.Append(":");
@@ -34,33 +35,30 @@ namespace Tea
             {
                 if (urlBuilder.ToString().Contains("?"))
                 {
-                    urlBuilder.Append("&");
+                    if (!urlBuilder.ToString().EndsWith("&"))
+                    {
+                        urlBuilder.Append("&");
+                    }
                 }
                 else
                 {
                     urlBuilder.Append("?");
                 }
-                var i = 0;
                 foreach (var entry in request.Query)
                 {
                     var key = entry.Key;
                     var val = entry.Value;
-
-                    urlBuilder.Append(key);
-                    if (!string.IsNullOrEmpty(val))
+                    if (string.IsNullOrWhiteSpace(val))
                     {
-                        urlBuilder.Append("=").Append(val);
+                        continue;
                     }
-
-                    if (i < request.Query.Count - 1)
-                    {
-                        urlBuilder.Append("&");
-                    }
-                    i = i + 1;
+                    urlBuilder.Append(PercentEncode(key));
+                    urlBuilder.Append("=");
+                    urlBuilder.Append(PercentEncode(val));
+                    urlBuilder.Append("&");
                 }
             }
-
-            return urlBuilder.ToString();
+            return urlBuilder.ToString().TrimEnd('?').TrimEnd('&');
         }
 
         public static TeaResponse DoAction(TeaRequest request)
@@ -290,6 +288,30 @@ namespace Tea
             stream.Write(bytes, 0, bytes.Length);
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
+        }
+
+        private static string PercentEncode(string value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+            var stringBuilder = new StringBuilder();
+            var text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
+            var bytes = Encoding.UTF8.GetBytes(value);
+            foreach (char c in bytes)
+            {
+                if (text.IndexOf(c) >= 0)
+                {
+                    stringBuilder.Append(c);
+                }
+                else
+                {
+                    stringBuilder.Append("%").Append(string.Format(CultureInfo.InvariantCulture, "{0:X2}", (int) c));
+                }
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }

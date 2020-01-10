@@ -67,6 +67,16 @@ namespace TeaUnitTests
             dicDict.Add("test", 1);
             dic.Add("dict", dicDict);
 
+            dic.Add("testInt32", "-32");
+            dic.Add("testLong", -64L);
+            dic.Add("testFloat", 11.11);
+            dic.Add("testDouble", 12.12);
+            dic.Add("testBool", "false");
+            dic.Add("testShort", -16);
+            dic.Add("testUShort", 16);
+            dic.Add("testUInt", 32);
+            dic.Add("testULong", 64);
+
             TestRegModel model = TeaModel.ToObject<TestRegModel>(dic);
             Assert.NotNull(model);
             Assert.Equal("requestID", model.RequestId);

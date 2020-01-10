@@ -8,6 +8,6 @@ namespace TeaUnitTests.Models
         [Validation(Pattern = "r", MaxLength = 0, Required = true)]
         public string RequestId { get; set; }
 
-        public int testInt { get; set; }
+        public int? testInt { get; set; }
     }
 }
