@@ -1,3 +1,6 @@
+### 2020-03-05 Version 0.2.3
+* Remove set `HttpWebRequest.Content-Length`
+
 ### 2020-01-10 Version 0.2.2
 * Fixed `ComposeUrl()`
 * Supported `MapObj()`
