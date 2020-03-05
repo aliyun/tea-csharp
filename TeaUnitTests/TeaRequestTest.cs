@@ -16,6 +16,10 @@ namespace TeaUnitTests
             Assert.Equal("http", teaRequest.Protocol);
             teaRequest.Headers = null;
             Assert.NotNull(teaRequest.Headers);
+            Assert.Equal("GET",teaRequest.Method);
+            
+            teaRequest.Method = "POST";
+            Assert.Equal("POST",teaRequest.Method);
         }
     }
 }
