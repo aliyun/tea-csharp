@@ -93,7 +93,6 @@ namespace Tea
             {
                 Stream requestStream = httpWebRequest.GetRequestStream();
                 request.Body.Position = 0;
-                httpWebRequest.ContentLength = request.Body.Length;
 
                 byte[] buffer = new byte[4096];
                 int bytesRead;
@@ -152,7 +151,6 @@ namespace Tea
             {
                 Stream requestStream = httpWebRequest.GetRequestStream();
                 request.Body.Position = 0;
-                httpWebRequest.ContentLength = request.Body.Length;
 
                 byte[] buffer = new byte[4096];
                 int bytesRead;

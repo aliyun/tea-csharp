@@ -6,6 +6,7 @@ namespace Tea
     public class TeaRequest
     {
         private string _protocol;
+        private string _method;
         private Dictionary<string, string> _query;
         private Dictionary<string, string> _headers;
         public TeaRequest()
@@ -34,7 +35,21 @@ namespace Tea
 
         public int Port { get; set; }
 
-        public string Method { get; set; }
+        public string Method 
+        {
+            get
+            {
+                if(_method == null)
+                {
+                    return "GET";
+                }
+                return _method;
+            }
+            set
+            {
+                _method = value;
+            }
+        }
 
         public string Pathname { get; set; }
 
