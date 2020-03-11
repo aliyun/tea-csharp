@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
+using System.Net.Http;
 
 namespace Tea
 {
     public class TeaResponse
     {
-
-        private HttpWebResponse _response { get; set; }
+        private HttpResponseMessage _responseAsync { get; set; }
 
         public int StatusCode { get; set; }
 
@@ -19,9 +18,9 @@ namespace Tea
         {
             get
             {
-                if (_response != null)
+                if (_responseAsync != null)
                 {
-                    return _response.GetResponseStream();
+                    return _responseAsync.Content.ReadAsStreamAsync().Result;
                 }
                 else
                 {
@@ -30,14 +29,14 @@ namespace Tea
             }
         }
 
-        public TeaResponse(HttpWebResponse response)
+        public TeaResponse(HttpResponseMessage response)
         {
             if (response != null)
             {
                 StatusCode = (int) response.StatusCode;
-                StatusMessage = response.StatusDescription;
+                StatusMessage = "";
                 Headers = TeaCore.ConvertHeaders(response.Headers);
-                _response = response;
+                _responseAsync = response;
             }
         }
     }

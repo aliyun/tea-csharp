@@ -22,7 +22,7 @@ namespace Tea
             }
         }
 
-        public new string Message
+        public override string Message
         {
             get
             {
@@ -30,7 +30,7 @@ namespace Tea
             }
         }
 
-        public new Dictionary<string, object> Data
+        public Dictionary<string, object> DataResult
         {
             get
             {
