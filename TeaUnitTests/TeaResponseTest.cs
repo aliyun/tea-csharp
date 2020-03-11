@@ -1,6 +1,7 @@
-﻿using System.Net;
-
-using Moq;
+﻿using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 
 using Tea;
 
@@ -13,15 +14,13 @@ namespace TeaUnitTests
         [Fact]
         public void TestTeaResponse()
         {
-            Mock<HttpWebResponse> mockHttpWebResponse = new Mock<HttpWebResponse>();
-            mockHttpWebResponse.Setup(p => p.StatusCode).Returns(HttpStatusCode.OK);
-            mockHttpWebResponse.Setup(p => p.StatusDescription).Returns("StatusDescription");
-            mockHttpWebResponse.Setup(p => p.Headers).Returns(new WebHeaderCollection());
-            TeaResponse teaResponse = new TeaResponse(mockHttpWebResponse.Object);
-            Assert.NotNull(teaResponse);
-            Assert.Equal(200, teaResponse.StatusCode);
-            Assert.Equal("StatusDescription", teaResponse.StatusMessage);
-            Assert.Empty(teaResponse.Headers);
+            HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+            httpResponseMessage.StatusCode = HttpStatusCode.OK;
+            httpResponseMessage.Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes("test")));
+            TeaResponse response = new TeaResponse(httpResponseMessage);
+            Assert.NotNull(response);
+            Assert.Equal(200, response.StatusCode);
+            Assert.Equal("", response.StatusMessage);
 
             TeaResponse teaResponseNull = new TeaResponse(null);
             Assert.Null(teaResponseNull.Body);

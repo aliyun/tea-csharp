@@ -5,6 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ namespace Tea
     {
         private static readonly int bufferLength = 1024;
         private static List<string> bodyMethod = new List<string> { "POST", "PUT", "PATCH" };
+        private static readonly HttpClient httpClient = new HttpClient();
 
         public static string ComposeUrl(TeaRequest request)
         {
@@ -68,54 +71,18 @@ namespace Tea
 
         public static TeaResponse DoAction(TeaRequest request, Dictionary<string, object> runtimeOptions)
         {
-            var url = TeaCore.ComposeUrl(request);
-            HttpWebRequest httpWebRequest = (HttpWebRequest) WebRequest.Create(url);
-            httpWebRequest.Method = request.Method;
-            httpWebRequest.KeepAlive = true;
+            int timeout;
 
-            foreach (var header in request.Headers)
-            {
-                httpWebRequest.Headers.Add(header.Key, header.Value);
-            }
+            HttpRequestMessage req = GetRequestMessage(request, runtimeOptions, out timeout);
 
-            int readTimeout = DictUtils.GetDicValue(runtimeOptions, "readTimeout").ToSafeInt(0);
-            if (readTimeout != 0)
-            {
-                httpWebRequest.ReadWriteTimeout = readTimeout;
-            }
-            int connectTimeout = DictUtils.GetDicValue(runtimeOptions, "connectTimeout").ToSafeInt(0);
-            if (connectTimeout != 0)
-            {
-                httpWebRequest.Timeout = connectTimeout;
-            }
-
-            if (bodyMethod.Contains(request.Method) && request.Body != null)
-            {
-                Stream requestStream = httpWebRequest.GetRequestStream();
-                request.Body.Position = 0;
-
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-                while ((bytesRead = request.Body.Read(buffer, 0, buffer.Length)) != 0)
-                {
-                    requestStream.Write(buffer, 0, bytesRead);
-                }
-            }
-
-            HttpWebResponse httpWebResponse;
             try
             {
-                httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-                return new TeaResponse(httpWebResponse);
+                HttpResponseMessage response = httpClient.SendAsync(req, new CancellationTokenSource(timeout).Token).Result;
+                return new TeaResponse(response);
             }
-            catch (WebException ex)
+            catch (System.Threading.Tasks.TaskCanceledException)
             {
-                HttpWebResponse excepResp = (HttpWebResponse) ex.Response;
-                if (excepResp == null)
-                {
-                    throw ex;
-                }
-                return new TeaResponse(excepResp);
+                throw new WebException("operation is timeout");
             }
         }
 
@@ -126,54 +93,18 @@ namespace Tea
 
         public static async Task<TeaResponse> DoActionAsync(TeaRequest request, Dictionary<string, object> runtimeOptions)
         {
-            var url = TeaCore.ComposeUrl(request);
-            HttpWebRequest httpWebRequest = (HttpWebRequest) WebRequest.Create(url);
-            httpWebRequest.Method = request.Method;
-            httpWebRequest.KeepAlive = false;
+            int timeout;
 
-            foreach (var header in request.Headers)
-            {
-                httpWebRequest.Headers.Add(header.Key, header.Value);
-            }
+            HttpRequestMessage req = GetRequestMessage(request, runtimeOptions, out timeout);
 
-            int readTimeout = DictUtils.GetDicValue(runtimeOptions, "readTimeout").ToSafeInt(0);
-            if (readTimeout != 0)
-            {
-                httpWebRequest.ReadWriteTimeout = readTimeout;
-            }
-            int connectTimeout = DictUtils.GetDicValue(runtimeOptions, "connectTimeout").ToSafeInt(0);
-            if (connectTimeout != 0)
-            {
-                httpWebRequest.Timeout = connectTimeout;
-            }
-
-            if (bodyMethod.Contains(request.Method) && request.Body != null)
-            {
-                Stream requestStream = httpWebRequest.GetRequestStream();
-                request.Body.Position = 0;
-
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-                while ((bytesRead = request.Body.Read(buffer, 0, buffer.Length)) != 0)
-                {
-                    requestStream.Write(buffer, 0, bytesRead);
-                }
-            }
-
-            HttpWebResponse httpWebResponse;
             try
             {
-                httpWebResponse = (HttpWebResponse) await httpWebRequest.GetResponseAsync();
-                return new TeaResponse(httpWebResponse);
+                HttpResponseMessage response = await httpClient.SendAsync(req, new CancellationTokenSource(timeout).Token);
+                return new TeaResponse(response);
             }
-            catch (WebException ex)
+            catch (System.Threading.Tasks.TaskCanceledException)
             {
-                HttpWebResponse excepResp = (HttpWebResponse) ex.Response;
-                if (excepResp == null)
-                {
-                    throw ex;
-                }
-                return new TeaResponse(excepResp);
+                throw new WebException("operation is timeout");
             }
         }
 
@@ -212,6 +143,17 @@ namespace Tea
             for (int i = 0; i < headers.Count; i++)
             {
                 result.Add(TeaConverter.StrToLower(headers.GetKey(i)), headers.Get(i));
+            }
+            return result;
+        }
+
+        public static Dictionary<string, string> ConvertHeaders(HttpResponseHeaders headers)
+        {
+            var result = new Dictionary<string, string>();
+            var enumerator = headers.GetEnumerator();
+            foreach (var item in headers)
+            {
+                result.Add(TeaConverter.StrToLower(item.Key), item.Value.First());
             }
             return result;
         }
@@ -288,7 +230,7 @@ namespace Tea
             return stream;
         }
 
-        private static string PercentEncode(string value)
+        internal static string PercentEncode(string value)
         {
             if (value == null)
             {
@@ -310,6 +252,50 @@ namespace Tea
             }
 
             return stringBuilder.ToString();
+        }
+
+        internal static HttpRequestMessage GetRequestMessage(TeaRequest request, Dictionary<string, object> runtimeOptions, out int timeout)
+        {
+            var url = ComposeUrl(request);
+            HttpRequestMessage req = new HttpRequestMessage();
+            req.Method = HttpUtils.GetHttpMethod(request.Method);
+            req.RequestUri = new Uri(url);
+            timeout = 100000;
+            int readTimeout = DictUtils.GetDicValue(runtimeOptions, "readTimeout").ToSafeInt(0);
+            int connectTimeout = DictUtils.GetDicValue(runtimeOptions, "connectTimeout").ToSafeInt(0);
+
+            if (readTimeout != 0 || connectTimeout != 0)
+            {
+                timeout = readTimeout + connectTimeout;
+            }
+
+            if (bodyMethod.Contains(request.Method) && request.Body != null)
+            {
+                Stream requestStream = new MemoryStream();
+                request.Body.Position = 0;
+
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = request.Body.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    requestStream.Write(buffer, 0, bytesRead);
+                }
+
+                requestStream.Position = 0;
+                StreamContent streamContent = new StreamContent(requestStream);
+                req.Content = streamContent;
+            }
+
+            foreach (var header in request.Headers)
+            {
+                req.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                if (header.Key.ToLower().StartsWith("content-") && req.Content != null)
+                {
+                    req.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+            }
+
+            return req;
         }
     }
 }

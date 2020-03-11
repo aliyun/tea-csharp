@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -85,6 +86,7 @@ namespace TeaUnitTests
 
             teaRequest.Method = "POST";
             teaRequest.Body = new MemoryStream(Encoding.UTF8.GetBytes("test"));
+            teaRequest.Headers["content-test"] = "test";
             teaResponse = TeaCore.DoAction(teaRequest, runtime);
             Assert.NotNull(teaResponse);
 
@@ -99,7 +101,7 @@ namespace TeaUnitTests
             Dictionary<string, object> runtime404 = new Dictionary<string, object>();
             runtime404.Add("readTimeout", 7000);
             runtime404.Add("connectTimeout", 7000);
-            Assert.Throws<WebException>(() => { TeaCore.DoAction(teaRequest404, runtime); });
+            Assert.Throws<AggregateException>(() => { TeaCore.DoAction(teaRequest404, runtime); });
 
             TeaRequest requestException = new TeaRequest
             {
@@ -110,6 +112,7 @@ namespace TeaUnitTests
             Dictionary<string, object> runtimeException = new Dictionary<string, object>();
             requestException.Headers["host"] = "www.aliyun.com";
             TeaResponse responseException = TeaCore.DoAction(requestException, runtimeException);
+            Assert.NotNull(responseException);
         }
 
         [Fact]
@@ -128,8 +131,8 @@ namespace TeaUnitTests
             Assert.NotNull(teaResponse);
 
             Dictionary<string, object> runtime = new Dictionary<string, object>();
-            runtime.Add("readTimeout", 7000);
-            runtime.Add("connectTimeout", 7000);
+            runtime.Add("readTimeout", 4000);
+            runtime.Add("connectTimeout", 0);
 
             teaResponse = await TeaCore.DoActionAsync(teaRequest, runtime);
             Assert.NotNull(teaResponse);
@@ -153,7 +156,7 @@ namespace TeaUnitTests
             Dictionary<string, object> runtime404 = new Dictionary<string, object>();
             runtime404.Add("readTimeout", 7000);
             runtime404.Add("connectTimeout", 7000);
-            await Assert.ThrowsAsync<WebException>(async() => { await TeaCore.DoActionAsync(teaRequest404, runtime); });
+            await Assert.ThrowsAsync<HttpRequestException>(async() => { await TeaCore.DoActionAsync(teaRequest404, runtime); });
 
             TeaRequest requestException = new TeaRequest
             {
@@ -231,7 +234,7 @@ namespace TeaUnitTests
             TeaCore.Sleep(1000);
             TimeSpan tsAfter = new TimeSpan(DateTime.Now.Ticks);
             TimeSpan tsSubtract = tsBefore.Subtract(tsAfter).Duration();
-            Assert.InRange(tsSubtract.TotalMilliseconds, 1000, 1100);
+            Assert.InRange(tsSubtract.TotalMilliseconds, 990, 1100);
         }
 
         [Fact]
@@ -241,7 +244,7 @@ namespace TeaUnitTests
             await TeaCore.SleepAsync(1000);
             TimeSpan tsAfter = new TimeSpan(DateTime.Now.Ticks);
             TimeSpan tsSubtract = tsBefore.Subtract(tsAfter).Duration();
-            Assert.InRange(tsSubtract.TotalMilliseconds, 1000, 1000000);
+            Assert.InRange(tsSubtract.TotalMilliseconds, 990, 1000000);
         }
 
         [Fact]
@@ -266,6 +269,14 @@ namespace TeaUnitTests
             stream.Read(bytes, 0, bytes.Length);
             string bytesStr = Encoding.UTF8.GetString(bytes);
             Assert.Equal("test", bytesStr);
+        }
+
+        [Fact]
+        public void Test_PercentEncode()
+        {
+            Assert.Null(TeaCore.PercentEncode(null));
+
+            Assert.Equal("test%3D", TeaCore.PercentEncode("test="));
         }
     }
 }
