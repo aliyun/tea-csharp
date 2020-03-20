@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using Tea;
 
 using Xunit;
@@ -40,6 +40,18 @@ namespace TeaUnitTests
             attribute.Required = true;
             Assert.Equal("propertyName is required.",
                 Assert.Throws<ArgumentException>(() => { teaValidator.ValidateRequired(null); }).Message
+            );
+
+            attribute.MaxLength = 3;
+            teaValidator.ValidateMaxLength("阿里");
+            Assert.Equal("propertyName is exceed max-length: 3",
+                Assert.Throws<ArgumentException>(() => { teaValidator.ValidateMaxLength("阿里test"); }).Message
+            );
+
+            List<string> list = new List<string>{ "1", "2","3","4" };
+            teaValidator.ValidateMaxLength("阿里");
+            Assert.Equal("propertyName is exceed max-length: 3",
+                Assert.Throws<ArgumentException>(() => { teaValidator.ValidateMaxLength(list); }).Message
             );
         }
     }

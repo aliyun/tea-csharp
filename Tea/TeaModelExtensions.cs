@@ -100,6 +100,9 @@ namespace Tea
                 {
                     IList list = (IList) obj;
 
+                    //validate list count
+                    teaValidator.ValidateMaxLength(list);
+
                     Type listType = propertyType.GetGenericArguments() [0];
                     if (typeof(TeaModel).IsAssignableFrom(listType))
                     {
@@ -112,6 +115,7 @@ namespace Tea
                     {
                         for (int j = 0; j < list.Count; j++)
                         {
+                            //validate pattern
                             teaValidator.ValidateRegex(list[j]);
                         }
                     }
@@ -122,7 +126,10 @@ namespace Tea
                 }
                 else
                 {
+                    //validate pattern
                     teaValidator.ValidateRegex(obj);
+                    //validate list count
+                    teaValidator.ValidateMaxLength(obj);
                 }
             }
         }
