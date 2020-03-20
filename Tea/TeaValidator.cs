@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -41,5 +42,26 @@ namespace Tea
             }
         }
 
+
+        public void ValidateMaxLength(object obj)
+        {
+            bool result = true;
+            if(Attribute != null && Attribute.MaxLength>0)
+            {
+                if (typeof(IList).IsAssignableFrom(obj.GetType()))
+                {
+                    result = ((IList)obj).Count <= Attribute.MaxLength;
+                }
+                else
+                {
+                    result = obj.ToString().Length <= Attribute.MaxLength;
+                }
+            }
+
+            if (!result)
+            {
+                throw new ArgumentException(string.Format("{0} is exceed max-length: {1}", PropertyName, Attribute.MaxLength));
+            }
+        }
     }
 }
