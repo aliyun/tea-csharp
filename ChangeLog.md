@@ -1,3 +1,7 @@
+### 2020-03-05 Version 0.3.1
+* Improved `DoAction()`
+* supported validate `maxlength`
+
 ### 2020-03-05 Version 0.2.3
 * Remove set `HttpWebRequest.Content-Length`
 
