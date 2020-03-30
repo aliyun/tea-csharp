@@ -37,37 +37,12 @@ namespace Tea
                 if (dict.ContainsKey(realName))
                 {
                     var value = dict[realName];
-                    if (value is List<Dictionary<string, object>>)
+                    if(value == null)
                     {
-                        var list = Activator.CreateInstance(propertyType);
-                        Type innerPropertyType = propertyType.GetGenericArguments() [0];
-
-                        foreach (Dictionary<string, object> dic in (List<Dictionary<string, object>>) value)
-                        {
-                            var v = Activator.CreateInstance(innerPropertyType);
-                            MethodInfo mAddList = propertyType.GetMethod("Add", new Type[] { innerPropertyType });
-                            if (mAddList != null)
-                            {
-                                var item = ToObject(dic, v);
-                                mAddList.Invoke(list, new object[] { item });
-                            }
-                        }
-
-                        p.SetValue(obj, list);
+                        p.SetValue(obj, value);
+                        continue;
                     }
-                    else if (typeof(TeaModel).IsAssignableFrom(propertyType))
-                    {
-                        var v = Activator.CreateInstance(propertyType);
-                        p.SetValue(obj, ToObject((Dictionary<string, object>) value, v));
-                    }
-                    else if (propertyType.Equals(typeof(Int32)) && value is Int64)
-                    {
-                        p.SetValue(obj, Convert.ToInt32((Int64) value));
-                    }
-                    else
-                    {
-                        p.SetValue(obj, MapObj(propertyType, value));
-                    }
+                    p.SetValue(obj, MapObj(propertyType, value));
                 }
             }
             return obj;
@@ -78,6 +53,36 @@ namespace Tea
             if (value == null)
             {
                 return null;
+            }
+            else if (typeof(IList).IsAssignableFrom(value.GetType()))
+            {
+                var list = Activator.CreateInstance(propertyType);
+                Type innerPropertyType = propertyType.GetGenericArguments()[0];
+                foreach (var temp in (IList)value)
+                {
+                    MethodInfo mAddList = propertyType.GetMethod("Add", new Type[] { innerPropertyType });
+                    if (mAddList != null)
+                    {
+                        if (temp == null)
+                        {
+                            mAddList.Invoke(list, new object[] { null });
+                            continue;
+                        }
+                        var item = MapObj(innerPropertyType, temp);
+                        mAddList.Invoke(list, new object[] { item });
+                    }
+                }
+                return list;
+            }
+            else if (typeof(TeaModel).IsAssignableFrom(propertyType))
+            {
+                var v = Activator.CreateInstance(propertyType);
+                Dictionary<string, object> dicObj = ((IDictionary)value).Keys.Cast<string>().ToDictionary(key => key, key => ((IDictionary)value)[key]);
+                return ToObject(dicObj, v);
+            }
+            else if (propertyType.Equals(typeof(Int32)) && value is Int64)
+            {
+                return Convert.ToInt32((Int64)value);
             }
             else if (propertyType == typeof(int?))
             {
