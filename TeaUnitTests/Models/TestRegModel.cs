@@ -46,5 +46,7 @@ namespace TeaUnitTests.Models
 
         public ulong? testULong { get; set; }
 
+        public string testNull { get; set; }
+
     }
 }

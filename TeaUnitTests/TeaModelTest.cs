@@ -76,6 +76,7 @@ namespace TeaUnitTests
             dic.Add("testUShort", 16);
             dic.Add("testUInt", 32);
             dic.Add("testULong", 64);
+            dic.Add("testNull", null);
 
             TestRegModel model = TeaModel.ToObject<TestRegModel>(dic);
             Assert.NotNull(model);
@@ -90,6 +91,7 @@ namespace TeaUnitTests
             Assert.Equal("str", model.testListStr[0]);
             Assert.NotNull(model.subModel);
             Assert.NotNull(model.dict);
+            Assert.Null(model.testNull);
 
             Dictionary<string, string> dicString = null;
             Assert.Null(TeaModel.ToObject<TestDicStringModel>(dicString));
