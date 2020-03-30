@@ -1,3 +1,7 @@
+### 2020-03-05 Version 0.3.2
+* Supported `Dictionary` enxtension func `Get(string key)`
+* improved `ToObject()`
+
 ### 2020-03-05 Version 0.3.1
 * Improved `DoAction()`
 * supported validate `maxlength`
