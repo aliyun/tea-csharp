@@ -1,3 +1,7 @@
+### 2020-05-13 Version 0.3.3
+* Replenish validate
+* Fixed ToMap return null
+
 ### 2020-03-05 Version 0.3.2
 * Supported `Dictionary` enxtension func `Get(string key)`
 * improved `ToObject()`
