@@ -28,10 +28,12 @@ namespace TeaUnitTests.Models
 
         public Dictionary<string, object> dict { get; set; }
 
+        [Validation(Maximun = 10)]
         public int? testInt32 { get; set; }
 
         public long? testLong { get; set; }
 
+        [Validation(Minimum = -1)]
         public float? testFloat { get; set; }
 
         public double? testDouble { get; set; }
