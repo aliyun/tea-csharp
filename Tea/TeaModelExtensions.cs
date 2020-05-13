@@ -102,6 +102,7 @@ namespace Tea
 
                     //validate list count
                     teaValidator.ValidateMaxLength(list);
+                    teaValidator.ValidateMinLength(list);
 
                     Type listType = propertyType.GetGenericArguments() [0];
                     if (typeof(TeaModel).IsAssignableFrom(listType))
@@ -128,8 +129,12 @@ namespace Tea
                 {
                     //validate pattern
                     teaValidator.ValidateRegex(obj);
-                    //validate list count
+                    //validate count
                     teaValidator.ValidateMaxLength(obj);
+                    teaValidator.ValidateMinLength(obj);
+                    //validate num
+                    teaValidator.ValidateMaximum(obj);
+                    teaValidator.ValidateMinimum(obj);
                 }
             }
         }

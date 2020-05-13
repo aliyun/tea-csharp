@@ -53,6 +53,24 @@ namespace TeaUnitTests
             Assert.Equal("propertyName is exceed max-length: 3",
                 Assert.Throws<ArgumentException>(() => { teaValidator.ValidateMaxLength(list); }).Message
             );
+
+            attribute.MinLength = 2;
+            teaValidator.ValidateMinLength("阿里");
+            Assert.Equal("propertyName is less than min-length: 2",
+                Assert.Throws<ArgumentException>(() => { teaValidator.ValidateMinLength("阿"); }).Message
+            );
+
+            attribute.Maximun = 1.5;
+            teaValidator.ValidateMaximum("1");
+            Assert.Equal("propertyName is exceed maximum: 1.5",
+                Assert.Throws<ArgumentException>(() => { teaValidator.ValidateMaximum(2); }).Message
+            );
+
+            attribute.Minimum = 1;
+            teaValidator.ValidateMinimum(1.5);
+            Assert.Equal("propertyName is less than Minimum: 1",
+                Assert.Throws<ArgumentException>(() => { teaValidator.ValidateMinimum(-2); }).Message
+            );
         }
     }
 }
