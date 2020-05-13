@@ -11,7 +11,7 @@ namespace Tea
         {
             if (model == null)
             {
-                return new Dictionary<string, object>();
+                return null;
             }
             var result = new Dictionary<string, object>();
             Type type = model.GetType();
