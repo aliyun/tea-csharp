@@ -15,7 +15,7 @@ namespace TeaUnitTests
         public void TestToMap()
         {
             TeaModel modelNull = null;
-            Assert.Empty(modelNull.ToMap());
+            Assert.Null(modelNull.ToMap());
 
             TestRegModel model = new TestRegModel();
             model.RequestId = "requestID";
