@@ -19,7 +19,6 @@ namespace Tea
     {
         private static readonly int bufferLength = 1024;
         private static List<string> bodyMethod = new List<string> { "POST", "PUT", "PATCH" };
-        private static readonly HttpClient httpClient = new HttpClient();
 
         public static string ComposeUrl(TeaRequest request)
         {
@@ -72,11 +71,13 @@ namespace Tea
         public static TeaResponse DoAction(TeaRequest request, Dictionary<string, object> runtimeOptions)
         {
             int timeout;
-
+            var url = ComposeUrl(request);
+            Uri uri = new Uri(url);
             HttpRequestMessage req = GetRequestMessage(request, runtimeOptions, out timeout);
 
             try
             {
+                HttpClient httpClient = HttpClientUtils.GetOrAddHttpClient(request.Protocol,uri.Host, uri.Port, runtimeOptions);
                 HttpResponseMessage response = httpClient.SendAsync(req, new CancellationTokenSource(timeout).Token).Result;
                 return new TeaResponse(response);
             }
@@ -94,11 +95,13 @@ namespace Tea
         public static async Task<TeaResponse> DoActionAsync(TeaRequest request, Dictionary<string, object> runtimeOptions)
         {
             int timeout;
-
+            var url = ComposeUrl(request);
+            Uri uri = new Uri(url);
             HttpRequestMessage req = GetRequestMessage(request, runtimeOptions, out timeout);
 
             try
             {
+                HttpClient httpClient = HttpClientUtils.GetOrAddHttpClient(request.Protocol, uri.Host, uri.Port, runtimeOptions);
                 HttpResponseMessage response = await httpClient.SendAsync(req, new CancellationTokenSource(timeout).Token);
                 return new TeaResponse(response);
             }
