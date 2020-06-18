@@ -63,23 +63,26 @@ namespace TeaUnitTests
         public void TestDoAction()
         {
             TeaRequest teaRequest = new TeaRequest();
-            teaRequest.Protocol = "https";
+            teaRequest.Protocol = "http";
             teaRequest.Method = "GET";
             teaRequest.Headers = new Dictionary<string, string>();
             teaRequest.Headers["host"] = "www.alibabacloud.com";
             teaRequest.Pathname = "/s/zh";
             teaRequest.Query = new Dictionary<string, string>();
             teaRequest.Query.Add("k", "ecs");
-
-            TeaResponse teaResponse = TeaCore.DoAction(teaRequest);
-            Assert.NotNull(teaResponse);
-
             Dictionary<string, object> runtime = new Dictionary<string, object>();
             runtime.Add("readTimeout", 7000);
             runtime.Add("connectTimeout", 7000);
+            runtime.Add("httpsProxy", "http://www.alibabacloud.com/s/zh?k=ecs");
+            runtime.Add("ignoreSSL", true);
 
-            teaResponse = TeaCore.DoAction(teaRequest, runtime);
+            TeaResponse teaResponse = TeaCore.DoAction(teaRequest, runtime);
             Assert.NotNull(teaResponse);
+
+            teaRequest.Protocol = "https";
+            teaResponse = TeaCore.DoAction(teaRequest);
+            Assert.NotNull(teaResponse);
+
 
             string bodyStr = TeaCore.GetResponseBody(teaResponse);
             Assert.NotNull(bodyStr);
@@ -101,7 +104,10 @@ namespace TeaUnitTests
             Dictionary<string, object> runtime404 = new Dictionary<string, object>();
             runtime404.Add("readTimeout", 7000);
             runtime404.Add("connectTimeout", 7000);
-            Assert.Throws<AggregateException>(() => { TeaCore.DoAction(teaRequest404, runtime); });
+            Assert.Throws<AggregateException>(() => { TeaCore.DoAction(teaRequest404, runtime404); });
+
+            TeaRequest teaRequestProxy = new TeaRequest();
+
 
             TeaRequest requestException = new TeaRequest
             {
