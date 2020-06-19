@@ -1,3 +1,6 @@
+### 2020-06-19 Version 0.4.0
+* Improved `HttpClient` no static
+
 ### 2020-05-13 Version 0.3.3
 * Replenish validate
 * Fixed ToMap return null
