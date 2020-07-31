@@ -37,7 +37,7 @@ namespace Tea
                 if (dict.ContainsKey(realName))
                 {
                     var value = dict[realName];
-                    if(value == null)
+                    if (value == null)
                     {
                         p.SetValue(obj, value);
                         continue;
@@ -57,8 +57,8 @@ namespace Tea
             else if (typeof(IList).IsAssignableFrom(value.GetType()))
             {
                 var list = Activator.CreateInstance(propertyType);
-                Type innerPropertyType = propertyType.GetGenericArguments()[0];
-                foreach (var temp in (IList)value)
+                Type innerPropertyType = propertyType.GetGenericArguments() [0];
+                foreach (var temp in (IList) value)
                 {
                     MethodInfo mAddList = propertyType.GetMethod("Add", new Type[] { innerPropertyType });
                     if (mAddList != null)
@@ -77,12 +77,40 @@ namespace Tea
             else if (typeof(TeaModel).IsAssignableFrom(propertyType))
             {
                 var v = Activator.CreateInstance(propertyType);
-                Dictionary<string, object> dicObj = ((IDictionary)value).Keys.Cast<string>().ToDictionary(key => key, key => ((IDictionary)value)[key]);
+                Dictionary<string, object> dicObj = ((IDictionary) value).Keys.Cast<string>().ToDictionary(key => key, key => ((IDictionary) value) [key]);
                 return ToObject(dicObj, v);
+            }
+            else if (typeof(IDictionary).IsAssignableFrom(propertyType))
+            {
+                var dic = (IDictionary) value;
+                IDictionary resultDic;
+                if (propertyType.Equals(typeof(IDictionary)))
+                {
+                    resultDic = dic;
+                }
+                else
+                {
+                    resultDic = (IDictionary) System.Activator.CreateInstance(propertyType);
+                    var innerType = propertyType.GetGenericArguments() [1];
+                    foreach (DictionaryEntry keypair in dic)
+                    {
+                        if (keypair.Value == null)
+                        {
+                            resultDic.Add(keypair.Key, null);
+                        }
+                        else
+                        {
+                            Type valueType = keypair.Value.GetType();
+                            resultDic.Add(keypair.Key, MapObj(innerType, keypair.Value));
+                        }
+                    }
+                }
+
+                return resultDic;
             }
             else if (propertyType.Equals(typeof(Int32)) && value is Int64)
             {
-                return Convert.ToInt32((Int64)value);
+                return Convert.ToInt32((Int64) value);
             }
             else if (propertyType == typeof(int?))
             {

@@ -23,57 +23,61 @@ namespace Tea
                 Type property = propertyInfo.PropertyType;
                 NameInMapAttribute attribute = propertyInfo.GetCustomAttribute(typeof(NameInMapAttribute)) as NameInMapAttribute;
                 string realName = attribute == null ? propertyInfo.Name : attribute.Name;
-                if (typeof(IList).IsAssignableFrom(property))
-                {
-                    IList list = (IList) propertyInfo.GetValue(model);
-                    if (list != null)
-                    {
-                        Type listType = property.GetGenericArguments() [0];
-                        if (typeof(TeaModel).IsAssignableFrom(listType))
-                        {
-                            IList dicList = new List<Dictionary<string, object>>();
-                            for (int j = 0; j < list.Count; j++)
-                            {
-                                if (list[j] == null)
-                                {
-                                    dicList.Add(null);
-                                }
-                                else
-                                {
-                                    dicList.Add(((TeaModel) list[j]).ToMap());
-                                }
-                            }
-                            result.Add(realName, dicList);
-                        }
-                        else
-                        {
-                            result.Add(realName, list);
-                        }
-                    }
-                    else
-                    {
-                        result.Add(realName, null);
-                    }
-                }
-                else if (typeof(TeaModel).IsAssignableFrom(property))
-                {
-                    TeaModel teaModel = (TeaModel) propertyInfo.GetValue(model);
-                    if (teaModel != null)
-                    {
-                        result.Add(realName, ((TeaModel) propertyInfo.GetValue(model)).ToMap());
-                    }
-                    else
-                    {
-                        result.Add(realName, null);
-                    }
-                }
-                else
-                {
-                    result.Add(realName, propertyInfo.GetValue(model));
-                }
+                result.Add(realName, ToMapFactory(property, propertyInfo.GetValue(model)));
             }
 
             return result;
+        }
+
+        private static object ToMapFactory(Type type, object value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+            if (typeof(IList).IsAssignableFrom(type))
+            {
+                IList list = (IList) value;
+                Type listType = type.GetGenericArguments() [0];
+                List<object> resultList = new List<object>();
+                for (int j = 0; j < list.Count; j++)
+                {
+                    if (list[j] == null)
+                    {
+                        resultList.Add(null);
+                    }
+                    else
+                    {
+                        resultList.Add(ToMapFactory(listType, list[j]));
+                    }
+                }
+                return resultList;
+            }
+            else if (typeof(IDictionary).IsAssignableFrom(type))
+            {
+                IDictionary dic = (IDictionary) value;
+                IDictionary resultDic = new Dictionary<string, object>();
+                foreach (DictionaryEntry keypair in dic)
+                {
+                    if (keypair.Value == null)
+                    {
+                        resultDic.Add(keypair.Key, null);
+                    }
+                    else
+                    {
+                        Type valueType = keypair.Value.GetType();
+                        resultDic.Add(keypair.Key, ToMapFactory(valueType, keypair.Value));
+                    }
+                }
+                return resultDic;
+            }
+            else if (typeof(TeaModel).IsAssignableFrom(type))
+            {
+                TeaModel teaModel = (TeaModel) value;
+                return teaModel.ToMap();
+            }
+
+            return value;
         }
 
         public static void Validate(this TeaModel model)
