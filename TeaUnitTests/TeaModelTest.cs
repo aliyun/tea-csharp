@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Tea;
@@ -11,6 +12,16 @@ namespace TeaUnitTests
 {
     public class TeaModelTest
     {
+        public class NestedTest : TeaModel
+        {
+            [NameInMap("MapNestedMap")]
+            public Dictionary<string, Dictionary<string, TestRegSubModel>> mapnestedMap { get; set; }
+
+            [NameInMap("ListNestedList")]
+            public List<List<IDictionary>> listNestedList { get; set; }
+
+        }
+
         [Fact]
         public void TestToMap()
         {
@@ -24,9 +35,35 @@ namespace TeaUnitTests
             model.testNoAttr = "noAttr";
             model.subModel = new TestRegSubModel();
             model.testListStr = new List<string> { "str" };
+            TestRegSubModel dicSubModel = new TestRegSubModel
+            {
+                RequestId = "requestDic"
+            };
+            Dictionary<string, TestRegSubModel> dicSub = new Dictionary<string, TestRegSubModel>
+            {
+                { "subDic", dicSubModel },
+                { "subNull", null }
+            };
+            var dicMap = new Dictionary<string, Dictionary<string, TestRegSubModel>>
+            {
+                { "map", dicSub }
+            };
+            Dictionary<string, string> map = new Dictionary<string, string>
+            {
+                { "test", "test" }
+            };
+            List<IDictionary> list = new List<IDictionary>();
+            list.Add(map);
+            List<List<IDictionary>> listNestedList = new List<List<IDictionary>>();
+            listNestedList.Add(list);
+            model.dicNestDic = dicMap;
+            model.listIDic = listNestedList;
             Dictionary<string, object> dic = model.ToMap();
             Assert.NotNull(dic);
-            Assert.IsType<List<Dictionary<string, object>>>(dic["items"]);
+
+            var from = TeaModel.ToObject<TestRegModel>(dic);
+            Assert.Equal("test", from.listIDic[0][0]["test"]);
+            Assert.Equal("requestDic", from.dicNestDic["map"]["subDic"].RequestId);
 
             TestRegModel modelEmpty = new TestRegModel();
             modelEmpty.RequestId = "1";

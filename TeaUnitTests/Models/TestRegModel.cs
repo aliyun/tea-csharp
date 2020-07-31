@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 
 using Tea;
@@ -49,6 +50,10 @@ namespace TeaUnitTests.Models
         public ulong? testULong { get; set; }
 
         public string testNull { get; set; }
+
+        public Dictionary<string, Dictionary<string, TestRegSubModel>> dicNestDic { get; set; }
+
+        public List<List<IDictionary>> listIDic { get; set; }
 
     }
 }
