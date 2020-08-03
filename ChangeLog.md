@@ -1,3 +1,6 @@
+### 2020-08-03 Version 1.0.0
+* Improve the nesting logic of the toMap method for Model class.
+
 ### 2020-06-19 Version 0.4.0
 * Improved `HttpClient` no static
 
