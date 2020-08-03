@@ -8,7 +8,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageReleaseNotes></PackageReleaseNotes>
     <AssemblyName>Tea</AssemblyName>
-    <Version>0.4.0</Version>
+    <Version>1.0.0</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>5</LangVersion>
   </PropertyGroup>
@@ -39,10 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LogLib.Common" Version="5.1.2">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
 
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2">
       <PrivateAssets>all</PrivateAssets>
