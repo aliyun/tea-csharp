@@ -89,7 +89,7 @@ namespace TeaUnitTests.Utils
             dicStr["test"] = "test";
             dicStr["key"] = "value";
             Assert.Null(dicStr.Get("testNull"));
-            Assert.Equal("test","test");
+            Assert.Equal("test", dicStr.Get("test"));
 
             Dictionary<string, object> dicObj = new Dictionary<string, object>();
             dicObj["test"] = 1;

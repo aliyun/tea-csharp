@@ -190,11 +190,15 @@ namespace TeaUnitTests
         public void TestAllowRetry()
         {
             long _now = System.DateTime.Now.Millisecond;
+
+            Assert.True(TeaCore.AllowRetry(null, 0, _now));
+
             Assert.False(TeaCore.AllowRetry(null, 3, _now));
 
             Dictionary<string, object> dic = new Dictionary<string, object>();
             Assert.False(TeaCore.AllowRetry(dic, 3, _now));
 
+            dic.Add("retryable", true);
             dic.Add("maxAttempts", null);
             Assert.False(TeaCore.AllowRetry(dic, 3, _now));
 
@@ -259,11 +263,8 @@ namespace TeaUnitTests
             Exception ex = new Exception();
             Assert.False(TeaCore.IsRetryable(ex));
 
-            TeaException webEx = new TeaException(new Dictionary<string, object>());
+            TeaRetryableException webEx = new TeaRetryableException();
             Assert.True(TeaCore.IsRetryable(webEx));
-
-            OperationCanceledException opEx = new OperationCanceledException();
-            Assert.True(TeaCore.IsRetryable(opEx));
         }
 
         [Fact]

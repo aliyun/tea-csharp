@@ -163,6 +163,16 @@ namespace Tea
 
         public static bool AllowRetry(IDictionary dict, int retryTimes, long now)
         {
+            if(retryTimes == 0)
+            {
+                return true;
+            }
+
+            if(!dict.Get("retryable").ToSafeBool(false))
+            {
+                return false;
+            }
+            
             int retry;
             if (dict == null)
             {
@@ -217,7 +227,7 @@ namespace Tea
 
         public static bool IsRetryable(Exception e)
         {
-            return e is TeaException || e is OperationCanceledException;
+            return e is TeaRetryableException;
         }
 
         public static Stream BytesReadable(string str)
@@ -300,5 +310,6 @@ namespace Tea
 
             return req;
         }
+
     }
 }

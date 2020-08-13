@@ -114,22 +114,14 @@ namespace Tea.Utils
             }
         }
 
-        public static string Get(this Dictionary<string,string> dic, string key, string defaultVal = null)
-        {
-            if(dic == null)
-            {
-                return null;
-            }
 
-            string value = string.Empty;
-            if(dic.TryGetValue(key, out value))
+        public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue defaultValue = default(TValue))
+        {
+            if (dict == null)
             {
-                return value;
+                return default(TValue);
             }
-            else
-            {
-                return defaultVal;
-            }
+            return dict.ContainsKey(key) ? dict[key] : defaultValue;
         }
 
         public static object Get(this IDictionary dic, string key, object defaultVal = null)
@@ -138,7 +130,7 @@ namespace Tea.Utils
             {
                 return null;
             }
-            if(dic.Contains(key))
+            if (dic.Contains(key))
             {
                 return dic[key];
             }

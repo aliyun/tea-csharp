@@ -4,14 +4,8 @@ namespace Tea
 {
     public class TeaRetryableException : Exception
     {
-        public TeaRequest Request { get; set; }
-
-        public TeaResponse Response { get; set; }
-
-        public TeaRetryableException(TeaRequest request, TeaResponse response)
+        public TeaRetryableException()
         {
-            Request = request;
-            Response = response;
         }
     }
 }
