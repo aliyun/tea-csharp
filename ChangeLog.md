@@ -1,3 +1,7 @@
+### 2020-08-14 Version 1.0.1
+* Fixed IsRetryable.
+* Improve `Dictionary` extension method `Get` Generic.
+
 ### 2020-08-03 Version 1.0.0
 * Improve the nesting logic of the toMap method for Model class.
 
