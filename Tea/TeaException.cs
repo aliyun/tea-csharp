@@ -10,9 +10,12 @@ namespace Tea
 {
     public class TeaException : Exception
     {
-        private string code;
-        private string message;
-        private Dictionary<string, object> data;
+        private readonly string code;
+        private readonly string message;
+        private readonly Dictionary<string, object> data;
+        private readonly string httpCode;
+        private readonly string hostId;
+        private readonly string requestId;
 
         public string Code
         {
@@ -26,7 +29,20 @@ namespace Tea
         {
             get
             {
-                return message;
+                string res = message;
+                if (!string.IsNullOrWhiteSpace(requestId))
+                {
+                    res += string.Format(";requestId:{0}", requestId);
+                }
+                if (!string.IsNullOrWhiteSpace(httpCode))
+                {
+                    res += string.Format(";httpCode:{0}", httpCode);
+                }
+                if (!string.IsNullOrWhiteSpace(hostId))
+                {
+                    res += string.Format(";hostId:{0}", hostId);
+                }
+                return res;
             }
         }
 
@@ -52,18 +68,25 @@ namespace Tea
             {
                 IDictionary dicData = (IDictionary) obj;
                 data = dicData.Keys.Cast<string>().ToDictionary(key => key, key => dicData[key]);
-                return;
+            }
+            else
+            {
+                Dictionary<string, object> filedsDict = new Dictionary<string, object>();
+                Type type = obj.GetType();
+                PropertyInfo[] properties = type.GetProperties();
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    PropertyInfo p = properties[i];
+                    filedsDict.Add(p.Name, p.GetValue(obj));
+                }
+
+                data = filedsDict;
             }
 
-            Dictionary<string, object> filedsDict = new Dictionary<string, object>();
-            Type type = obj.GetType();
-            PropertyInfo[] properties = type.GetProperties();
-            for (int i = 0; i < properties.Length; i++)
-            {
-                PropertyInfo p = properties[i];
-                filedsDict.Add(p.Name, p.GetValue(obj));
-            }
-            data = filedsDict;
+            var dataKeyLower = data.Keys.Cast<string>().ToDictionary(key => key.ToLower(), key => data[key]);
+            httpCode = dataKeyLower.Get("httpcode").ToSafeString();
+            hostId = dataKeyLower.Get("hostid").ToSafeString();
+            requestId = dataKeyLower.Get("requestid").ToSafeString();
         }
     }
 }

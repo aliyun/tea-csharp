@@ -28,12 +28,16 @@ namespace TeaUnitTests
                 {
                     "data",
                     new Dictionary<string, string>
-                    { { "test", "test" }
+                    { { "test", "test" },
+                        { "httpCode", "httpCodeMsg" },
+                        { "hostId", "hostIdMsg" },
+                        { "requestId", "requestIdMsg" }
                     }
                 }
             });
             Assert.NotNull(teaException);
             Assert.NotNull(teaException.DataResult);
+            Assert.Equal("message;requestId:requestIdMsg;httpCode:httpCodeMsg;hostId:hostIdMsg", teaException.Message);
 
             teaException = new TeaException(new Dictionary<string, object>
             { { "code", "200" },
