@@ -55,5 +55,7 @@ namespace TeaUnitTests.Models
 
         public List<List<IDictionary>> listIDic { get; set; }
 
+        public byte[] bytes { get; set; }
+
     }
 }

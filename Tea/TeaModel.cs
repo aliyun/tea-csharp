@@ -54,7 +54,7 @@ namespace Tea
             {
                 return null;
             }
-            else if (typeof(IList).IsAssignableFrom(value.GetType()))
+            else if (typeof(IList).IsAssignableFrom(value.GetType()) && !typeof(Array).IsAssignableFrom(value.GetType()))
             {
                 var list = Activator.CreateInstance(propertyType);
                 Type innerPropertyType = propertyType.GetGenericArguments() [0];
