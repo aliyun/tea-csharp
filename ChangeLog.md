@@ -1,3 +1,6 @@
+### 2020-08-26 Version 1.0.2
+* Fixed `ToMap()` and `Validate()` except type `Array`
+
 ### 2020-08-14 Version 1.0.1
 * Fixed IsRetryable.
 * Improve `Dictionary` extension method `Get` Generic.
