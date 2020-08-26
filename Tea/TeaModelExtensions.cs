@@ -35,7 +35,7 @@ namespace Tea
             {
                 return null;
             }
-            if (typeof(IList).IsAssignableFrom(type))
+            if (typeof(IList).IsAssignableFrom(type) && !typeof(Array).IsAssignableFrom(type))
             {
                 IList list = (IList) value;
                 Type listType = type.GetGenericArguments() [0];
@@ -100,7 +100,7 @@ namespace Tea
                 {
                     continue;
                 }
-                if (typeof(IList).IsAssignableFrom(propertyType))
+                if (typeof(IList).IsAssignableFrom(propertyType) && !typeof(Array).IsAssignableFrom(propertyType))
                 {
                     IList list = (IList) obj;
 

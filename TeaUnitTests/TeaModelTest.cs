@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Text;
 using Tea;
 
 using TeaUnitTests.Models;
@@ -35,6 +35,7 @@ namespace TeaUnitTests
             model.testNoAttr = "noAttr";
             model.subModel = new TestRegSubModel();
             model.testListStr = new List<string> { "str" };
+            model.bytes = Encoding.UTF8.GetBytes("test");
             TestRegSubModel dicSubModel = new TestRegSubModel
             {
                 RequestId = "requestDic"
@@ -153,6 +154,7 @@ namespace TeaUnitTests
             successModel.testListStr = new List<string> { "listStr1" };
             successModel.Items = new List<TestRegSubModel> { new TestRegSubModel { RequestId = "rTest" } };
             successModel.subModel = new TestRegSubModel { RequestId = "rTest", testInt = 10 };
+            successModel.bytes = Encoding.UTF8.GetBytes("test");
             successModel.Validate();
 
             successModel.testListStr = null;
