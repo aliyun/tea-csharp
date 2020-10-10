@@ -1,3 +1,6 @@
+### 2020-10-10 Version 1.0.3
+* public `ToMapFactory()` 
+
 ### 2020-08-26 Version 1.0.2
 * Fixed `ToMap()` and `Validate()` except type `Array`
 
