@@ -29,7 +29,7 @@ namespace Tea
             return result;
         }
 
-        private static object ToMapFactory(Type type, object value)
+        public static object ToMapFactory(Type type, object value)
         {
             if (value == null)
             {
