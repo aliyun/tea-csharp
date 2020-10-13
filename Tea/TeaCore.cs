@@ -50,7 +50,7 @@ namespace Tea
                 {
                     var key = entry.Key;
                     var val = entry.Value;
-                    if (string.IsNullOrWhiteSpace(val))
+                    if (val == null)
                     {
                         continue;
                     }
