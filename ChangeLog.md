@@ -1,3 +1,6 @@
+### 2020-10-21 Version 1.0.4
+* supported cert verify
+
 ### 2020-10-10 Version 1.0.3
 * public `ToMapFactory()` 
 
