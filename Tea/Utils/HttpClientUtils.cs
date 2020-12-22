@@ -38,7 +38,7 @@ namespace Tea.Utils
             if(httpClient == null)
             {
                 httpClient = CreatHttpClient(options);
-                httpClients.Add(key, httpClient);
+                httpClients[key] = httpClient;
             }
 
             return httpClient;
