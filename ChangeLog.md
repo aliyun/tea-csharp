@@ -1,3 +1,6 @@
+### 2020-12-29 Version 1.0.5
+* fixed content headers
+
 ### 2020-10-21 Version 1.0.4
 * supported cert verify
 
