@@ -282,7 +282,7 @@ namespace Tea
                 timeout = readTimeout + connectTimeout;
             }
 
-            if (bodyMethod.Contains(request.Method) && request.Body != null)
+            if (request.Body != null)
             {
                 Stream requestStream = new MemoryStream();
                 request.Body.Position = 0;
