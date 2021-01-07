@@ -1,3 +1,6 @@
+### 2020-01-07 Version 1.0.6
+* Fixed Dic thread err
+
 ### 2020-12-29 Version 1.0.5
 * fixed content headers
 
