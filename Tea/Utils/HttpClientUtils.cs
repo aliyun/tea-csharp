@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
@@ -15,9 +17,9 @@ using Org.BouncyCastle.X509;
 
 namespace Tea.Utils
 {
-    public class HttpClientUtils
+    public static class HttpClientUtils
     {
-        internal static Dictionary<string, HttpClient> httpClients = new Dictionary<string, HttpClient>();
+        internal static ConcurrentDictionary<string, HttpClient> httpClients = new ConcurrentDictionary<string, HttpClient>();
 
         internal static HttpClient GetOrAddHttpClient(string protocol,string host, int port, Dictionary<string, object> options)
         {
