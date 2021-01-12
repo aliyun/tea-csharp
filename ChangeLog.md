@@ -1,5 +1,5 @@
 ### 2021-01-12 Version 1.0.7
-* `ToMap()` Ignore `Stream`
+* `ToMap()` Ignore `Stream` 
 
 ### 2021-01-07 Version 1.0.6
 * Fixed Dic thread err
