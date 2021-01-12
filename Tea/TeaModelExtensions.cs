@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 namespace Tea
@@ -21,6 +22,10 @@ namespace Tea
             {
                 PropertyInfo propertyInfo = properties[i];
                 Type property = propertyInfo.PropertyType;
+                if(typeof(Stream).IsAssignableFrom(property))
+                {
+                    continue;
+                }
                 NameInMapAttribute attribute = propertyInfo.GetCustomAttribute(typeof(NameInMapAttribute)) as NameInMapAttribute;
                 string realName = attribute == null ? propertyInfo.Name : attribute.Name;
                 result.Add(realName, ToMapFactory(property, propertyInfo.GetValue(model)));
