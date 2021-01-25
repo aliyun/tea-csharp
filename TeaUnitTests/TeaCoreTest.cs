@@ -36,7 +36,7 @@ namespace TeaUnitTests
 
             teaRequest.Query["foo"] = "";
             url = TeaCore.ComposeUrl(teaRequest);
-            Assert.Equal("http://fake.domain.com:8080/index.html", url);
+            Assert.Equal("http://fake.domain.com:8080/index.html?foo=", url);
 
             teaRequest.Query["foo"] = "bar";
             url = TeaCore.ComposeUrl(teaRequest);
