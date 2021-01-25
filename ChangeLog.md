@@ -1,3 +1,6 @@
+### 2021-01-25 Version 1.0.8
+* `ComposeUrl()` no ignore empty
+
 ### 2021-01-12 Version 1.0.7
 * `ToMap()` Ignore `Stream` 
 
