@@ -8,6 +8,10 @@ namespace Tea.Utils
     {
         public static string ToSafeString(this object obj, string defaultStr = null)
         {
+            if(obj == null)
+            {
+                return defaultStr;
+            }
             try
             {
                 return obj.ToString();
@@ -36,6 +40,10 @@ namespace Tea.Utils
 
         public static int ToSafeInt(this object obj, int defaultStr)
         {
+            if(obj == null)
+            {
+                return defaultStr;
+            }
             try
             {
                 return Convert.ToInt32(obj);
@@ -48,6 +56,10 @@ namespace Tea.Utils
 
         public static bool ToSafeBool(this object obj, bool defaultBool = false)
         {
+            if(obj == null)
+            {
+                return defaultBool;
+            }
             try
             {
                 return Convert.ToBoolean(obj);
@@ -76,6 +88,10 @@ namespace Tea.Utils
 
         public static double ToSafeDouble(this object obj, double defaultDouble)
         {
+            if(obj == null)
+            {
+                return defaultDouble;
+            }
             try
             {
                 return Convert.ToDouble(obj);
@@ -104,6 +120,10 @@ namespace Tea.Utils
 
         public static float ToSafeFloat(this object obj, float defaultFloat)
         {
+            if(obj == null)
+            {
+                return defaultFloat;
+            }
             try
             {
                 return Convert.ToSingle(obj);
