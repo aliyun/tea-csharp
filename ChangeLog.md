@@ -1,3 +1,6 @@
+### 2021-02-05 Version 1.0.9
+* Fixed safe convert
+
 ### 2021-01-25 Version 1.0.8
 * `ComposeUrl()` no ignore empty
 
