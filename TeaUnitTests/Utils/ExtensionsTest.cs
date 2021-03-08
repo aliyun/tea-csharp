@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Tea.Utils;
-
 using Xunit;
 
 namespace TeaUnitTests.Utils
@@ -93,7 +92,18 @@ namespace TeaUnitTests.Utils
 
             Dictionary<string, object> dicObj = new Dictionary<string, object>();
             dicObj["test"] = 1;
-            Assert.Equal(1,dicObj.Get("test"));
+            Assert.Equal(1, dicObj.Get("test"));
+
+            // key is NULL
+            System.String res = dicStr.Get(null);
+            Assert.Null(res);
+            res = dicStr.Get(null, "default");
+            Assert.Equal("default", res);
+
+            res = (System.String) dicObj.Get(null);
+            Assert.Null(res);
+            res = (System.String) dicObj.Get(null, "default");
+            Assert.Equal("default", res);
         }
     }
 }

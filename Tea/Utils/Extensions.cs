@@ -8,10 +8,11 @@ namespace Tea.Utils
     {
         public static string ToSafeString(this object obj, string defaultStr = null)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 return defaultStr;
             }
+
             try
             {
                 return obj.ToString();
@@ -28,6 +29,7 @@ namespace Tea.Utils
             {
                 return null;
             }
+
             try
             {
                 return Convert.ToInt32(obj);
@@ -40,10 +42,11 @@ namespace Tea.Utils
 
         public static int ToSafeInt(this object obj, int defaultStr)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 return defaultStr;
             }
+
             try
             {
                 return Convert.ToInt32(obj);
@@ -56,10 +59,11 @@ namespace Tea.Utils
 
         public static bool ToSafeBool(this object obj, bool defaultBool = false)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 return defaultBool;
             }
+
             try
             {
                 return Convert.ToBoolean(obj);
@@ -76,6 +80,7 @@ namespace Tea.Utils
             {
                 return null;
             }
+
             try
             {
                 return Convert.ToDouble(obj);
@@ -88,10 +93,11 @@ namespace Tea.Utils
 
         public static double ToSafeDouble(this object obj, double defaultDouble)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 return defaultDouble;
             }
+
             try
             {
                 return Convert.ToDouble(obj);
@@ -108,6 +114,7 @@ namespace Tea.Utils
             {
                 return null;
             }
+
             try
             {
                 return Convert.ToSingle(obj);
@@ -120,10 +127,11 @@ namespace Tea.Utils
 
         public static float ToSafeFloat(this object obj, float defaultFloat)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 return defaultFloat;
             }
+
             try
             {
                 return Convert.ToSingle(obj);
@@ -135,12 +143,19 @@ namespace Tea.Utils
         }
 
 
-        public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue defaultValue = default(TValue))
+        public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key,
+            TValue defaultValue = default(TValue))
         {
             if (dict == null)
             {
                 return default(TValue);
             }
+
+            if (key == null)
+            {
+                return defaultValue;
+            }
+
             return dict.ContainsKey(key) ? dict[key] : defaultValue;
         }
 
@@ -150,15 +165,18 @@ namespace Tea.Utils
             {
                 return null;
             }
+
+            if (key == null)
+            {
+                return defaultVal;
+            }
+
             if (dic.Contains(key))
             {
                 return dic[key];
             }
-            else
-            {
-                return null;
-            }
-        }
 
+            return null;
+        }
     }
 }
