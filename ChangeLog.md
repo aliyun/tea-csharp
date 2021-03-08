@@ -1,3 +1,6 @@
+### 2021-03-08 Version 1.0.10
+* Fixed safe get from Dic
+
 ### 2021-02-05 Version 1.0.9
 * Fixed safe convert
 
