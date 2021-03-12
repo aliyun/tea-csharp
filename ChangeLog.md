@@ -1,3 +1,6 @@
+### 2021-03-08 Version 1.0.11
+* Deprecated BouncyCastle and custom Cert feature
+
 ### 2021-03-08 Version 1.0.10
 * Fixed safe get from Dic
 
