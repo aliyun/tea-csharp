@@ -27,7 +27,7 @@ Use Package Manager
 Detailed changes for each release are documented in the [release notes](./ChangeLog.md).
 
 ## References
-* [OpenAPI Explorer](https://api.aliyun.com/)
+* [OpenAPI Developer Portal](https://next.api.aliyun.com/)
 * [Latest Release](https://github.com/aliyun/tea-csharp)
 
 ## License
