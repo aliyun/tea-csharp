@@ -4,6 +4,12 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <RootNamespace>Tea</RootNamespace>
     <OutputType>Library</OutputType>
+    <Authors>Alibaba Cloud</Authors>
+    <PackageTags>Alibaba Aliyun Tea Core SDK</PackageTags>
+    <Copyright>©2009-present Alibaba Cloud</Copyright>
+    <PackageProjectUrl>https://github.com/aliyun/</PackageProjectUrl>
+    <PackageIconUrl>https://www.alibabacloud.com/favicon.ico</PackageIconUrl>
+    <Description>Alibaba Cloud Tea Core SDK for .NET</Description>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageReleaseNotes></PackageReleaseNotes>
