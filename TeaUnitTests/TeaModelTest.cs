@@ -78,7 +78,7 @@ namespace TeaUnitTests
         {
             Dictionary<string, object> dic = new Dictionary<string, object>();
             List<Dictionary<string, object>> dicItems = new List<Dictionary<string, object>>();
-            List<string> testListStr = new List<string> { "str" };
+            List<string> testListStr = new List<string> { "str","testStr"};
             dic.Add("requestId", "requestID");
             dic.Add("next_marker", "next");
             dic.Add("testNoAttr", "noAttr");
@@ -103,6 +103,7 @@ namespace TeaUnitTests
 
             Dictionary<string, object> dicDict = new Dictionary<string, object>();
             dicDict.Add("test", 1);
+            dicDict.Add("testListStr", testListStr);
             dic.Add("dict", dicDict);
 
             dic.Add("testInt32", "-32");
@@ -122,6 +123,7 @@ namespace TeaUnitTests
             Assert.Equal("next", model.NextMarker);
             Assert.Equal("noAttr", model.testNoAttr);
             Assert.Equal("sub", model.Items[0].RequestId);
+            Assert.Equal(testListStr, model.dict["testListStr"]);
             Assert.Equal(100, model.Items[0].testInt);
             Assert.NotNull(model.Items[1]);
             Assert.NotEqual(model.Items[0].RequestId, model.Items[1].RequestId);

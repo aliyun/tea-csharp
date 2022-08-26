@@ -57,7 +57,12 @@ namespace Tea
             else if (typeof(IList).IsAssignableFrom(value.GetType()) && !typeof(Array).IsAssignableFrom(value.GetType()))
             {
                 var list = Activator.CreateInstance(propertyType);
-                Type innerPropertyType = propertyType.GetGenericArguments() [0];
+                Type[] types = propertyType.GetGenericArguments();
+                if (types.Length == 0 || types == null)
+                {
+                    return value;
+                }
+                Type innerPropertyType = types[0];
                 foreach (var temp in (IList) value)
                 {
                     MethodInfo mAddList = propertyType.GetMethod("Add", new Type[] { innerPropertyType });
