@@ -1,3 +1,6 @@
+### 2022-09-19 Version 1.0.12
+* Fixed `ToObject()`
+
 ### 2021-03-08 Version 1.0.11
 * Deprecated BouncyCastle and custom Cert feature
 
