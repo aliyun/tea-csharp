@@ -116,8 +116,13 @@ namespace TeaUnitTests
             dic.Add("testUInt", 32);
             dic.Add("testULong", 64);
             dic.Add("testNull", null);
+            Dictionary<string, object> nullValueDic = new Dictionary<string, object>();
+            nullValueDic.Add("testNullValueDic", new Dictionary<string, object>());
+            dic.Add("Content", nullValueDic);
 
             TestRegModel model = TeaModel.ToObject<TestRegModel>(dic);
+            var testNullValueDic = model.Content["testNullValueDic"] as Dictionary<string, object>;
+            Assert.True(testNullValueDic.Count==0);
             Assert.NotNull(model);
             Assert.Equal("requestID", model.RequestId);
             Assert.Equal("next", model.NextMarker);

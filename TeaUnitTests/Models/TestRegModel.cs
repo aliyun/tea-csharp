@@ -25,6 +25,14 @@ namespace TeaUnitTests.Models
         [Validation(Pattern = "listStr", MaxLength = 0)]
         public List<string> testListStr { get; set; }
 
+        [NameInMap("Content")]
+        [Validation(Required = false)]
+        public Dictionary<string, object> Content
+        {
+            get;
+            set;
+        }
+
         public TestRegSubModel subModel { get; set; }
 
         public Dictionary<string, object> dict { get; set; }

@@ -85,9 +85,13 @@ namespace Tea
                 Dictionary<string, object> dicObj = ((IDictionary) value).Keys.Cast<string>().ToDictionary(key => key, key => ((IDictionary) value) [key]);
                 return ToObject(dicObj, v);
             }
-            else if (typeof(IDictionary).IsAssignableFrom(propertyType))
+            else if (typeof(IDictionary).IsAssignableFrom(propertyType) || typeof(IDictionary).IsAssignableFrom(value.GetType()))
             {
                 var dic = (IDictionary) value;
+                if (dic.Count == 0)
+                {
+                    return dic;
+                }
                 IDictionary resultDic;
                 if (propertyType.Equals(typeof(IDictionary)))
                 {
