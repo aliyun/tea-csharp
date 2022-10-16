@@ -13,6 +13,9 @@ namespace Tea
         private string code;
         private string message;
         private Dictionary<string, object> data;
+        private int statusCode;
+        private string description;
+        private Dictionary<string, object> accessDeniedDetail;
 
         public string Code
         {
@@ -38,12 +41,47 @@ namespace Tea
             }
         }
 
+        public int StatusCode
+        {
+            get
+            {
+                return statusCode;
+            }
+        }
+
+
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+        }
+
+        public Dictionary<string, object> AccessDeniedDetail
+        {
+            get
+            {
+                return accessDeniedDetail;
+            }
+        }
+
         public TeaException(IDictionary dict)
         {
             Dictionary<string, object> dicObj = dict.Keys.Cast<string>().ToDictionary(key => key, key => dict[key]);
             code = DictUtils.GetDicValue(dicObj, "code").ToSafeString();
             message = DictUtils.GetDicValue(dicObj, "message").ToSafeString();
-            object obj = DictUtils.GetDicValue(dicObj, "data");
+            description = DictUtils.GetDicValue(dicObj, "description").ToSafeString();
+            object obj = DictUtils.GetDicValue(dicObj, "accessDeniedDetail");
+            if (obj != null)
+            {
+                if (typeof(IDictionary).IsAssignableFrom(obj.GetType()))
+                {
+                    IDictionary dicDetail = (IDictionary) obj;
+                    accessDeniedDetail = dicDetail.Keys.Cast<string>().ToDictionary(key => key, key => dicDetail[key]);
+                }
+            }
+            obj = DictUtils.GetDicValue(dicObj, "data");
             if (obj == null)
             {
                 return;
@@ -52,6 +90,10 @@ namespace Tea
             {
                 IDictionary dicData = (IDictionary) obj;
                 data = dicData.Keys.Cast<string>().ToDictionary(key => key, key => dicData[key]);
+                if (DictUtils.GetDicValue(data, "statusCode") != null)
+                {
+                    statusCode = int.Parse(DictUtils.GetDicValue(data, "statusCode").ToSafeString());
+                }
                 return;
             }
 
