@@ -14,7 +14,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageReleaseNotes></PackageReleaseNotes>
     <AssemblyName>Tea</AssemblyName>
-    <Version>1.0.12</Version>
+    <Version>1.1.0</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>5</LangVersion>
   </PropertyGroup>

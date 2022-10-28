@@ -1,3 +1,6 @@
+### 2022-10-28 Version 1.1.0
+* Feat: return more details in error info
+
 ### 2022-09-19 Version 1.0.12
 * Fixed `ToObject()`
 
