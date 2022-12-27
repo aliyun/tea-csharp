@@ -1,3 +1,6 @@
+### 2022-12-27 Version 1.1.1
+* Fix: remove changeType for object params
+
 ### 2022-10-28 Version 1.1.0
 * Feat: return more details in error info
 
