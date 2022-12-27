@@ -104,6 +104,7 @@ namespace TeaUnitTests
             Dictionary<string, object> dicDict = new Dictionary<string, object>();
             dicDict.Add("test", 1);
             dicDict.Add("testListStr", testListStr);
+            dicDict.Add("testDict", dicSubModel);
             dic.Add("dict", dicDict);
 
             dic.Add("testInt32", "-32");
@@ -129,6 +130,7 @@ namespace TeaUnitTests
             Assert.Equal("noAttr", model.testNoAttr);
             Assert.Equal("sub", model.Items[0].RequestId);
             Assert.Equal(testListStr, model.dict["testListStr"]);
+            Assert.Equal(dicSubModel, model.dict["testDict"]);
             Assert.Equal(100, model.Items[0].testInt);
             Assert.NotNull(model.Items[1]);
             Assert.NotEqual(model.Items[0].RequestId, model.Items[1].RequestId);
