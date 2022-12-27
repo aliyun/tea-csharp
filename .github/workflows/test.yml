@@ -25,5 +25,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test TeaUnitTests/ /p:AltCover=true
+      env:
+        CA: ${{ secrets.CA }}
     - name: CodeCov
       run: bash <(curl -s https://codecov.io/bash)
