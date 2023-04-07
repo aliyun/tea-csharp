@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace Tea
 {
@@ -56,6 +57,11 @@ namespace Tea
             }
             else if (typeof(IList).IsAssignableFrom(value.GetType()) && !typeof(Array).IsAssignableFrom(value.GetType()))
             {
+                if (propertyType.Name.Equals("String"))
+                {
+
+                    return JsonConvert.SerializeObject(value);
+                }
                 var list = Activator.CreateInstance(propertyType);
                 Type[] types = propertyType.GetGenericArguments();
                 if (types.Length == 0 || types == null)

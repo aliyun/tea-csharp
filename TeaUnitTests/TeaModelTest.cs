@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Tea;
 
@@ -78,7 +79,7 @@ namespace TeaUnitTests
         {
             Dictionary<string, object> dic = new Dictionary<string, object>();
             List<Dictionary<string, object>> dicItems = new List<Dictionary<string, object>>();
-            List<string> testListStr = new List<string> { "str","testStr"};
+            List<string> testListStr = new List<string> { "str", "testStr" };
             dic.Add("requestId", "requestID");
             dic.Add("next_marker", "next");
             dic.Add("testNoAttr", "noAttr");
@@ -123,7 +124,7 @@ namespace TeaUnitTests
 
             TestRegModel model = TeaModel.ToObject<TestRegModel>(dic);
             var testNullValueDic = model.Content["testNullValueDic"] as Dictionary<string, object>;
-            Assert.True(testNullValueDic.Count==0);
+            Assert.True(testNullValueDic.Count == 0);
             Assert.NotNull(model);
             Assert.Equal("requestID", model.RequestId);
             Assert.Equal("next", model.NextMarker);
@@ -149,6 +150,19 @@ namespace TeaUnitTests
             Assert.NotNull(stringModel);
             Assert.Equal("test", stringModel.RequestId);
 
+            // Test ShrinkRequest
+            List<string> strList = new List<string>();
+            strList.Add("https://viapi-test.oss-cn-shanghai.aliyuncs.com/test/imgsearch/demo/1.png");
+            strList.Add("https://viapi-test.oss-cn-shanghai.aliyuncs.com/test/imgsearch/demo/1.png");
+            dicDict = new Dictionary<string, object>();
+            dicDict.Add("Str1", "test");
+            dicDict.Add("Str2", "test");
+            dicDict.Add("Strs", strList);
+            TestShrinkRequest testShrinkRequest = new TestShrinkRequest();
+            testShrinkRequest = TeaModel.ToObject(dicDict, new TestShrinkRequest());
+            Assert.Equal("test", testShrinkRequest.Str1);
+            Console.WriteLine(testShrinkRequest.StrShrink);
+            Assert.Equal("[\"https://viapi-test.oss-cn-shanghai.aliyuncs.com/test/imgsearch/demo/1.png\",\"https://viapi-test.oss-cn-shanghai.aliyuncs.com/test/imgsearch/demo/1.png\"]", testShrinkRequest.StrShrink);
         }
 
         [Fact]
