@@ -149,6 +149,46 @@ namespace TeaUnitTests
             Assert.NotNull(stringModel);
             Assert.Equal("test", stringModel.RequestId);
 
+            Dictionary<string, object> dicConvert = new Dictionary<string, object>();
+            dicConvert.Add("requestId", dicSub);
+            dicConvert.Add("count", "1");
+
+            stringModel = TeaModel.ToObject<TestDicStringModel>(dicConvert);
+            Assert.NotNull(stringModel);
+            Assert.Equal("{\"requestId\":\"sub\",\"testInt\":100}", stringModel.RequestId);
+            Assert.Equal(1, stringModel.Count);
+
+            dicConvert.Remove("requestId");
+            dicConvert.Add("requestId", dicItems);
+            stringModel = TeaModel.ToObject<TestDicStringModel>(dicConvert);
+            Assert.Equal("[{\"requestId\":\"sub\",\"testInt\":100},{\"requestId\":\"subRe\",\"testInt\":500},null]", stringModel.RequestId);
+
+            dicConvert.Remove("requestId");
+            string[] array = new string[] { "a", "b" };
+            dicConvert.Add("requestId", array);
+            stringModel = TeaModel.ToObject<TestDicStringModel>(dicConvert);
+            Assert.Equal("[\"a\",\"b\"]", stringModel.RequestId);
+
+            dicConvert.Remove("requestId");
+            dicConvert.Add("requestId", 1.1);
+            stringModel = TeaModel.ToObject<TestDicStringModel>(dicConvert);
+            Assert.Equal("1.1", stringModel.RequestId);
+
+            dicConvert.Remove("requestId");
+            dicConvert.Add("requestId", 11111111111111111111L);
+            stringModel = TeaModel.ToObject<TestDicStringModel>(dicConvert);
+            Assert.Equal("11111111111111111111", stringModel.RequestId);
+
+            dicConvert.Remove("requestId");
+            dicConvert.Add("requestId", null);
+            stringModel = TeaModel.ToObject<TestDicStringModel>(dicConvert);
+            Assert.Null(stringModel.RequestId);
+
+            dicConvert.Remove("requestId");
+            dicConvert.Add("requestId", true);
+            stringModel = TeaModel.ToObject<TestDicStringModel>(dicConvert);
+            Assert.Equal("True", stringModel.RequestId);
+
         }
 
         [Fact]

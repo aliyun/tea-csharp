@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using Newtonsoft.Json;
+
 namespace Tea
 {
     public class TeaModel
@@ -53,6 +55,15 @@ namespace Tea
             if (value == null)
             {
                 return null;
+            }
+            else if (propertyType.Equals(typeof(string)))
+            {
+                if (typeof(IList).IsAssignableFrom(value.GetType())
+                    || typeof(IDictionary).IsAssignableFrom(value.GetType()))
+                {
+                    return JsonConvert.SerializeObject(value);
+                }
+                return Convert.ToString(value);
             }
             else if (typeof(IList).IsAssignableFrom(value.GetType()) && !typeof(Array).IsAssignableFrom(value.GetType()))
             {
