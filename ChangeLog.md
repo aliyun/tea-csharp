@@ -1,3 +1,6 @@
+### 2023-04-18 Version 1.1.2
+* Feat: support conversion of any type to string 
+
 ### 2022-12-27 Version 1.1.1
 * Fix: remove changeType for object params
 
