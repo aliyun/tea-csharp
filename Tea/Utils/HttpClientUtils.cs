@@ -13,6 +13,7 @@ namespace Tea.Utils
 {
     public static class HttpClientUtils
     {
+        public static Func<object , X509Certificate2Collection, System.Security.Cryptography.X509Certificates.X509Certificate, X509Chain, SslPolicyErrors, bool> ServerCertificateCustomValidationCallback { get; set; }
         internal static ConcurrentDictionary<string, HttpClient> httpClients = new ConcurrentDictionary<string, HttpClient>();
 
         internal static HttpClient GetOrAddHttpClient(string protocol,string host, int port, Dictionary<string, object> options)
@@ -65,6 +66,29 @@ namespace Tea.Utils
             {
                 handler.ServerCertificateValidationCallback = delegate { return true; };
             }
+            else
+            {
+                string ca = options.Get("ca") != null ? options.Get("ca").ToSafeString() : options.Get("ca").ToSafeString();
+                if (!string.IsNullOrWhiteSpace(ca))
+                {
+
+                    handler.ServerCertificateValidationCallback = (message, cert, chain, sslPolicyErrors) =>
+                    {
+                        var collection = new X509Certificate2Collection();
+                        byte[] certBytes = Encoding.UTF8.GetBytes(ca);
+                        X509Certificate2 cacert = new X509Certificate2(certBytes);
+                        collection.Add(cacert);
+                        if (ServerCertificateCustomValidationCallback != null)
+                        {
+                            return ServerCertificateCustomValidationCallback(message, collection, cert, chain, sslPolicyErrors);
+                        }
+                        return CertificateValidationCallBack(message, collection, cert, chain, sslPolicyErrors);
+                    };
+
+                }
+
+            }
+
             httpClient = new HttpClient(handler);
 #else
             HttpClientHandler httpClientHandler = new HttpClientHandler();
@@ -80,6 +104,29 @@ namespace Tea.Utils
             if (ignoreSSL)
             {
                 httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, error) => true;
+            }
+            else
+            {
+                string ca = options.Get("ca") != null ? options.Get("ca").ToSafeString() : options.Get("ca").ToSafeString();
+                if(!string.IsNullOrWhiteSpace(ca))
+                {
+
+                    httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
+                    {
+                   
+                        var collection = new X509Certificate2Collection();
+                        byte[] certBytes = Encoding.UTF8.GetBytes(ca);
+                        X509Certificate2 cacert = new X509Certificate2(certBytes);
+                        collection.Add(cacert);
+                        if (ServerCertificateCustomValidationCallback != null)
+                        {
+                            return ServerCertificateCustomValidationCallback(message, collection, cert, chain, sslPolicyErrors);
+                        }
+                        return CertificateValidationCallBack(message, collection, cert, chain, sslPolicyErrors);
+                    };
+
+                }
+
             }
             httpClient = new HttpClient(httpClientHandler);
 #endif
