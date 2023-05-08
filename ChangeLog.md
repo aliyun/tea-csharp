@@ -1,3 +1,6 @@
+### 2023-05-08 Version 1.1.3
+* Feat: support server certificate custom validation
+
 ### 2023-04-18 Version 1.1.2
 * Feat: support conversion of any type to string 
 
