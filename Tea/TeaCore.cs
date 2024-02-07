@@ -301,10 +301,13 @@ namespace Tea
 
             foreach (var header in request.Headers)
             {
-                req.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 if (header.Key.ToLower().StartsWith("content-") && req.Content != null)
                 {
                     req.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+                else
+                {
+                    req.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
             }
 
