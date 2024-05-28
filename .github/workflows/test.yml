@@ -9,14 +9,14 @@ on:
 jobs:
   test:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 2.1.811
+        dotnet-version: 3.1.426
     - name: install altcover
       run: dotnet tool install --global altcover.visualizer --version 8.6.14
     - name: Install dependencies
@@ -24,7 +24,7 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test TeaUnitTests/ /p:AltCover=true
+      run: dotnet test DarabonbaUnitTests/ /p:AltCover=true
       env:
         CA: ${{ secrets.CA }}
     - name: CodeCov

@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>DaraUnitTests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="**/obj/**" />
+    <None Remove="**/obj/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AltCover" Version="6.7.750" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <PackageReference Include="Microsoft.NETCore.TestHost" Version="2.0.8" />
+    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="Codecov" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Darabonba\Darabonba.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -16,7 +16,7 @@ build_script:
   - cmd: dotnet build 
 test_script:
   # Dotnet Test
-  - dotnet test TeaUnitTests/ /p:AltCover=true
+  - dotnet test DarabonbaUnitTests/ /p:AltCover=true
 on_finish:
   - ps: |
       $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH
