@@ -1,3 +1,6 @@
+### 2024-09-18 Version 1.1.4
+* Fix: change fixed dependency of newtonsoft.json to scope dependency
+  
 ### 2023-05-08 Version 1.1.3
 * Feat: support server certificate custom validation
 
