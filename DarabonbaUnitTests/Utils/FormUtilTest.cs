@@ -12,8 +12,8 @@ namespace DaraUnitTests.Utils
         [Fact]
         public void Test_ToFormString()
         {
-            Assert.Empty(FormUtil.ToFormString(null));
-            Assert.Empty(FormUtil.ToFormString(new Dictionary<string, object>()));
+            Assert.Empty(FormUtils.ToFormString(null));
+            Assert.Empty(FormUtils.ToFormString(new Dictionary<string, object>()));
 
             Dictionary<string, object> dict = new Dictionary<string, object>
             {
@@ -21,19 +21,19 @@ namespace DaraUnitTests.Utils
                 { "param", "test" },
                 { "testNull", null }
             };
-            Assert.Equal("form=test&param=test", FormUtil.ToFormString(dict));
+            Assert.Equal("form=test&param=test", FormUtils.ToFormString(dict));
         }
 
         [Fact]
         public void Test_GetBoundary()
         {
-            Assert.Equal(14, FormUtil.GetBoundary().Length);
+            Assert.Equal(14, FormUtils.GetBoundary().Length);
         }
 
         [Fact]
         public void Test_ToFileForm()
         {
-            Stream fileFormStream = FormUtil.ToFileForm(new Dictionary<string, object>(), "boundary");
+            Stream fileFormStream = FormUtils.ToFileForm(new Dictionary<string, object>(), "boundary");
             Assert.NotNull(fileFormStream);
 
             string formStr = GetFormStr(fileFormStream);
@@ -41,7 +41,7 @@ namespace DaraUnitTests.Utils
 
             Dictionary<string, object> dict = new Dictionary<string, object>();
             dict.Add("stringkey", "string");
-            fileFormStream = FormUtil.ToFileForm(dict, "boundary");
+            fileFormStream = FormUtils.ToFileForm(dict, "boundary");
             formStr = GetFormStr(fileFormStream);
             Assert.Equal("--boundary\r\n" +
                 "Content-Disposition: form-data; name=\"stringkey\"\r\n\r\n" +
@@ -61,7 +61,7 @@ namespace DaraUnitTests.Utils
                 { "stringkey", "string" },
                 { "filefield", fileField }
             };
-            fileFormStream = FormUtil.ToFileForm(dict, "boundary");
+            fileFormStream = FormUtils.ToFileForm(dict, "boundary");
             formStr = GetFormStr(fileFormStream);
             Assert.Equal("--boundary\r\n" +
                 "Content-Disposition: form-data; name=\"stringkey\"\r\n\r\n" +

@@ -5,7 +5,7 @@ using Darabonba.Exceptions;
 
 namespace Darabonba.Utils
 {
-    public class StringUtil
+    public class StringUtils
     {
         public static string SubString(string str, int? start, int? end)
         {
@@ -14,7 +14,7 @@ namespace Darabonba.Utils
 
         public static byte[] ToBytes(string data, string type)
         {
-            return BytesUtil.From(data, type);
+            return BytesUtils.From(data, type);
         }
 
         private static string Replace(string data, string replacement, string pattern)

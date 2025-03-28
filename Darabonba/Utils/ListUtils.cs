@@ -4,7 +4,7 @@ using Darabonba.Exceptions;
 
 namespace Darabonba.Utils
 {
-    public class ListUtil
+    public class ListUtils
     {
         public static T Shift<T>(List<T> list)
         {

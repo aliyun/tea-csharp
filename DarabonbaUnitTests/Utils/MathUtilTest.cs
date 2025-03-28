@@ -9,47 +9,47 @@ namespace DaraUnitTests.Utils
         public void TestFloor()
         {
             float funm = 2.13f;
-            Assert.Equal(2, MathUtil.Floor(funm));
+            Assert.Equal(2, MathUtils.Floor(funm));
             double dunm = 2.13d;
-            Assert.Equal(2, MathUtil.Floor(dunm));
+            Assert.Equal(2, MathUtils.Floor(dunm));
         }
 
         [Fact]
         public void TestRound()
         {
             float funm = 2.49f;
-            Assert.Equal(2, MathUtil.Round(funm));
+            Assert.Equal(2, MathUtils.Round(funm));
             double dunm = 2.51d;
-            Assert.Equal(3, MathUtil.Round(dunm));
+            Assert.Equal(3, MathUtils.Round(dunm));
         }
         
         [Fact]
         public void TestParseInt()
         {
             float funm = 2.13f;
-            Assert.Equal(2, MathUtil.ParseInt(funm));
+            Assert.Equal(2, MathUtils.ParseInt(funm));
             double dunm = 2.13d;
-            Assert.Equal(2, MathUtil.ParseInt(dunm));
+            Assert.Equal(2, MathUtils.ParseInt(dunm));
         }
 
         [Fact]
         public void TestParseLong()
         {
             float funm = 2.13f;
-            Assert.Equal(2L, MathUtil.ParseLong(funm));
+            Assert.Equal(2L, MathUtils.ParseLong(funm));
             double dunm = 2.13d;
-            Assert.Equal(2L, MathUtil.ParseLong(dunm));
+            Assert.Equal(2L, MathUtils.ParseLong(dunm));
         }
 
         [Fact]
         public void TestParseFloat()
         {
             int iunm = 2;
-            Assert.Equal(2f, MathUtil.ParseFloat(iunm));
+            Assert.Equal(2f, MathUtils.ParseFloat(iunm));
             float funm = 2.13f;
-            Assert.Equal(2.13f, MathUtil.ParseFloat(funm));
+            Assert.Equal(2.13f, MathUtils.ParseFloat(funm));
             double dunm = 2.13d;
-            Assert.Equal(2.13f, MathUtil.ParseFloat(dunm));
+            Assert.Equal(2.13f, MathUtils.ParseFloat(dunm));
         }
 
         [Fact]
@@ -58,8 +58,8 @@ namespace DaraUnitTests.Utils
             int inum = 2;
             float fnum = 2.01f;
             double dnum = 2.001d;
-            Assert.Equal(2, MathUtil.Min(inum, fnum));
-            Assert.Equal(2.001d, MathUtil.Min(dnum, fnum));
+            Assert.Equal(2, MathUtils.Min(inum, fnum));
+            Assert.Equal(2.001d, MathUtils.Min(dnum, fnum));
         }
 
         [Fact]
@@ -68,8 +68,8 @@ namespace DaraUnitTests.Utils
             int inum = 2;
             float fnum = 2.01f;
             double dnum = 2.02d;
-            Assert.Equal(2.01f, MathUtil.Max(inum, fnum));
-            Assert.Equal(2.02d, MathUtil.Max(dnum, fnum));
+            Assert.Equal(2.01f, MathUtils.Max(inum, fnum));
+            Assert.Equal(2.02d, MathUtils.Max(dnum, fnum));
         }
     }
 

@@ -3,7 +3,7 @@ using Darabonba.Exceptions;
 
 namespace Darabonba.Utils
 {
-    public class MathUtil
+    public class MathUtils
     {
         public static int Floor(double? num)
         {

@@ -27,7 +27,7 @@ namespace DaraUnitTests.Utils
                 { "key2", "value22" },
                 { "key3", "value3" }
             };
-            Dictionary<string, object> res = ConverterUtil.Merge(dict1, dict2);
+            Dictionary<string, object> res = ConverterUtils.Merge(dict1, dict2);
             Assert.Equal("value1", res["key1"]);
             Assert.Equal("value22", res["key2"]);
             Assert.Equal("value3", res["key3"]);
@@ -36,7 +36,7 @@ namespace DaraUnitTests.Utils
         [Fact]
         public void TestMergeListMap()
         {
-            Assert.Empty(ConverterUtil.Merge<object>(null));
+            Assert.Empty(ConverterUtils.Merge<object>(null));
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
             Dictionary<string, object> dicNull = null;
@@ -48,35 +48,35 @@ namespace DaraUnitTests.Utils
             dic.Add("test", "test");
             dicMerge.Add("testMerge", "testMerge");
             dicMerge.Add("testExist", "IsExist");
-            Dictionary<string, string> dicResult = ConverterUtil.Merge<string>(dic, dicNull, dicMerge, null);
+            Dictionary<string, string> dicResult = ConverterUtils.Merge<string>(dic, dicNull, dicMerge, null);
             Assert.NotNull(dicResult);
             Assert.Equal(4, dicResult.Count);
 
-            Dictionary<string, object> dicModelMerge = ConverterUtil.Merge<object>(dic, dicNull, dicMerge, model);
+            Dictionary<string, object> dicModelMerge = ConverterUtils.Merge<object>(dic, dicNull, dicMerge, model);
             Assert.NotNull(dicResult);
 
-            Assert.Throws<ArgumentException>(() => { ConverterUtil.Merge<object>(dic, 1); });
+            Assert.Throws<ArgumentException>(() => { ConverterUtils.Merge<object>(dic, 1); });
         }
 
         [Fact]
         public void TestStrToLower()
         {
-            Assert.Empty(ConverterUtil.StrToLower(null));
+            Assert.Empty(ConverterUtils.StrToLower(null));
 
-            Assert.Equal("test", ConverterUtil.StrToLower("TEST"));
+            Assert.Equal("test", ConverterUtils.StrToLower("TEST"));
         }
 
         [Fact]
         public void Test_ParseMethods()
         {
-            Assert.Equal(123, ConverterUtil.ParseInt("123"));
-            Assert.Equal(123, ConverterUtil.ParseInt("123.0123"));
-            Assert.Equal(123, ConverterUtil.ParseLong("123"));
-            Assert.Equal(123, ConverterUtil.ParseLong("123.0123"));
-            Assert.Equal(123.0123, Math.Round(ConverterUtil.ParseFloat("123.0123"), 4));
-            var ex = Assert.Throws<DaraException>(() => { ConverterUtil.ParseLong((string)null); });
+            Assert.Equal(123, ConverterUtils.ParseInt("123"));
+            Assert.Equal(123, ConverterUtils.ParseInt("123.0123"));
+            Assert.Equal(123, ConverterUtils.ParseLong("123"));
+            Assert.Equal(123, ConverterUtils.ParseLong("123.0123"));
+            Assert.Equal(123.0123, Math.Round(ConverterUtils.ParseFloat("123.0123"), 4));
+            var ex = Assert.Throws<DaraException>(() => { ConverterUtils.ParseLong((string)null); });
             Assert.Equal("Data is null.", ex.Message);
-            var ex1 = Assert.Throws<FormatException>(() => { ConverterUtil.ParseLong("test"); });
+            var ex1 = Assert.Throws<FormatException>(() => { ConverterUtils.ParseLong("test"); });
             Assert.Equal("Input string was not in a correct format.", ex1.Message);
         }
     }

@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Darabonba.Utils
 {
-    public static class JSONUtil
+    public static class JSONUtils
     {
         public static string SerializeObject(object data)
         {

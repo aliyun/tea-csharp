@@ -853,7 +853,7 @@ namespace DaraUnitTests
         public void TestBytesReadable()
         {
             string str = "test";
-            Stream stream = StreamUtil.BytesReadable(str);
+            Stream stream = StreamUtils.BytesReadable(str);
             byte[] bytes = new byte[stream.Length];
             stream.Read(bytes, 0, bytes.Length);
             string bytesStr = Encoding.UTF8.GetString(bytes);

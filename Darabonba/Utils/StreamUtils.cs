@@ -8,7 +8,7 @@ using Darabonba.Models;
 
 namespace Darabonba.Utils
 {
-    public class StreamUtil
+    public class StreamUtils
     {
         private const string DATA_PREFIX = "data:";
         private const string EVENT_PREFIX = "event:";
@@ -150,14 +150,14 @@ namespace Darabonba.Utils
         public static object ReadAsJSON(Stream stream)
         {
             object jResult = ParseJSON(ReadAsString(stream));
-            object result = JSONUtil.Deserialize(jResult);
+            object result = JSONUtils.Deserialize(jResult);
             return result;
         }
 
         public async static Task<object> ReadAsJSONAsync(Stream stream)
         {
             object jResult = ParseJSON(await ReadAsStringAsync(stream));
-            object result = JSONUtil.Deserialize(jResult);
+            object result = JSONUtils.Deserialize(jResult);
             return result;
         }
 
