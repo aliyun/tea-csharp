@@ -25,19 +25,19 @@ namespace DaraUnitTests.Utils
             Dictionary<string, object> dict = new Dictionary<string, object>
             { { "key", "value" }
             };
-            string jsonStr = JSONUtil.SerializeObject(dict);
+            string jsonStr = JSONUtils.SerializeObject(dict);
             Assert.NotNull(jsonStr);
             Assert.NotEmpty(jsonStr);
             Assert.Equal("{\"key\":\"value\"}", jsonStr);
-            Assert.Equal("{}", JSONUtil.SerializeObject(new Dictionary<string, object>()));
-            Assert.Equal("test str", JSONUtil.SerializeObject("test str"));
-            Assert.Equal("1", JSONUtil.SerializeObject(1));
-            Assert.Equal("true", JSONUtil.SerializeObject(true));
-            Assert.Equal("null", JSONUtil.SerializeObject(null));
+            Assert.Equal("{}", JSONUtils.SerializeObject(new Dictionary<string, object>()));
+            Assert.Equal("test str", JSONUtils.SerializeObject("test str"));
+            Assert.Equal("1", JSONUtils.SerializeObject(1));
+            Assert.Equal("true", JSONUtils.SerializeObject(true));
+            Assert.Equal("null", JSONUtils.SerializeObject(null));
             Dictionary<string, object> unicode = new Dictionary<string, object>
             { { "str", "test&<>://中文" }
             };
-            Assert.Equal("{\"key\":\"value\",\"map\":{\"str\":\"test&<>://中文\"},\"num\":1}", JSONUtil.SerializeObject(
+            Assert.Equal("{\"key\":\"value\",\"map\":{\"str\":\"test&<>://中文\"},\"num\":1}", JSONUtils.SerializeObject(
                 new Dictionary<string, object>
                 {
                     { "key", "value" },
@@ -49,11 +49,11 @@ namespace DaraUnitTests.Utils
         [Fact]
         public void TestDeserializeToDic()
         {
-            Assert.Null(JSONUtil.Deserialize(null));
+            Assert.Null(JSONUtils.Deserialize(null));
 
             string jsonStr = "{\"arrayObj\":[[{\"itemName\":\"item\",\"itemInt\":1},{\"itemName\":\"item2\",\"itemInt\":2}],[{\"itemName\":\"item3\",\"itemInt\":3}]],\"arrayList\":[[[1,2],[3,4]],[[5,6],[7]],[]],\"listStr\":[1,2,3],\"items\":[{\"total_size\":18,\"partNumber\":1,\"tags\":[{\"aa\":\"11\"}]},{\"total_size\":20,\"partNumber\":2,\"tags\":[{\"aa\":\"22\"}]}],\"next_marker\":\"\",\"test\":{\"total_size\":19,\"partNumber\":1,\"tags\":[{\"aa\":\"11\"}]}}";
             JObject jObject = JObject.Parse(jsonStr);
-            Dictionary<string, object> dic = (Dictionary<string, object>) JSONUtil.Deserialize(jObject);
+            Dictionary<string, object> dic = (Dictionary<string, object>) JSONUtils.Deserialize(jObject);
             Assert.NotNull(dic);
             List<object> listResult = (List<object>) dic["items"];
             Dictionary<string, object> item1 = (Dictionary<string, object>) listResult[0];
@@ -68,11 +68,11 @@ namespace DaraUnitTests.Utils
             var jsonStr = "{\"testBool\":true,\"arrayObj\":[[{\"itemName\":\"item\",\"itemInt\":1},{\"itemName\":\"item2\",\"itemInt\":2}],[{\"itemName\":\"item3\",\"itemInt\":3}]],\"arrayList\":[[[1,2],[3,4]],[[5,6],[7]],[]],\"listStr\":[1,2,3],\"items\":[{\"total_size\":18,\"partNumber\":1,\"tags\":[{\"aa\":\"11\"}]},{\"total_size\":20,\"partNumber\":2,\"tags\":[{\"aa\":\"22\"}]}],\"next_marker\":\"\",\"test\":{\"total_size\":19,\"partNumber\":1,\"tags\":[{\"aa\":\"11\"}]}}";
             var jObject = JObject.Parse(jsonStr);
             _testOutputHelper.WriteLine("objjj----{0}", jObject);
-            var res = JSONUtil.ReadPath(jObject, "$.arrayObj[0]");
+            var res = JSONUtils.ReadPath(jObject, "$.arrayObj[0]");
             Assert.Equal("[{\"itemName\":\"item\",\"itemInt\":1},{\"itemName\":\"item2\",\"itemInt\":2}]", JsonConvert.SerializeObject(res));
-            res = JSONUtil.ReadPath(jObject, "$.arrayObj[0][0].itemInt");
+            res = JSONUtils.ReadPath(jObject, "$.arrayObj[0][0].itemInt");
             Assert.Equal(1L, res);
-            res = JSONUtil.ReadPath(jObject, "$.testBool");
+            res = JSONUtils.ReadPath(jObject, "$.testBool");
             Assert.True((bool)res);
         }
         
@@ -99,27 +99,27 @@ namespace DaraUnitTests.Utils
                 }
             };
 
-            Assert.Null(JSONUtil.ReadPath(context, "$.notExist"));
-            _testOutputHelper.WriteLine("bool----{0}", JSONUtil.ReadPath(context, "$.testBool"));
-            Assert.True(JSONUtil.ReadPath(context, "$.testBool") is bool);
-            Assert.True(JSONUtil.ReadPath(context, "$.listList") is List<object>);
-            Assert.True(JSONUtil.ReadPath(context, "$.contextInteger") is long);
-            Assert.True(JSONUtil.ReadPath(context, "$.contextLong") is long);
-            Assert.True(JSONUtil.ReadPath(context, "$.contextDouble") is double);
-            Assert.True(JSONUtil.ReadPath(context, "$.contextFloat") is double);
-            Assert.True(JSONUtil.ReadPath(context, "$.contextListLong") is List<object>);
-            Assert.True(JSONUtil.ReadPath(context, "$.integerListMap") is Dictionary<string, object>);
+            Assert.Null(JSONUtils.ReadPath(context, "$.notExist"));
+            _testOutputHelper.WriteLine("bool----{0}", JSONUtils.ReadPath(context, "$.testBool"));
+            Assert.True(JSONUtils.ReadPath(context, "$.testBool") is bool);
+            Assert.True(JSONUtils.ReadPath(context, "$.listList") is List<object>);
+            Assert.True(JSONUtils.ReadPath(context, "$.contextInteger") is long);
+            Assert.True(JSONUtils.ReadPath(context, "$.contextLong") is long);
+            Assert.True(JSONUtils.ReadPath(context, "$.contextDouble") is double);
+            Assert.True(JSONUtils.ReadPath(context, "$.contextFloat") is double);
+            Assert.True(JSONUtils.ReadPath(context, "$.contextListLong") is List<object>);
+            Assert.True(JSONUtils.ReadPath(context, "$.integerListMap") is Dictionary<string, object>);
 
-            Assert.Equal(true, JSONUtil.ReadPath(context, "$.testBool"));
-            Assert.Equal("test", JSONUtil.ReadPath(context, "$.testStr"));
-            Assert.Equal(123L, JSONUtil.ReadPath(context, "$.contextLong"));
-            var listLong = JSONUtil.ReadPath(context, "$.contextListLong") as List<object>;
+            Assert.Equal(true, JSONUtils.ReadPath(context, "$.testBool"));
+            Assert.Equal("test", JSONUtils.ReadPath(context, "$.testStr"));
+            Assert.Equal(123L, JSONUtils.ReadPath(context, "$.contextLong"));
+            var listLong = JSONUtils.ReadPath(context, "$.contextListLong") as List<object>;
             Assert.Equal(123L, listLong[0]);
 
-            var listList = JSONUtil.ReadPath(context, "$.listList") as List<object>;
+            var listList = JSONUtils.ReadPath(context, "$.listList") as List<object>;
             Assert.Equal(789L, (listList[0] as List<object>)[0]);
 
-            var map = JSONUtil.ReadPath(context, "$.integerListMap") as Dictionary<string, object>;
+            var map = JSONUtils.ReadPath(context, "$.integerListMap") as Dictionary<string, object>;
             Assert.Equal(123L, (map["integerList"] as List<object>)[0]);
 
             var realListList = new List<List<int?>>();
@@ -159,11 +159,11 @@ namespace DaraUnitTests.Utils
             }
             var context1 = new Context
             {
-                ContextLong = JSONUtil.ReadPath(context, "$.contextLong") as long?,
-                ContextInteger = (int?)(JSONUtil.ReadPath(context, "$.contextInteger") as long?),
-                ContextFloat = (float?)(JSONUtil.ReadPath(context, "$.contextFloat") as double?),
-                ContextDouble = JSONUtil.ReadPath(context, "$.contextDouble") as double?,
-                ContextListLong = (JSONUtil.ReadPath(context, "$.contextListLong") as List<object>)
+                ContextLong = JSONUtils.ReadPath(context, "$.contextLong") as long?,
+                ContextInteger = (int?)(JSONUtils.ReadPath(context, "$.contextInteger") as long?),
+                ContextFloat = (float?)(JSONUtils.ReadPath(context, "$.contextFloat") as double?),
+                ContextDouble = JSONUtils.ReadPath(context, "$.contextDouble") as double?,
+                ContextListLong = (JSONUtils.ReadPath(context, "$.contextListLong") as List<object>)
                     .Select(item => item is long longValue ? longValue : (long?)null)
                     .ToList(),
                 ListList = realListList,

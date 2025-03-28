@@ -9,7 +9,7 @@ using Darabonba;
 
 namespace Darabonba.Utils
 {
-    public class XmlUtil
+    public class XmlUtils
     {
         public static Dictionary<string, object> ParseXml(string body, Type response)
         {

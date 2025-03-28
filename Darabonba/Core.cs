@@ -29,7 +29,7 @@ namespace Darabonba
         {
             var urlBuilder = new StringBuilder("");
 
-            urlBuilder.Append(ConverterUtil.StrToLower(request.Protocol)).Append("://");
+            urlBuilder.Append(ConverterUtils.StrToLower(request.Protocol)).Append("://");
             urlBuilder.Append(DictUtils.GetDicValue(request.Headers, "host"));
             if (request.Port > 0)
             {
@@ -150,7 +150,7 @@ namespace Darabonba
             var result = new Dictionary<string, string>();
             for (int i = 0; i < headers.Count; i++)
             {
-                result.Add(ConverterUtil.StrToLower(headers.GetKey(i)), headers.Get(i));
+                result.Add(ConverterUtils.StrToLower(headers.GetKey(i)), headers.Get(i));
             }
             return result;
         }
@@ -161,7 +161,7 @@ namespace Darabonba
             var enumerator = headers.GetEnumerator();
             foreach (var item in headers)
             {
-                result.Add(ConverterUtil.StrToLower(item.Key), item.Value.First());
+                result.Add(ConverterUtils.StrToLower(item.Key), item.Value.First());
             }
             return result;
         }

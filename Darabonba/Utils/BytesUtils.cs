@@ -2,7 +2,7 @@ using System.Text;
 
 namespace Darabonba.Utils
 {
-    public class BytesUtil
+    public class BytesUtils
     {
         public static byte[] From(string data, string type)
         {

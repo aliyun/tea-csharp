@@ -258,7 +258,7 @@ namespace DaraUnitTests.Utils
         {
             using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
             {
-                Assert.Equal("test", StreamUtil.ReadAsString(stream));
+                Assert.Equal("test", StreamUtils.ReadAsString(stream));
             }
         }
 
@@ -267,7 +267,7 @@ namespace DaraUnitTests.Utils
         {
             using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
             {
-                Assert.Equal("test", await StreamUtil.ReadAsStringAsync(stream));
+                Assert.Equal("test", await StreamUtils.ReadAsStringAsync(stream));
             }
         }
 
@@ -278,7 +278,7 @@ namespace DaraUnitTests.Utils
             byte[] array = Encoding.UTF8.GetBytes(jsonStr);
             using (MemoryStream stream = new MemoryStream(array))
             {
-                Dictionary<string, object> dic = (Dictionary<string, object>)StreamUtil.ReadAsJSON(stream);
+                Dictionary<string, object> dic = (Dictionary<string, object>)StreamUtils.ReadAsJSON(stream);
                 Assert.NotNull(dic);
                 List<object> listResult = (List<object>)dic["items"];
                 Dictionary<string, object> item1 = (Dictionary<string, object>)listResult[0];
@@ -291,7 +291,7 @@ namespace DaraUnitTests.Utils
             array = Encoding.UTF8.GetBytes(jsonStr);
             using (MemoryStream stream = new MemoryStream(array))
             {
-                List<object> listResult = (List<object>)StreamUtil.ReadAsJSON(stream);
+                List<object> listResult = (List<object>)StreamUtils.ReadAsJSON(stream);
                 Assert.NotNull(listResult);
                 Dictionary<string, object> item1 = (Dictionary<string, object>)listResult[0];
                 Assert.Equal("item", item1["itemName"]);
@@ -304,8 +304,8 @@ namespace DaraUnitTests.Utils
         {
             using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
             {
-                Assert.NotNull(StreamUtil.Read(stream, 3));
-                Assert.Equal(3, StreamUtil.Read(stream, 3).Length);
+                Assert.NotNull(StreamUtils.Read(stream, 3));
+                Assert.Equal(3, StreamUtils.Read(stream, 3).Length);
             }
         }
 
@@ -316,7 +316,7 @@ namespace DaraUnitTests.Utils
             using (MemoryStream readStream = new MemoryStream(inputData))
             using (MemoryStream writeStream = new MemoryStream())
             {
-                StreamUtil.Pipe(readStream, writeStream);
+                StreamUtils.Pipe(readStream, writeStream);
                 byte[] outputData = writeStream.ToArray();
                 Assert.Equal(inputData, outputData);
             }
@@ -324,7 +324,7 @@ namespace DaraUnitTests.Utils
             using (MemoryStream readStream1 = new MemoryStream(inputData1))
             using (MemoryStream writeStream1 = new MemoryStream())
             {
-                StreamUtil.Pipe(readStream1, writeStream1);
+                StreamUtils.Pipe(readStream1, writeStream1);
                 byte[] outputData1 = writeStream1.ToArray();
                 Assert.Empty(outputData1);
             }
@@ -336,19 +336,19 @@ namespace DaraUnitTests.Utils
             byte[] data = Encoding.UTF8.GetBytes("test");
             using (MemoryStream stream = new MemoryStream(data))
             {
-                Stream copy = StreamUtil.StreamFor(stream);
+                Stream copy = StreamUtils.StreamFor(stream);
                 Assert.NotNull(copy);
                 Assert.True(copy.CanRead);
                 string str = new StreamReader(copy).ReadToEnd();
                 Assert.Equal("test", str);
 
                 string data1 = "test1";
-                Stream copy1 = StreamUtil.StreamFor(data1);
+                Stream copy1 = StreamUtils.StreamFor(data1);
                 string str1 = new StreamReader(copy1).ReadToEnd();
                 Assert.Equal("test1", str1);
 
                 int data2 = 111;
-                Exception ex = Assert.Throws<Exception>(() => StreamUtil.StreamFor(data2));
+                Exception ex = Assert.Throws<Exception>(() => StreamUtils.StreamFor(data2));
                 Assert.Equal("data is not Stream or String", ex.Message);
             }
         }
@@ -360,7 +360,7 @@ namespace DaraUnitTests.Utils
             byte[] array = Encoding.UTF8.GetBytes(jsonStr);
             using (MemoryStream stream = new MemoryStream(array))
             {
-                Dictionary<string, object> dic = (Dictionary<string, object>)await StreamUtil.ReadAsJSONAsync(stream);
+                Dictionary<string, object> dic = (Dictionary<string, object>)await StreamUtils.ReadAsJSONAsync(stream);
                 Assert.NotNull(dic);
                 List<object> listResult = (List<object>)dic["items"];
                 Dictionary<string, object> item1 = (Dictionary<string, object>)listResult[0];
@@ -373,7 +373,7 @@ namespace DaraUnitTests.Utils
             array = Encoding.UTF8.GetBytes(jsonStr);
             using (MemoryStream stream = new MemoryStream(array))
             {
-                List<object> listResult = (List<object>)await StreamUtil.ReadAsJSONAsync(stream);
+                List<object> listResult = (List<object>)await StreamUtils.ReadAsJSONAsync(stream);
                 Assert.NotNull(listResult);
                 Dictionary<string, object> item1 = (Dictionary<string, object>)listResult[0];
                 Assert.Equal("item", item1["itemName"]);
@@ -386,7 +386,7 @@ namespace DaraUnitTests.Utils
         {
             using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
             {
-                Assert.NotNull(StreamUtil.ReadAsBytes(stream));
+                Assert.NotNull(StreamUtils.ReadAsBytes(stream));
             }
         }
 
@@ -395,7 +395,7 @@ namespace DaraUnitTests.Utils
         {
             using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
             {
-                Assert.NotNull(await StreamUtil.ReadAsBytesAsync(stream));
+                Assert.NotNull(await StreamUtils.ReadAsBytesAsync(stream));
             }
         }
 
@@ -519,7 +519,7 @@ namespace DaraUnitTests.Utils
                 var response = client.GetStreamAsync("http://localhost:8384/sse").Result;
                 var events = new List<SSEEvent>();
 
-                foreach (var sseEvent in StreamUtil.ReadAsSSE(response))
+                foreach (var sseEvent in StreamUtils.ReadAsSSE(response))
                 {
                     events.Add(sseEvent);
                 }
@@ -543,7 +543,7 @@ namespace DaraUnitTests.Utils
 
                 var events = new List<SSEEvent>();
 
-                foreach (var sseEvent in StreamUtil.ReadAsSSE(response))
+                foreach (var sseEvent in StreamUtils.ReadAsSSE(response))
                 {
                     events.Add(sseEvent);
                 }
@@ -569,7 +569,7 @@ namespace DaraUnitTests.Utils
 
                 var events = new List<SSEEvent>();
 
-                foreach (var sseEvent in StreamUtil.ReadAsSSE(response))
+                foreach (var sseEvent in StreamUtils.ReadAsSSE(response))
                 {
                     events.Add(sseEvent);
                 }
@@ -595,7 +595,7 @@ namespace DaraUnitTests.Utils
 
                 var events = new List<SSEEvent>();
 
-                foreach (var sseEvent in StreamUtil.ReadAsSSE(response))
+                foreach (var sseEvent in StreamUtils.ReadAsSSE(response))
                 {
                     events.Add(sseEvent);
                 }

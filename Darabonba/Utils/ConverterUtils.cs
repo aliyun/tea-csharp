@@ -4,7 +4,7 @@ using Darabonba.Exceptions;
 
 namespace Darabonba.Utils
 {
-    public class ConverterUtil
+    public class ConverterUtils
     {
         public static Dictionary<string, object> Merge(Dictionary<string, object> dic1, Dictionary<string, object> dic2)
         {

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Darabonba.Utils
 {
-    public class FormUtil
+    public class FormUtils
     {
         public static string ToFormString(Dictionary<string, object> map)
         {

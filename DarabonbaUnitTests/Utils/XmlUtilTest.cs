@@ -45,7 +45,7 @@ namespace DaraUnitTests.Utils
         public void Test_ToXml()
         {
             Model modelNull = new Model();
-            Assert.Empty(XmlUtil.ToXML(modelNull.ToMap()));
+            Assert.Empty(XmlUtils.ToXML(modelNull.ToMap()));
 
             ToBodyModel model = new ToBodyModel();
             ListAllMyBucketsResult result = new ListAllMyBucketsResult();
@@ -77,17 +77,17 @@ namespace DaraUnitTests.Utils
             model.listAllMyBucketsResult.TestBool = true;
             model.listAllMyBucketsResult.TestNull = null;
             model.listAllMyBucketsResult.TestListNull = null;
-            string xmlStr = XmlUtil.ToXML(model.ToMap());
+            string xmlStr = XmlUtils.ToXML(model.ToMap());
             Assert.NotNull(xmlStr);
 
-            Dictionary<string, object> xmlBody = (Dictionary<string, object>)XmlUtil.ParseXml(xmlStr, typeof(ToBodyModel));
+            Dictionary<string, object> xmlBody = (Dictionary<string, object>)XmlUtils.ParseXml(xmlStr, typeof(ToBodyModel));
             ToBodyModel teaModel = Model.ToObject<ToBodyModel>(xmlBody);
             Assert.NotNull(teaModel);
             Assert.Equal(1, teaModel.listAllMyBucketsResult.TestDouble);
 
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<body><Contents><Owner><DisplayName>disName</DisplayName></Owner><Key>key</Key></Contents><Contents/></body>";
-            Dictionary<string, object> map = XmlUtil.ParseXml(xml, null);
+            Dictionary<string, object> map = XmlUtils.ParseXml(xml, null);
             Assert.False(map.ContainsKey("xml"));
             Assert.Single(map);
             Assert.True(((Dictionary<string, object>)map["body"]).ContainsKey("Contents"));
@@ -101,15 +101,15 @@ namespace DaraUnitTests.Utils
         [Fact]
         public void TestXml()
         {
-            string xmlStr = XmlUtil.SerializeXml(model);
+            string xmlStr = XmlUtils.SerializeXml(model);
             Assert.NotNull(xmlStr);
             Assert.NotEmpty(xmlStr);
 
-            Assert.Equal(xmlStr, XmlUtil.SerializeXml(model.ToMap()));
+            Assert.Equal(xmlStr, XmlUtils.SerializeXml(model.ToMap()));
 
             model.listAllMyBucketsResult.dict = null;
-            xmlStr = XmlUtil.SerializeXml(model);
-            Dictionary<string, object> dict = XmlUtil.DeserializeXml(xmlStr, model.GetType());
+            xmlStr = XmlUtils.SerializeXml(model);
+            Dictionary<string, object> dict = XmlUtils.DeserializeXml(xmlStr, model.GetType());
             Assert.NotNull(dict);
         }
     }
