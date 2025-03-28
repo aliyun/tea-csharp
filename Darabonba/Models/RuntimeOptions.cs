@@ -6,6 +6,37 @@ namespace Darabonba.Models
 {
     public class RuntimeOptions : Model
     {
+        public static implicit operator RuntimeOptions(AlibabaCloud.TeaUtil.Models.RuntimeOptions options)
+        {
+            if (options == null)
+            {
+                return null;
+            }
+            return new RuntimeOptions
+            {
+                Autoretry = options.Autoretry,
+                IgnoreSSL = options.IgnoreSSL,
+                Key = options.Key,
+                Cert = options.Cert,
+                Ca = options.Ca,
+                MaxAttempts = options.MaxAttempts,
+                BackoffPeriod = options.BackoffPeriod,
+                BackoffPolicy = options.BackoffPolicy,
+                ReadTimeout = options.ReadTimeout,
+                ConnectTimeout = options.ConnectTimeout,
+                HttpProxy = options.HttpProxy,
+                HttpsProxy = options.HttpsProxy,
+                NoProxy = options.NoProxy,
+                MaxIdleConns = options.MaxIdleConns,
+                LocalAddr = options.LocalAddr,
+                Socks5Proxy = options.Socks5Proxy,
+                Socks5NetWork = options.Socks5NetWork,
+                KeepAlive = options.KeepAlive,
+                ExtendsParameters = options.ExtendsParameters,
+                RetryOptions = null
+            };
+        }
+
         public RetryOptions RetryOptions { get; set; }
         public bool? Autoretry { get; set; }
         public bool? IgnoreSSL { get; set; }

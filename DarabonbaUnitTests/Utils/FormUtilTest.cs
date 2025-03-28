@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Darabonba.Models;
 using Darabonba.Utils;
 using Xunit;
 
