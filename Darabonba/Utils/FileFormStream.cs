@@ -6,21 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Darabonba;
+using Darabonba.Models;
 
 namespace Darabonba.Utils
 {
-    public class FileField
-    {
-        [NameInMap("filename")]
-        public string Filename { get; set; }
-
-        [NameInMap("contentType")]
-        public string ContentType { get; set; }
-
-        [NameInMap("content")]
-        public Stream Content { get; set; }
-    }
-    
     public class FileFormStream : Stream
     {
 

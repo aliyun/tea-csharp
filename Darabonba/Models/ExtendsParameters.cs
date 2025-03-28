@@ -4,10 +4,25 @@ namespace Darabonba.Models
 {
     public class ExtendsParameters : Model
     {
+        public static implicit operator ExtendsParameters(AlibabaCloud.TeaUtil.Models.ExtendsParameters extendsParameters)
+        {
+            if (extendsParameters == null)
+            {
+                return null;
+            }
+            return new ExtendsParameters
+            {
+                Headers = extendsParameters.Headers,
+                Queries = extendsParameters.Queries
+            };
+        }
+
         public Dictionary<string, string> Headers { get; set; }
         public Dictionary<string, string> Queries { get; set; }
 
-        public new void Validate() {}
+        public new void Validate()
+        {
+        }
 
         public new ExtendsParameters Copy()
         {
@@ -29,6 +44,7 @@ namespace Darabonba.Models
             {
                 map["headers"] = Headers;
             }
+
             if (Queries != null)
             {
                 map["queries"] = Queries;
@@ -45,6 +61,7 @@ namespace Darabonba.Models
             {
                 model.Headers = map["headers"] as Dictionary<string, string>;
             }
+
             if (map.ContainsKey("queries"))
             {
                 model.Queries = map["queries"] as Dictionary<string, string>;
