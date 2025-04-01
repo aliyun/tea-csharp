@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DaraUnitTests.Utils
 {
-    public class ListUtilTest
+    public class ListUtilsTest
     {
 
         [Fact]

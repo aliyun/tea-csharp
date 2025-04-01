@@ -3,7 +3,7 @@ using Xunit;
 
 namespace DaraUnitTests.Utils
 {
-    public class MathUtilTest
+    public class MathUtilsTest
     {
         [Fact]
         public void TestFloor()

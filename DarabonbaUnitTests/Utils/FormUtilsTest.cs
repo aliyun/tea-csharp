@@ -7,7 +7,7 @@ using Xunit;
 
 namespace DaraUnitTests.Utils
 {
-    public class FormUtilTest
+    public class FormUtilsTest
     {
         [Fact]
         public void Test_ToFormString()

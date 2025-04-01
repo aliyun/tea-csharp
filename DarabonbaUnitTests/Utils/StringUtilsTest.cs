@@ -4,7 +4,7 @@ using Xunit;
 
 namespace DaraUnitTests.Utils
 {
-    public class StringUtilTest
+    public class StringUtilsTest
     {
         [Fact]
         public void TestSubString()

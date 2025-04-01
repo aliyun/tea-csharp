@@ -12,7 +12,7 @@ namespace DaraUnitTests.RetryPolicy
         {
             var exception = Assert.Throws<DaraException>(() =>
             {
-                BackoffPolicy backoffPolicy = BackoffPolicy.NewBackOffPolicy(new Dictionary<string, object>
+                BackoffPolicy bp = BackoffPolicy.NewBackOffPolicy(new Dictionary<string, object>
                 {
                     { "policy", "Any" }
                 });

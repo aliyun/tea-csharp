@@ -8,10 +8,10 @@ using static DaraUnitTests.Models.ListAllMyBucketsResult.Buckets;
 
 namespace DaraUnitTests.Utils
 {
-    public class XmlUtilTest
+    public class XmlUtilsTest
     {
         ToBodyModel model;
-        public XmlUtilTest()
+        public XmlUtilsTest()
         {
             model = new ToBodyModel();
             ListAllMyBucketsResult result = new ListAllMyBucketsResult();

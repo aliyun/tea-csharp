@@ -415,5 +415,40 @@ namespace Darabonba
 
             return context.Exception;
         }
+        
+        public static object GetDefaultValue(object obj, object defaultVal)
+        {
+            if (obj == null)
+                return defaultVal;
+        
+            if (obj is string && obj.Equals(""))
+                return defaultVal;
+            
+            if (obj is bool && !(bool)obj)
+                return defaultVal;
+
+            if (obj is byte && (byte)obj == 0)
+                return defaultVal;
+            if (obj is sbyte && (sbyte)obj == 0)
+                return defaultVal;
+            if (obj is short && (short)obj == 0)
+                return defaultVal;
+            if (obj is ushort && (ushort)obj == 0)
+                return defaultVal;
+            if (obj is int && (int)obj == 0)
+                return defaultVal;
+            if (obj is uint && (uint)obj == 0)
+                return defaultVal;
+            if (obj is long && (long)obj == 0)
+                return defaultVal;
+            if (obj is ulong && (ulong)obj == 0)
+                return defaultVal;
+            if (obj is float && (float)obj == 0)
+                return defaultVal;
+            if (obj is double && (double)obj == 0)
+                return defaultVal;
+
+            return obj; 
+        }
     }
 }
