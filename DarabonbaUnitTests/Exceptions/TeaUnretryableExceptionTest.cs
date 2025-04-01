@@ -1,22 +1,13 @@
-﻿using System;
-using Darabonba;
+﻿using Darabonba;
 using Darabonba.Exceptions;
 using Darabonba.RetryPolicy;
 using Tea;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace DaraUnitTests.Exceptions
 {
     public class TeaUnretryableExceptionTest
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public TeaUnretryableExceptionTest(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         [Fact]
         public void TestDaraUnRetryableException()
         {

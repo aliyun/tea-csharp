@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Darabonba;
@@ -6,19 +5,11 @@ using Darabonba.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace DaraUnitTests.Utils
 {
-    public class JSONUtilTest
+    public class JSONUtilsTest
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public JSONUtilTest(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         [Fact]
         public void Test_SerializeObject()
         {
@@ -67,7 +58,6 @@ namespace DaraUnitTests.Utils
         {
             var jsonStr = "{\"testBool\":true,\"arrayObj\":[[{\"itemName\":\"item\",\"itemInt\":1},{\"itemName\":\"item2\",\"itemInt\":2}],[{\"itemName\":\"item3\",\"itemInt\":3}]],\"arrayList\":[[[1,2],[3,4]],[[5,6],[7]],[]],\"listStr\":[1,2,3],\"items\":[{\"total_size\":18,\"partNumber\":1,\"tags\":[{\"aa\":\"11\"}]},{\"total_size\":20,\"partNumber\":2,\"tags\":[{\"aa\":\"22\"}]}],\"next_marker\":\"\",\"test\":{\"total_size\":19,\"partNumber\":1,\"tags\":[{\"aa\":\"11\"}]}}";
             var jObject = JObject.Parse(jsonStr);
-            _testOutputHelper.WriteLine("objjj----{0}", jObject);
             var res = JSONUtils.ReadPath(jObject, "$.arrayObj[0]");
             Assert.Equal("[{\"itemName\":\"item\",\"itemInt\":1},{\"itemName\":\"item2\",\"itemInt\":2}]", JsonConvert.SerializeObject(res));
             res = JSONUtils.ReadPath(jObject, "$.arrayObj[0][0].itemInt");
@@ -100,7 +90,6 @@ namespace DaraUnitTests.Utils
             };
 
             Assert.Null(JSONUtils.ReadPath(context, "$.notExist"));
-            _testOutputHelper.WriteLine("bool----{0}", JSONUtils.ReadPath(context, "$.testBool"));
             Assert.True(JSONUtils.ReadPath(context, "$.testBool") is bool);
             Assert.True(JSONUtils.ReadPath(context, "$.listList") is List<object>);
             Assert.True(JSONUtils.ReadPath(context, "$.contextInteger") is long);

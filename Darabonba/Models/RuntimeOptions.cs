@@ -1,11 +1,16 @@
 using System.Collections.Generic;
-using Darabonba;
 using Darabonba.RetryPolicy;
 
 namespace Darabonba.Models
 {
     public class RuntimeOptions : Model
     {
+        /// <summary>
+        /// 建议使用Darabonba.RuntimeOptions类
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        ///
         public static implicit operator RuntimeOptions(AlibabaCloud.TeaUtil.Models.RuntimeOptions options)
         {
             if (options == null)

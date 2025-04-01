@@ -237,7 +237,7 @@ namespace DaraUnitTests.Utils
     }
 
 
-    public class StreamUtilTest : IAsyncLifetime
+    public class StreamUtilsTest : IAsyncLifetime
     {
         private SseServer server = new SseServer("http://localhost:8384/");
 

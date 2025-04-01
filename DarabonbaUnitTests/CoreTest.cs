@@ -10,6 +10,7 @@ using Darabonba;
 using Darabonba.RetryPolicy;
 using Darabonba.Exceptions;
 using Darabonba.Utils;
+using DaraUnitTests.Utils;
 using Xunit;
 
 namespace DaraUnitTests
@@ -188,7 +189,10 @@ namespace DaraUnitTests
                 { "readTimeout", 7000 },
                 { "connectTimeout", 7000 }
             };
-            await Assert.ThrowsAsync<HttpRequestException>(async () => { await Core.DoActionAsync(request404, runtime); });
+            await Assert.ThrowsAsync<HttpRequestException>(async () =>
+            {
+                await Core.DoActionAsync(request404, runtime);
+            });
 
             Request requestException = new Request
             {
@@ -743,7 +747,8 @@ namespace DaraUnitTests
             retryPolicyContext = new RetryPolicyContext
             {
                 RetriesAttempted = 1,
-                Exception = new ThrottlingException { 
+                Exception = new ThrottlingException
+                {
                     Message = "ThrottlingException"
                 }
             };
@@ -752,7 +757,8 @@ namespace DaraUnitTests
             retryPolicyContext = new RetryPolicyContext
             {
                 RetriesAttempted = 1,
-                Exception = new ThrottlingException { 
+                Exception = new ThrottlingException
+                {
                     // TODO retryable true
                     Message = "ThrottlingException",
                     RetryAfter = 2000L
@@ -763,7 +769,8 @@ namespace DaraUnitTests
             retryPolicyContext = new RetryPolicyContext
             {
                 RetriesAttempted = 1,
-                Exception = new ThrottlingException { 
+                Exception = new ThrottlingException
+                {
                     // TODO retryable true
                     Message = "ThrottlingException",
                     RetryAfter = 320 * 1000L
@@ -775,7 +782,7 @@ namespace DaraUnitTests
             {
                 MaxAttempts = 1,
                 Backoff = backoffPolicy,
-                ErrorCode = new List<string> { "Throttling",  "Throttling.User", "Throttling.Api"}
+                ErrorCode = new List<string> { "Throttling", "Throttling.User", "Throttling.Api" }
             };
             retryOptions = new RetryOptions
             {
@@ -788,7 +795,8 @@ namespace DaraUnitTests
             retryPolicyContext = new RetryPolicyContext
             {
                 RetriesAttempted = 1,
-                Exception = new ThrottlingException { 
+                Exception = new ThrottlingException
+                {
                     // TODO retryable true
                     Code = "Throttling",
                     RetryAfter = 2000L
@@ -799,7 +807,8 @@ namespace DaraUnitTests
             retryPolicyContext = new RetryPolicyContext
             {
                 RetriesAttempted = 1,
-                Exception = new ThrottlingException { 
+                Exception = new ThrottlingException
+                {
                     // TODO retryable true
                     Code = "Throttling.User",
                     RetryAfter = 2000L
@@ -810,7 +819,8 @@ namespace DaraUnitTests
             retryPolicyContext = new RetryPolicyContext
             {
                 RetriesAttempted = 1,
-                Exception = new ThrottlingException { 
+                Exception = new ThrottlingException
+                {
                     // TODO retryable true
                     Code = "Throttling.Api",
                     RetryAfter = 2000L
@@ -884,7 +894,7 @@ namespace DaraUnitTests
             {
                 Assert.Equal("Darabonba.Exceptions.DaraException", e.GetType().ToString());
             }
-            
+
             retryPolicyContext = new RetryPolicyContext
             {
                 Request = new Request(),
@@ -898,6 +908,126 @@ namespace DaraUnitTests
             {
                 Assert.Equal("Darabonba.Exceptions.DaraUnRetryableException", e.GetType().ToString());
             }
+        }
+
+        [Fact]
+        public void Test_GetDefaultValue()
+        {
+            byte? byteVal = 0;
+            object obj = byteVal;
+            var res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            byteVal = 1;
+            obj = byteVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal((byte)1, res);
+            
+            byteVal = null;
+            res = Core.GetDefaultValue(byteVal, 100);
+            Assert.Equal(100, res);
+            
+            sbyte sbyteVal = 0;
+            obj = sbyteVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            sbyteVal = 1;
+            obj = sbyteVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal((sbyte)1, res);
+
+            int? intVal = 0;
+            obj = intVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            intVal = 1;
+            obj = intVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(1, res);
+            
+            uint? uintVal = 0;
+            obj = uintVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            uintVal = 1;
+            obj = uintVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal((uint)1, res);
+            
+            short shortVal = 0;
+            obj = shortVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            shortVal = 1;
+            obj = shortVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal((short)1, res);
+            
+            ushort ushortVal = 0;
+            obj = ushortVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            ushortVal = 1;
+            obj = ushortVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal((ushort)1, res);
+            
+            long longVal = 0;
+            obj = longVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            longVal = 1;
+            obj = longVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(1L, res);
+            
+            ulong ulongVal = 0;
+            obj = ulongVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            ulongVal = 1;
+            obj = ulongVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal((ulong)1, res);
+            
+            float floatVal = 0;
+            obj = floatVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            floatVal = 1;
+            obj = floatVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(1f, res);
+            
+            double doubleVal = 0;
+            obj = doubleVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(100, res);
+            doubleVal = 1;
+            obj = doubleVal;
+            res = Core.GetDefaultValue(obj, 100);
+            Assert.Equal(1d, res);
+            
+            var str = "";
+            obj = str;
+            res = Core.GetDefaultValue(obj, "defaultStr");
+            Assert.Equal("defaultStr", res);
+            str = "test";
+            obj = str;
+            res = Core.GetDefaultValue(obj, "defaultStr");
+            Assert.Equal("test", res);
+
+            var boolVal = false;
+            obj = boolVal;
+            res = Core.GetDefaultValue(obj, true);
+            Assert.True((bool)res);
+            boolVal = true;
+            obj = boolVal;
+            res = Core.GetDefaultValue(obj, false);
+            Assert.True((bool)res);
+
+            Context context = null;
+            res = Core.GetDefaultValue(context, true);
+            Assert.True((bool)res);
         }
     }
 }
