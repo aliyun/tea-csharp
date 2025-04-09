@@ -250,7 +250,11 @@ namespace DaraUnitTests.Utils
         public Task DisposeAsync()
         {
             server.Dispose();
+#if NET45
+            return Task.FromResult(0);
+#else
             return Task.CompletedTask;
+#endif
         }
 
         [Fact]
@@ -624,4 +628,3 @@ namespace DaraUnitTests.Utils
         }
     }
 }
-

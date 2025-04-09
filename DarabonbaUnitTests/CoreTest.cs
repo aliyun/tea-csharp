@@ -81,7 +81,8 @@ namespace DaraUnitTests
             {
                 { "readTimeout", 7000 },
                 { "connectTimeout", 7000 },
-                { "httpsProxy", "http://www.alibabacloud.com/s/zh?k=ecs" },
+                // result in failure on .NET framework 45
+                // { "httpsProxy", "http://www.alibabacloud.com/s/zh?k=ecs" },
                 { "ignoreSSL", true }
             };
 

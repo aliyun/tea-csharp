@@ -7,25 +7,49 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
+  test-ubuntu:
 
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 3.1.426
+        dotnet-version: '3.x'
     - name: install altcover
       run: dotnet tool install --global altcover.visualizer --version 8.6.14
     - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
+#      run: dotnet restore
+      run: cd DarabonbaUnitTests/ && dotnet add package AltCover && cd ../ && dotnet restore && dotnet build
+#    - name: Build
+#      run: dotnet build --configuration Release --no-restore --framework netcoreapp3.1
     - name: Test
-      run: dotnet test DarabonbaUnitTests/ /p:AltCover=true
+      run: dotnet test DarabonbaUnitTests/ /p:AltCover=true --framework netcoreapp3.1
       env:
         CA: ${{ secrets.CA }}
     - name: CodeCov
       run: bash <(curl -s https://codecov.io/bash)
+
+  test-windows:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        framework: [ net45, netcoreapp3.1 ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '3.x'
+
+      - name: Restore dependencies
+        run: dotnet restore DarabonbaUnitTests/DarabonbaUnitTests.csproj
+
+      - name: Ensure Tests Compile
+        run: dotnet build DarabonbaUnitTests/DarabonbaUnitTests.csproj --configuration Debug --framework ${{ matrix.framework }}
+
+      - name: Run Unit Tests
+        run: dotnet test DarabonbaUnitTests/DarabonbaUnitTests.csproj --no-build --logger "trx;LogFileName=TestResults_${{ matrix.framework }}.trx" --framework ${{ matrix.framework }}
+        env:
+          CA: ${{ secrets.CA }}
