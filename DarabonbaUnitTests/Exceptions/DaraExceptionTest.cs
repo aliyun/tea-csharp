@@ -18,7 +18,7 @@ namespace DaraUnitTests
             {
                 Message = "message",
                 Code = "200",
-                DataResult = new Dictionary<string, object>
+                Data = new Dictionary<string, object>
                 {
                     { "test", "test" }
                 }
@@ -75,6 +75,7 @@ namespace DaraUnitTests
             });
             Assert.NotNull(daraException);
             Assert.NotNull(daraException.DataResult);
+            Assert.Equal("test", daraException.Data["test"]);
 
             daraException = new DaraException(new Dictionary<string, object>
             {
@@ -124,6 +125,7 @@ namespace DaraUnitTests
             Assert.Equal("message", daraException.Message);
             Assert.Equal("description", daraException.Description);
             Assert.Equal(200, daraException.StatusCode);
+            Assert.Equal("test", daraException.DataResult["test"]);
             Assert.Equal("ImplicitDeny", DictUtils.GetDicValue(daraException.AccessDeniedDetail, "NoPermissionType"));
 
             daraException = new DaraException(new Dictionary<string, object>
@@ -160,7 +162,7 @@ namespace DaraUnitTests
                     {
                         { "NoPermissionType", "ImplicitDeny" }
                     },
-                    DataResult = new Dictionary<string, object>
+                    Data = new Dictionary<string, object>
                     {
                         { "test", "test" }
                     }
@@ -172,6 +174,7 @@ namespace DaraUnitTests
                 Assert.Equal("200", e.Code);
                 Assert.Equal("ImplicitDeny", DictUtils.GetDicValue(e.AccessDeniedDetail, "NoPermissionType"));
                 Assert.Equal("test", DictUtils.GetDicValue(e.DataResult, "test"));
+                Assert.Equal("test", e.DataResult["test"]);
                 Assert.Equal(0, e.StatusCode);
             }
 
@@ -197,7 +200,11 @@ namespace DaraUnitTests
                 throw new TestException
                 {
                     Message = "message",
-                    Code = "400"
+                    Code = "400",
+                    Data = new Dictionary<string, object>
+                    {
+                        { "test", "test" }
+                    }
                 };
             }
             catch (DaraException e)
@@ -205,7 +212,7 @@ namespace DaraUnitTests
                 Assert.Equal("message", e.Message);
                 Assert.Equal("400", e.Code);
                 Assert.Null(e.AccessDeniedDetail);
-                Assert.Null(e.DataResult);
+                Assert.Equal("test", e.Data["test"]);
             }
         }
     }

@@ -26,7 +26,11 @@ namespace DaraUnitTests
         {
             _file.Close();
             System.IO.File.Delete(tempTestFile);
+#if NET45
+            return Task.FromResult(0);
+#else
             return Task.CompletedTask;
+#endif
         }
 
         [Fact]

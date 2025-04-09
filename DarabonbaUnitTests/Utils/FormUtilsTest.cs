@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -48,8 +49,9 @@ namespace DaraUnitTests.Utils
                 "string\r\n" +
                 "--boundary--\r\n", formStr);
 
-            string path = System.AppDomain.CurrentDomain.BaseDirectory;
-            FileStream file = File.OpenRead("../../../../DarabonbaUnitTests/Fixtures/test.json");
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            var testPath = Path.Combine(basePath, "test.json");
+            var file = File.OpenRead(testPath);
             FileField fileField = new FileField
             {
                 Filename = "fakefilename",

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,7 +9,7 @@ namespace Darabonba.Exceptions
     {
         private string customCode;
         private string customMessage;
-        private Dictionary<string, object> customDataResult;
+        private Dictionary<string, object> customData;
         private int customStatusCode;
         private string customDescription;
         private Dictionary<string, object> customAccessDeniedDetail;
@@ -31,10 +30,10 @@ namespace Darabonba.Exceptions
             set { customMessage = value; SetInternalField("message", value); }
         }
         
-        public new Dictionary<string, object> DataResult
+        public new Dictionary<string, object> Data
         {
-            get { return customDataResult ?? base.DataResult; }
-            set { customDataResult = value; SetInternalField("data", value); }
+            get { return customData ?? base.DataResult; }
+            set { customData = value; SetInternalField("data", value); }
         }
         
         public new int StatusCode
@@ -71,8 +70,8 @@ namespace Darabonba.Exceptions
             Code = base.Code;
             StatusCode = base.StatusCode;
             Description = base.Description;
-            DataResult = base.DataResult;
             AccessDeniedDetail = base.AccessDeniedDetail;
+            Data = base.DataResult;
         }
     }
 }
