@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Darabonba.Models
+namespace Darabonba.Runtime
 {
     public class ExtendsParameters : Model
     {

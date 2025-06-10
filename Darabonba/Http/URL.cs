@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 
-namespace Darabonba
+namespace Darabonba.Http
 {
     public class URL
     {

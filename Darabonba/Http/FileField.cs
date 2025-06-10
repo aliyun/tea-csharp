@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Darabonba.Models
+namespace Darabonba.Http
 {
     public class FileField
     {

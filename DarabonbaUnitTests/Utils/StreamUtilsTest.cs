@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using Darabonba.Models;
+using Darabonba.Http;
 using Darabonba.Utils;
 using Xunit;
 using System.Net;

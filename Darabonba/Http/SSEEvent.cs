@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Darabonba;
 
-namespace Darabonba.Models
+namespace Darabonba.Http
 {
     public class SSEEvent : Model
     {

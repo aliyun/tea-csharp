@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Darabonba.RetryPolicy;
 
-namespace Darabonba.Models
+namespace Darabonba.Runtime
 {
     public class RuntimeOptions : Model
     {

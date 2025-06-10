@@ -1,4 +1,4 @@
-using Darabonba;
+using Darabonba.Http;
 using Xunit;
 
 namespace DaraUnitTests

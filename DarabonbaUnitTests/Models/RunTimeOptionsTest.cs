@@ -23,7 +23,7 @@ namespace DaraUnitTests.Models
             Assert.Null(runtimeOptions.RetryOptions);
         }
 
-        private static Darabonba.Models.RuntimeOptions Test(Darabonba.Models.RuntimeOptions runtimeOptions)
+        private static Darabonba.Runtime.RuntimeOptions Test(Darabonba.Runtime.RuntimeOptions runtimeOptions)
         {
             return runtimeOptions;
         }
