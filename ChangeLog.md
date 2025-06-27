@@ -1,3 +1,6 @@
+### 2025-04-10 Version 1.0.0
+* Release official version 1.0.0
+
 ### 2025-04-10 Version 1.0.0-preview.3
 * fix: solve empty data in exception
 
