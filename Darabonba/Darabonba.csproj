@@ -16,7 +16,7 @@
     <AssemblyName>Darabonba</AssemblyName>
     <Version>1.0.0</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <LangVersion>8</LangVersion>
+    <LangVersion>5</LangVersion>
   </PropertyGroup>
 
   <!-- Conditionally obtain references for the .NET Framework 4.5 target -->
@@ -51,9 +51,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net45' ">
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.1"/>
   </ItemGroup>
 </Project>

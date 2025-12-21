@@ -112,25 +112,6 @@ namespace Darabonba
             }
         }
         
-        public static async Task<Response> DoSSEActionAsync(Request request, Dictionary<string, object> runtimeOptions)
-        {
-            int timeout;
-            var url = ComposeUrl(request);
-            Uri uri = new Uri(url);
-            HttpRequestMessage req = GetRequestMessage(request, runtimeOptions, out timeout);
-
-            try
-            {
-                HttpClient httpClient = HttpClientUtils.GetOrAddHttpClient(request.Protocol, uri.Host, uri.Port, runtimeOptions);
-                HttpResponseMessage response =  await httpClient.SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
-                return new Response(response);
-            }
-            catch (TaskCanceledException)
-            {
-                throw new WebException("operation is timeout");
-            }
-        }
-
         public static async Task<Response> DoActionAsync(Request request)
         {
             return await DoActionAsync(request, new Dictionary<string, object>());
@@ -146,9 +127,7 @@ namespace Darabonba
             try
             {
                 HttpClient httpClient = HttpClientUtils.GetOrAddHttpClient(request.Protocol, uri.Host, uri.Port, runtimeOptions);
-                // HttpResponseMessage response = await httpClient.SendAsync(req, new CancellationTokenSource(timeout).Token);
-                HttpResponseMessage response = await httpClient.SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
-                response.EnsureSuccessStatusCode();
+                HttpResponseMessage response = await httpClient.SendAsync(req, new CancellationTokenSource(timeout).Token);
                 return new Response(response);
             }
             catch (TaskCanceledException)
