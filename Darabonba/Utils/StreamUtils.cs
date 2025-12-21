@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Darabonba.Models;
 
@@ -230,7 +232,36 @@ namespace Darabonba.Utils
 
             return sseEvent;
         }
-
+        
+#if !NET45
+        public static async IAsyncEnumerable<SSEEvent> ReadAsSSEAsync(Stream stream)
+        {
+            using (var reader = new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, bufferSize: 1024, leaveOpen: true))
+            {
+                var buffer = new char[128];
+                var rest = string.Empty;
+                int count;
+        
+        
+                while (!reader.EndOfStream)
+                {
+                    count = await reader.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+                    var chunk = new string(buffer, 0, count);
+        
+                    var eventResult = TryGetEvents(rest, chunk);
+                    rest = eventResult.Remain;
+        
+                    if (eventResult.Events != null && eventResult.Events.Count > 0)
+                    {
+                        foreach (var @event in eventResult.Events)
+                        {
+                            yield return @event;
+                        }
+                    }
+                }
+            }
+        }
+#endif
 
         public static IEnumerable<SSEEvent> ReadAsSSE(Stream stream)
         {
