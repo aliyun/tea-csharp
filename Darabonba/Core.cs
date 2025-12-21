@@ -91,6 +91,45 @@ namespace Darabonba
                 throw new WebException("operation is timeout");
             }
         }
+        
+        
+        public static Response DoSSEAction(Request request, Dictionary<string, object> runtimeOptions)
+        {
+            int timeout;
+            var url = ComposeUrl(request);
+            Uri uri = new Uri(url);
+            HttpRequestMessage req = GetRequestMessage(request, runtimeOptions, out timeout);
+
+            try
+            {
+                HttpClient httpClient = HttpClientUtils.GetOrAddHttpClient(request.Protocol, uri.Host, uri.Port, runtimeOptions);
+                HttpResponseMessage response =  httpClient.SendAsync(req, HttpCompletionOption.ResponseHeadersRead).Result;
+                return new Response(response);
+            }
+            catch (TaskCanceledException)
+            {
+                throw new WebException("operation is timeout");
+            }
+        }
+        
+        public static async Task<Response> DoSSEActionAsync(Request request, Dictionary<string, object> runtimeOptions)
+        {
+            int timeout;
+            var url = ComposeUrl(request);
+            Uri uri = new Uri(url);
+            HttpRequestMessage req = GetRequestMessage(request, runtimeOptions, out timeout);
+
+            try
+            {
+                HttpClient httpClient = HttpClientUtils.GetOrAddHttpClient(request.Protocol, uri.Host, uri.Port, runtimeOptions);
+                HttpResponseMessage response =  await httpClient.SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
+                return new Response(response);
+            }
+            catch (TaskCanceledException)
+            {
+                throw new WebException("operation is timeout");
+            }
+        }
 
         public static async Task<Response> DoActionAsync(Request request)
         {
@@ -107,7 +146,9 @@ namespace Darabonba
             try
             {
                 HttpClient httpClient = HttpClientUtils.GetOrAddHttpClient(request.Protocol, uri.Host, uri.Port, runtimeOptions);
-                HttpResponseMessage response = await httpClient.SendAsync(req, new CancellationTokenSource(timeout).Token);
+                // HttpResponseMessage response = await httpClient.SendAsync(req, new CancellationTokenSource(timeout).Token);
+                HttpResponseMessage response = await httpClient.SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
                 return new Response(response);
             }
             catch (TaskCanceledException)
