@@ -192,6 +192,45 @@ namespace TeaUnitTests
         }
 
         [Fact]
+        public void TestEmptyStrongTypeDictionaryMapping()
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            
+            Dictionary<string, object> emptyDict = new Dictionary<string, object>();
+            dic.Add("Content", emptyDict);
+            
+            TestRegModel model = TeaModel.ToObject<TestRegModel>(dic);
+            Assert.NotNull(model);
+            Assert.NotNull(model.Content);
+            Assert.True(model.Content.Count == 0);
+            
+            Dictionary<string, object> nestedDic = new Dictionary<string, object>();
+            Dictionary<string, object> innerEmptyDict = new Dictionary<string, object>();
+            nestedDic.Add("testNullValueDic", innerEmptyDict);
+            dic["Content"] = nestedDic;
+            
+            model = TeaModel.ToObject<TestRegModel>(dic);
+            Assert.NotNull(model);
+            Assert.NotNull(model.Content);
+            var testNullValueDic = model.Content["testNullValueDic"] as Dictionary<string, object>;
+            Assert.NotNull(testNullValueDic);
+            Assert.True(testNullValueDic.Count == 0);
+            
+            // Dictionary<string, Dictionary<string, TestRegSubModel>>
+            Dictionary<string, object> dicWithEmptyNested = new Dictionary<string, object>();
+            Dictionary<string, Dictionary<string, object>> emptyNestedMap = new Dictionary<string, Dictionary<string, object>>();
+            emptyNestedMap.Add("emptyKey", new Dictionary<string, object>());
+            dicWithEmptyNested.Add("dicNestDic", emptyNestedMap);
+            
+            model = TeaModel.ToObject<TestRegModel>(dicWithEmptyNested);
+            Assert.NotNull(model);
+            Assert.NotNull(model.dicNestDic);
+            Assert.True(model.dicNestDic.ContainsKey("emptyKey"));
+            Assert.NotNull(model.dicNestDic["emptyKey"]);
+            Assert.True(model.dicNestDic["emptyKey"].Count == 0);
+        }
+
+        [Fact]
         public void TestValidator()
         {
             TeaModel modelNull = null;
