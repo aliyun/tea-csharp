@@ -1,3 +1,6 @@
+### 2025-12-30 Version 1.0.1
+* feat: support do sse action
+
 ### 2025-04-10 Version 1.0.0
 * Release official version 1.0.0
 
