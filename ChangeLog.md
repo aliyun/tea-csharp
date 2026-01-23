@@ -1,3 +1,6 @@
+### 2026-01-23 Version 1.1.4
+* Fixed `MapObj()`
+
 ### 2023-05-08 Version 1.1.3
 * Feat: support server certificate custom validation
 
