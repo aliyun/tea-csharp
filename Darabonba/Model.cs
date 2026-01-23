@@ -99,10 +99,6 @@ namespace Darabonba
             else if (typeof(IDictionary).IsAssignableFrom(propertyType))
             {
                 var dic = (IDictionary) value;
-                if (dic.Count == 0)
-                {
-                    return dic;
-                }
                 IDictionary resultDic;
                 if (propertyType.Equals(typeof(IDictionary)))
                 {
@@ -111,6 +107,7 @@ namespace Darabonba
                 else
                 {
                     resultDic = (IDictionary) System.Activator.CreateInstance(propertyType);
+                    // empty dictionary skip
                     var innerType = propertyType.GetGenericArguments() [1];
                     foreach (DictionaryEntry keypair in dic)
                     {
