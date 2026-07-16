@@ -255,7 +255,7 @@ namespace Darabonba
                             continue;
                         }
 
-                        if (ctx.RetriesAttempted > retryCondition.MaxAttempts)
+                        if (ctx.RetriesAttempted >= retryCondition.MaxAttempts)
                         {
                             return false;
                         }

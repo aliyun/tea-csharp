@@ -349,7 +349,7 @@ namespace DaraUnitTests
                 NoRetryCondition = new List<RetryCondition> { retryCondition3 }
             };
 
-            Assert.True(Core.ShouldRetry(retryOptions, retryPolicyContext));
+            Assert.False(Core.ShouldRetry(retryOptions, retryPolicyContext));
 
             retryPolicyContext = new RetryPolicyContext
             {
@@ -409,7 +409,7 @@ namespace DaraUnitTests
                 }
             };
 
-            Assert.True(Core.ShouldRetry(retryOptions, retryPolicyContext));
+            Assert.False(Core.ShouldRetry(retryOptions, retryPolicyContext));
 
             retryPolicyContext = new RetryPolicyContext
             {
@@ -460,6 +460,37 @@ namespace DaraUnitTests
                 }
             };
             Assert.False(Core.ShouldRetry(retryOptions, retryPolicyContext));
+        }
+
+        [Fact]
+        public void TestShouldRetryMaxAttemptsBoundary()
+        {
+            var retryCondition = new RetryCondition
+            {
+                MaxAttempts = 2,
+                Exception = new List<string> { "AException" }
+            };
+            var retryOptions = new RetryOptions
+            {
+                Retryable = true,
+                RetryCondition = new List<RetryCondition> { retryCondition }
+            };
+            var exception = new AException
+            {
+                Message = "AException",
+                Code = "AExceptionCode"
+            };
+
+            Assert.True(Core.ShouldRetry(retryOptions, new RetryPolicyContext
+            {
+                RetriesAttempted = 1,
+                Exception = exception
+            }));
+            Assert.False(Core.ShouldRetry(retryOptions, new RetryPolicyContext
+            {
+                RetriesAttempted = 2,
+                Exception = exception
+            }));
         }
 
         [Fact]
