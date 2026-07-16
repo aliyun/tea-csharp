@@ -1,3 +1,6 @@
+### 2026-07-16 Version 1.0.2
+* fix: match retryCondition.Exception by exception type name, not Message
+
 ### 2025-12-30 Version 1.0.1
 * feat: support do sse action
 
