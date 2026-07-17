@@ -23,6 +23,13 @@ namespace DaraUnitTests
 
             request.Query = null;
             Assert.NotNull(request.Query);
+
+            request.Protocol = "https";
+            Assert.Equal("https", request.Protocol);
+
+            Assert.Empty(request.ToMap());
+            Assert.Empty(request.ToMap(true));
+            Assert.NotNull(Request.FromMap(new System.Collections.Generic.Dictionary<string, object>()));
         }
     }
 }

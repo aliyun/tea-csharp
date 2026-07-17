@@ -26,6 +26,11 @@ namespace DaraUnitTests
 
             Response responseNull = new Response(null);
             Assert.Null(responseNull.Body);
+
+            Assert.NotNull(response.Body);
+            Assert.Empty(response.ToMap());
+            Assert.Empty(response.ToMap(true));
+            Assert.NotNull(Response.FromMap(new System.Collections.Generic.Dictionary<string, object>()));
         }
     }
 }

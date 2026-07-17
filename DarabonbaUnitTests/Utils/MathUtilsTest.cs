@@ -1,4 +1,5 @@
 using Darabonba.Utils;
+using Darabonba.Exceptions;
 using Xunit;
 
 namespace DaraUnitTests.Utils
@@ -30,6 +31,8 @@ namespace DaraUnitTests.Utils
             Assert.Equal(2, MathUtils.ParseInt(funm));
             double dunm = 2.13d;
             Assert.Equal(2, MathUtils.ParseInt(dunm));
+            var ex = Assert.Throws<DaraException>(() => MathUtils.ParseInt<string>(null));
+            Assert.Equal("Data is null.", ex.Message);
         }
 
         [Fact]
@@ -39,6 +42,8 @@ namespace DaraUnitTests.Utils
             Assert.Equal(2L, MathUtils.ParseLong(funm));
             double dunm = 2.13d;
             Assert.Equal(2L, MathUtils.ParseLong(dunm));
+            var ex = Assert.Throws<DaraException>(() => MathUtils.ParseLong<string>(null));
+            Assert.Equal("Data is null.", ex.Message);
         }
 
         [Fact]
@@ -50,6 +55,8 @@ namespace DaraUnitTests.Utils
             Assert.Equal(2.13f, MathUtils.ParseFloat(funm));
             double dunm = 2.13d;
             Assert.Equal(2.13f, MathUtils.ParseFloat(dunm));
+            var ex = Assert.Throws<DaraException>(() => MathUtils.ParseFloat<string>(null));
+            Assert.Equal("Data is null.", ex.Message);
         }
 
         [Fact]

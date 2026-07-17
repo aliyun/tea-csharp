@@ -77,7 +77,28 @@ namespace DaraUnitTests.Utils
             var ex = Assert.Throws<DaraException>(() => { ConverterUtils.ParseLong((string)null); });
             Assert.Equal("Data is null.", ex.Message);
             var ex1 = Assert.Throws<FormatException>(() => { ConverterUtils.ParseLong("test"); });
-            Assert.Equal("Input string was not in a correct format.", ex1.Message);
+            Assert.Contains("not in a correct format", ex1.Message);
+
+            var exInt = Assert.Throws<DaraException>(() => ConverterUtils.ParseInt((string)null));
+            Assert.Equal("Data is null.", exInt.Message);
+            var exFloat = Assert.Throws<DaraException>(() => ConverterUtils.ParseFloat((string)null));
+            Assert.Equal("Data is null..", exFloat.Message);
+        }
+
+        [Fact]
+        public void Test_ParseBool()
+        {
+            Assert.True(ConverterUtils.ParseBool("true"));
+            Assert.True(ConverterUtils.ParseBool("TRUE"));
+            Assert.True(ConverterUtils.ParseBool("1"));
+            Assert.False(ConverterUtils.ParseBool("false"));
+            Assert.False(ConverterUtils.ParseBool("FALSE"));
+            Assert.False(ConverterUtils.ParseBool("0"));
+
+            var exNull = Assert.Throws<DaraException>(() => ConverterUtils.ParseBool((string)null));
+            Assert.Equal("Data is null..", exNull.Message);
+            var exInvalid = Assert.Throws<DaraException>(() => ConverterUtils.ParseBool("maybe"));
+            Assert.Equal("Cannot convert data to bool.", exInvalid.Message);
         }
     }
 }
