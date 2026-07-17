@@ -237,7 +237,8 @@ namespace Darabonba
                 {
                     foreach (var noRetryCondition in noRetryConditions)
                     {
-                        if (DictUtils.Contains(noRetryCondition.Exception, daraException.Message) ||
+                        // Match by exception type name (parity with other langs: ex.name / GetName()), not Message.
+                        if (DictUtils.Contains(noRetryCondition.Exception, daraException.GetType().Name) ||
                             DictUtils.Contains(noRetryCondition.ErrorCode, daraException.Code))
                         {
                             return false;
@@ -248,7 +249,7 @@ namespace Darabonba
                 {
                     foreach (var retryCondition in retryConditions)
                     {
-                        if (!DictUtils.Contains(retryCondition.Exception, daraException.Message) &&
+                        if (!DictUtils.Contains(retryCondition.Exception, daraException.GetType().Name) &&
                             !DictUtils.Contains(retryCondition.ErrorCode, daraException.Code))
                         {
                             continue;
@@ -304,7 +305,8 @@ namespace Darabonba
                     {
                         foreach (var retryCondition in retryConditions)
                         {
-                            if (!DictUtils.Contains(retryCondition.Exception, daraException.Message) && !DictUtils.Contains(retryCondition.ErrorCode, daraException.Code))
+                            // Match by exception type name (parity with other langs: ex.name / GetName()), not Message.
+                            if (!DictUtils.Contains(retryCondition.Exception, daraException.GetType().Name) && !DictUtils.Contains(retryCondition.ErrorCode, daraException.Code))
                             {
                                 continue;
                             }

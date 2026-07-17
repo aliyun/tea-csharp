@@ -425,6 +425,44 @@ namespace DaraUnitTests
         }
 
         [Fact]
+        public void TestShouldRetryMatchesExceptionTypeNameNotMessage()
+        {
+            var retryCondition = new RetryCondition
+            {
+                MaxAttempts = 3,
+                Exception = new List<string> { "AException" }
+            };
+            var retryOptions = new RetryOptions
+            {
+                Retryable = true,
+                RetryCondition = new List<RetryCondition> { retryCondition }
+            };
+
+            // Config lists type name; Message is a human-readable string and must not be used for matching.
+            var retryPolicyContext = new RetryPolicyContext
+            {
+                RetriesAttempted = 1,
+                Exception = new AException
+                {
+                    Message = "something went wrong",
+                    Code = "SomeCode"
+                }
+            };
+            Assert.True(Core.ShouldRetry(retryOptions, retryPolicyContext));
+
+            retryPolicyContext = new RetryPolicyContext
+            {
+                RetriesAttempted = 1,
+                Exception = new BException
+                {
+                    Message = "AException",
+                    Code = "OtherCode"
+                }
+            };
+            Assert.False(Core.ShouldRetry(retryOptions, retryPolicyContext));
+        }
+
+        [Fact]
         public void TestGetBackoffTime()
         {
             Dictionary<string, object> dic = new Dictionary<string, object>();
@@ -735,7 +773,8 @@ namespace DaraUnitTests
                 RetryCondition = new List<RetryCondition> { retryCondition },
                 NoRetryCondition = null
             };
-            Assert.Equal(100, Core.GetBackoffDelay(retryOptions, retryPolicyContext));
+            // GetBackoffDelay does not gate on Retryable; type-name match still applies backoff.
+            Assert.Equal(400, Core.GetBackoffDelay(retryOptions, retryPolicyContext));
 
             retryOptions = new RetryOptions
             {
@@ -743,7 +782,18 @@ namespace DaraUnitTests
                 RetryCondition = new List<RetryCondition> { retryCondition },
                 NoRetryCondition = null
             };
-            Assert.Equal(100, Core.GetBackoffDelay(retryOptions, retryPolicyContext));
+            // Match by type name ThrottlingException even when Message is unset / not the type name.
+            Assert.Equal(400, Core.GetBackoffDelay(retryOptions, retryPolicyContext));
+
+            retryPolicyContext = new RetryPolicyContext
+            {
+                RetriesAttempted = 1,
+                Exception = new ThrottlingException
+                {
+                    Message = "Request was throttled"
+                }
+            };
+            Assert.Equal(400, Core.GetBackoffDelay(retryOptions, retryPolicyContext));
 
             retryPolicyContext = new RetryPolicyContext
             {
