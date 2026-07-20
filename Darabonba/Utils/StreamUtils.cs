@@ -257,5 +257,36 @@ namespace Darabonba.Utils
                 }
             }
         }
+
+#if NETSTANDARD2_1 || NETCOREAPP3_1_OR_GREATER || NET5_0_OR_GREATER
+        public static async System.Collections.Generic.IAsyncEnumerable<SSEEvent> ReadAsSSEAsync(
+            Stream stream,
+            [System.Runtime.CompilerServices.EnumeratorCancellation] System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            using (var reader = new StreamReader(stream))
+            {
+                var buffer = new char[4096];
+                var rest = string.Empty;
+                int count;
+
+                while ((count = await reader.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    var chunk = new string(buffer, 0, count);
+
+                    var eventResult = TryGetEvents(rest, chunk);
+                    rest = eventResult.Remain;
+
+                    if (eventResult.Events != null && eventResult.Events.Count > 0)
+                    {
+                        foreach (var @event in eventResult.Events)
+                        {
+                            yield return @event;
+                        }
+                    }
+                }
+            }
+        }
+#endif
     }
 }

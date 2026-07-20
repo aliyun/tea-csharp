@@ -538,6 +538,41 @@ namespace DaraUnitTests.Utils
             }
         }
 
+#if NETCOREAPP3_1_OR_GREATER || NETSTANDARD2_1 || NET5_0_OR_GREATER
+        [Fact]
+        public async Task Test_ReadAsSSEAsync_FromMemory()
+        {
+            string payload = "id: sse-test\nevent: flow\nretry: 3\ndata: {\"count\": 0}\n\n" +
+                             "id: sse-test\nevent: flow\nretry: 3\ndata: {\"count\": 1}\n\n";
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(payload)))
+            {
+                var events = new List<SSEEvent>();
+                await foreach (var sseEvent in StreamUtils.ReadAsSSEAsync(stream))
+                {
+                    events.Add(sseEvent);
+                }
+                Assert.Equal(2, events.Count);
+                Assert.Equal("{\"count\": 0}", events[0].Data);
+                Assert.Equal("sse-test", events[0].Id);
+                Assert.Equal("flow", events[0].Event);
+                Assert.Equal(3, events[0].Retry);
+                Assert.Equal("{\"count\": 1}", events[1].Data);
+            }
+        }
+
+        [Fact]
+        public void Test_ReadAsSSE_FromMemory()
+        {
+            string payload = "id: sse-test\nevent: flow\nretry: 3\ndata: {\"count\": 0}\n\n";
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(payload)))
+            {
+                var events = new List<SSEEvent>(StreamUtils.ReadAsSSE(stream));
+                Assert.Single(events);
+                Assert.Equal("{\"count\": 0}", events[0].Data);
+            }
+        }
+#endif
+
         [Fact]
         public async Task Test_ReadAsSSE_WithNoSpaces()
         {
