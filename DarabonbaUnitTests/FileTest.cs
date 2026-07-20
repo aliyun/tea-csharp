@@ -37,8 +37,11 @@ namespace DaraUnitTests
         public async Task Test_All()
         {
             TestPath();
+            TestCreateTime();
             await TestCreateTimeAsync();
+            TestModifyTime();
             await TestModifyTimeAsync();
+            TestLength();
             await TestLengthAsync();
             TestExists();
             await TestExistsAsync();
@@ -48,6 +51,33 @@ namespace DaraUnitTests
             await TestWriteAsync();
             TestCreateWriteStream();
             TestCreateReadStream();
+            TestDispose();
+        }
+
+        private void TestCreateTime()
+        {
+            var createTime = _file.CreateTime();
+            Assert.Equal(_fileInfo.CreationTimeUtc.ToString("yyyy-MM-dd HH:mm:ssZ"), createTime.DateTime.ToString("yyyy-MM-dd HH:mm:ssZ"));
+        }
+
+        private void TestModifyTime()
+        {
+            var modifyTime = _file.ModifyTime();
+            Assert.Equal(_fileInfo.LastWriteTimeUtc.ToString("yyyy-MM-dd HH:mm:ssZ"), modifyTime.DateTime.ToString("yyyy-MM-dd HH:mm:ssZ"));
+        }
+
+        private void TestLength()
+        {
+            Assert.Equal(_fileInfo.Length, _file.Length());
+        }
+
+        private void TestDispose()
+        {
+            string tempDisposeFile = Path.GetTempFileName();
+            System.IO.File.WriteAllText(tempDisposeFile, "dispose");
+            var file = new File(tempDisposeFile);
+            file.Dispose();
+            System.IO.File.Delete(tempDisposeFile);
         }
 
         private void TestPath()

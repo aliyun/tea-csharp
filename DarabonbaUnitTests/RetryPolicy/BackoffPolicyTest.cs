@@ -73,6 +73,59 @@ namespace DaraUnitTests.RetryPolicy
                 { "cap", 60000L }
             });
             Assert.Equal("FullJitterBackoffPolicy", backoffPolicy.GetType().Name);
+
+            var ctx = new RetryPolicyContext { RetriesAttempted = 1 };
+            Assert.NotNull(new FixedBackoffPolicy(100).GetDelayTime(ctx));
+            Assert.NotNull(new RandomBackoffPolicy(2, 60000L).GetDelayTime(ctx));
+            Assert.NotNull(new ExponentialBackoffPolicy(2, 60000L).GetDelayTime(ctx));
+            Assert.NotNull(new EqualJitterBackoffPolicy(2, 60000L).GetDelayTime(ctx));
+            Assert.NotNull(new FullJitterBackoffPolicy(2, 60000L).GetDelayTime(ctx));
+
+            // default cap paths
+            Assert.Equal("RandomBackoffPolicy", BackoffPolicy.NewBackOffPolicy(new Dictionary<string, object>
+            {
+                { "policy", "Random" },
+                { "period", 2 }
+            }).GetType().Name);
+            Assert.Equal("ExponentialBackoffPolicy", BackoffPolicy.NewBackOffPolicy(new Dictionary<string, object>
+            {
+                { "policy", "Exponential" },
+                { "period", 2 }
+            }).GetType().Name);
+            Assert.Equal("EqualJitterBackoffPolicy", BackoffPolicy.NewBackOffPolicy(new Dictionary<string, object>
+            {
+                { "policy", "EqualJitter" },
+                { "period", 2 }
+            }).GetType().Name);
+            Assert.Equal("FullJitterBackoffPolicy", BackoffPolicy.NewBackOffPolicy(new Dictionary<string, object>
+            {
+                { "policy", "FullJitter" },
+                { "period", 2 }
+            }).GetType().Name);
+
+            Assert.Throws<DaraException>(() => BackoffPolicy.NewBackOffPolicy(new Dictionary<string, object>
+            {
+                { "policy", "Fixed" }
+            }));
+            Assert.Throws<DaraException>(() => BackoffPolicy.NewBackOffPolicy(new Dictionary<string, object>()));
+            Assert.Throws<DaraException>(() => BackoffPolicy.NewBackOffPolicy(new Dictionary<string, object>
+            {
+                { "policy", null }
+            }));
+        }
+
+        [Fact]
+        public void Test_RetryOptions_ToMap_FromMap()
+        {
+            var options = new RetryOptions
+            {
+                Retryable = true,
+                RetryCondition = new List<RetryCondition>(),
+                NoRetryCondition = new List<RetryCondition>()
+            };
+            Assert.Empty(options.ToMap());
+            Assert.Empty(options.ToMap(true));
+            Assert.NotNull(RetryOptions.FromMap(new Dictionary<string, object>()));
         }
     }
 }
