@@ -494,6 +494,44 @@ namespace DaraUnitTests
         }
 
         [Fact]
+        public void TestShouldRetryDefaultsMaxAttemptsWhenNull()
+        {
+            // Null MaxAttempts must not retry forever: in C#, n >= null is false.
+            var retryCondition = new RetryCondition
+            {
+                MaxAttempts = null,
+                Exception = new List<string> { "AException" },
+                ErrorCode = new List<string> { "AExceptionCode" }
+            };
+            var retryOptions = new RetryOptions
+            {
+                Retryable = true,
+                RetryCondition = new List<RetryCondition> { retryCondition }
+            };
+            var exception = new AException
+            {
+                Message = "AException",
+                Code = "AExceptionCode"
+            };
+
+            Assert.True(Core.ShouldRetry(retryOptions, new RetryPolicyContext
+            {
+                RetriesAttempted = 1,
+                Exception = exception
+            }));
+            Assert.True(Core.ShouldRetry(retryOptions, new RetryPolicyContext
+            {
+                RetriesAttempted = 2,
+                Exception = exception
+            }));
+            Assert.False(Core.ShouldRetry(retryOptions, new RetryPolicyContext
+            {
+                RetriesAttempted = 3,
+                Exception = exception
+            }));
+        }
+
+        [Fact]
         public void TestGetBackoffTime()
         {
             Dictionary<string, object> dic = new Dictionary<string, object>();

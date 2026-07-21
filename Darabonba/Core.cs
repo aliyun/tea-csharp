@@ -255,7 +255,9 @@ namespace Darabonba
                             continue;
                         }
 
-                        if (ctx.RetriesAttempted >= retryCondition.MaxAttempts)
+                        // Null MaxAttempts must not retry forever: in C#, `n >= null` is false.
+                        int maxAttempts = retryCondition.MaxAttempts ?? DefaultMaxAttempts;
+                        if (ctx.RetriesAttempted >= maxAttempts)
                         {
                             return false;
                         }
