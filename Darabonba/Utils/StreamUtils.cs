@@ -2,8 +2,10 @@ using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Darabonba.Models;
 
 namespace Darabonba.Utils
@@ -259,9 +261,9 @@ namespace Darabonba.Utils
         }
 
 #if NETSTANDARD2_1 || NETCOREAPP3_1_OR_GREATER || NET5_0_OR_GREATER
-        public static async System.Collections.Generic.IAsyncEnumerable<SSEEvent> ReadAsSSEAsync(
+        public static async IAsyncEnumerable<SSEEvent> ReadAsSSEAsync(
             Stream stream,
-            [System.Runtime.CompilerServices.EnumeratorCancellation] System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             using (var reader = new StreamReader(stream))
             {
