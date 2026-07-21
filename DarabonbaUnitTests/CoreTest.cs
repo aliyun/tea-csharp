@@ -173,6 +173,19 @@ namespace DaraUnitTests
             response = await Core.DoActionAsync(request, runtime);
             Assert.NotNull(response);
 
+            // DoSSEActionAsync uses ResponseHeadersRead; still returns a Response
+            Request sseRequest = new Request
+            {
+                Protocol = "https",
+                Method = "GET",
+                Headers = new Dictionary<string, string>(),
+                Pathname = "/s/zh"
+            };
+            sseRequest.Headers["host"] = "www.alibabacloud.com";
+            Response sseResponse = await Core.DoSSEActionAsync(sseRequest, runtime);
+            Assert.NotNull(sseResponse);
+            Assert.True(sseResponse.StatusCode > 0);
+
             Request request404 = new Request
             {
                 Protocol = "https",
