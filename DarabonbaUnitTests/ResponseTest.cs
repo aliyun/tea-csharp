@@ -32,5 +32,19 @@ namespace DaraUnitTests
             Assert.Empty(response.ToMap(true));
             Assert.NotNull(Response.FromMap(new System.Collections.Generic.Dictionary<string, object>()));
         }
+
+        [Fact]
+        public void TestResponseMergesContentHeaders()
+        {
+            HttpResponseMessage httpResponseMessage = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Content = new StringContent("<Error/>", Encoding.UTF8, "text/xml")
+            };
+            Response response = new Response(httpResponseMessage);
+            Assert.NotNull(response.Headers);
+            Assert.True(response.Headers.ContainsKey("content-type"));
+            Assert.Contains("text/xml", response.Headers["content-type"]);
+        }
     }
 }

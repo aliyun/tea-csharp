@@ -1,4 +1,5 @@
-### 2026-07-20 Version 1.0.3
+### 2026-07-21 Version 1.0.3
+* fix: merge HttpContent headers (e.g. Content-Type) into Response.Headers
 * feat: add DoSSEActionAsync and ReadAsSSEAsync (netstandard2.1+)
 * feat: add netstandard2.1 target framework
 

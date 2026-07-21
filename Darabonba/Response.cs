@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+
+using Darabonba.Utils;
 
 namespace Darabonba
 {
@@ -37,6 +40,18 @@ namespace Darabonba
                 StatusCode = (int)response.StatusCode;
                 StatusMessage = "";
                 Headers = Core.ConvertHeaders(response.Headers);
+                // Content-Type / Content-Length live on Content.Headers; merge for callers.
+                if (response.Content != null && response.Content.Headers != null)
+                {
+                    foreach (var item in response.Content.Headers)
+                    {
+                        string key = ConverterUtils.StrToLower(item.Key);
+                        if (!Headers.ContainsKey(key) && item.Value != null && item.Value.Any())
+                        {
+                            Headers.Add(key, item.Value.First());
+                        }
+                    }
+                }
                 _responseAsync = response;
             }
         }
