@@ -1,8 +1,6 @@
-### 2026-07-20 Version 1.0.3
+### 2026-07-23 Version 1.0.2
 * feat: add DoSSEActionAsync and ReadAsSSEAsync (netstandard2.1+)
 * feat: add netstandard2.1 target framework
-
-### 2026-07-16 Version 1.0.2
 * fix: match retryCondition.Exception by exception type name, not Message
 
 ### 2025-12-30 Version 1.0.1
