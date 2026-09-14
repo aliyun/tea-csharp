@@ -28,8 +28,14 @@ namespace DaraUnitTests
             Assert.Null(responseNull.Body);
 
             Assert.NotNull(response.Body);
-            Assert.Empty(response.ToMap());
-            Assert.Empty(response.ToMap(true));
+            var map = response.ToMap();
+            Assert.Equal(200, map["statusCode"]);
+            Assert.False(map.ContainsKey("body"));
+            Assert.Equal(response.StatusCode, Response.FromMap(map).StatusCode);
+            var input = new System.Collections.Generic.Dictionary<string, object> { { "statusCode", 201L }, { "body", response.Body } };
+            var copy = Response.FromMap(input);
+            Assert.Equal(201, copy.StatusCode);
+            Assert.Equal("test", new StreamReader(copy.Body).ReadToEnd());
             Assert.NotNull(Response.FromMap(new System.Collections.Generic.Dictionary<string, object>()));
         }
     }

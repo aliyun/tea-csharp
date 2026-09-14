@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Darabonba.Models
@@ -36,7 +37,7 @@ namespace Darabonba.Models
             return copy;
         }
 
-        public Dictionary<string, object> ToMap(bool noStream = false)
+        public override Dictionary<string, object> ToMapCore(bool noStream = false)
         {
             var map = new Dictionary<string, object>();
 
@@ -53,21 +54,55 @@ namespace Darabonba.Models
             return map;
         }
 
+        public Dictionary<string, object> ToMap(bool noStream = false)
+        {
+            return ToMapCore(noStream);
+        }
+
+        public new static ExtendsParameters FromMap(IDictionary map)
+        {
+            if (map == null)
+            {
+                return null;
+            }
+            var model = new ExtendsParameters();
+            if (map.Contains("headers"))
+            {
+                Dictionary<string, string> value0 = null;
+                if (map["headers"] != null)
+                {
+                    value0 = new Dictionary<string, string>();
+                    foreach (DictionaryEntry item0 in (IDictionary)map["headers"])
+                    {
+                        value0.Add((string)item0.Key, (string)item0.Value);
+                    }
+                }
+                model.Headers = value0;
+            }
+            if (map.Contains("queries"))
+            {
+                Dictionary<string, string> value0 = null;
+                if (map["queries"] != null)
+                {
+                    value0 = new Dictionary<string, string>();
+                    foreach (DictionaryEntry item0 in (IDictionary)map["queries"])
+                    {
+                        value0.Add((string)item0.Key, (string)item0.Value);
+                    }
+                }
+                model.Queries = value0;
+            }
+            return model;
+        }
+
         public static ExtendsParameters FromMap(IDictionary<string, object> map)
         {
-            var model = new ExtendsParameters();
+            return FromMap((IDictionary)(map == null ? null : new Dictionary<string, object>(map)));
+        }
 
-            if (map.ContainsKey("headers"))
-            {
-                model.Headers = map["headers"] as Dictionary<string, string>;
-            }
-
-            if (map.ContainsKey("queries"))
-            {
-                model.Queries = map["queries"] as Dictionary<string, string>;
-            }
-
-            return model;
+        public static ExtendsParameters FromMap(Dictionary<string, object> map)
+        {
+            return FromMap((IDictionary)map);
         }
     }
 }

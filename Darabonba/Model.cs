@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -10,6 +11,30 @@ namespace Darabonba
 {
     public class Model : TeaModel
     {
+        public static Model FromMap(IDictionary map)
+        {
+            return map == null ? null : new Model();
+        }
+
+        public virtual Dictionary<string, object> ToMapCore(bool noStream = false)
+        {
+            var result = new Dictionary<string, object>();
+            PropertyInfo[] properties = GetType().GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                PropertyInfo propertyInfo = properties[i];
+                Type property = propertyInfo.PropertyType;
+                if (typeof(Stream).IsAssignableFrom(property))
+                {
+                    continue;
+                }
+                NameInMapAttribute attribute = propertyInfo.GetCustomAttribute(typeof(NameInMapAttribute)) as NameInMapAttribute;
+                string realName = attribute == null ? propertyInfo.Name : attribute.Name;
+                result.Add(realName, ModelExtensions.ToMapFactory(property, propertyInfo.GetValue(this)));
+            }
+            return result;
+        }
+
         public static T ToObject<T>(IDictionary dict) where T : class, new()
         {
             var result = new T();

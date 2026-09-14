@@ -14,24 +14,7 @@ namespace Darabonba
             {
                 return null;
             }
-            var result = new Dictionary<string, object>();
-            Type type = model.GetType();
-            PropertyInfo[] properties = type.GetProperties();
-            //PropertyInfo
-            for (int i = 0; i < properties.Length; i++)
-            {
-                PropertyInfo propertyInfo = properties[i];
-                Type property = propertyInfo.PropertyType;
-                if (typeof(Stream).IsAssignableFrom(property))
-                {
-                    continue;
-                }
-                NameInMapAttribute attribute = propertyInfo.GetCustomAttribute(typeof(NameInMapAttribute)) as NameInMapAttribute;
-                string realName = attribute == null ? propertyInfo.Name : attribute.Name;
-                result.Add(realName, ToMapFactory(property, propertyInfo.GetValue(model)));
-            }
-
-            return result;
+            return model.ToMapCore();
         }
 
         public static object ToMapFactory(Type type, object value)

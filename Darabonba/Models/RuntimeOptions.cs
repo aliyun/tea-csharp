@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Darabonba.RetryPolicy;
 
@@ -79,15 +80,15 @@ namespace Darabonba.Models
             return copy;
         }
 
-        public Dictionary<string, object> ToMap(bool noStream = false)
+        public override Dictionary<string, object> ToMapCore(bool noStream = false)
         {
             var map = new Dictionary<string, object>();
 
             if (RetryOptions != null)
             {
-                map["retryOptions"] = RetryOptions;
+                map["retryOptions"] = RetryOptions.ToMap();
             }
-            
+
             if (Autoretry != null)
             {
                 map["autoretry"] = Autoretry;
@@ -186,112 +187,116 @@ namespace Darabonba.Models
             return map;
         }
 
-        public static RuntimeOptions FromMap(Dictionary<string, object> map)
+        public Dictionary<string, object> ToMap(bool noStream = false)
         {
+            return ToMapCore(noStream);
+        }
+
+        public new static RuntimeOptions FromMap(IDictionary map)
+        {
+            if (map == null)
+            {
+                return null;
+            }
             var model = new RuntimeOptions();
-
-            if (map.ContainsKey("retryOptions"))
+            if (!map.Contains("maxAttempts") && map.Contains("max_attempts"))
             {
-                model.RetryOptions = (RetryOptions)map["retryOptions"];
+                model.MaxAttempts = map["max_attempts"] == null ? (int?)null : System.Convert.ToInt32(map["max_attempts"]);
             }
-            
-            if (map.ContainsKey("autoretry"))
+            if (!map.Contains("backoffPolicy") && map.Contains("backoff_policy"))
             {
-                model.Autoretry = (bool?)map["autoretry"];
+                model.BackoffPolicy = System.Convert.ToString(map["backoff_policy"]);
             }
-
-            if (map.ContainsKey("ignoreSSL"))
+            if (!map.Contains("backoffPeriod") && map.Contains("backoff_period"))
             {
-                model.IgnoreSSL = (bool?)map["ignoreSSL"];
+                model.BackoffPeriod = map["backoff_period"] == null ? (int?)null : System.Convert.ToInt32(map["backoff_period"]);
             }
-
-            if (map.ContainsKey("key"))
+            if (map.Contains("retryOptions"))
+            {
+                model.RetryOptions = map["retryOptions"] as RetryOptions ?? (map["retryOptions"] == null ? null : Darabonba.RetryPolicy.RetryOptions.FromMap((IDictionary)map["retryOptions"]));
+            }
+            if (map.Contains("autoretry"))
+            {
+                model.Autoretry = map["autoretry"] == null ? (bool?)null : System.Convert.ToBoolean(map["autoretry"]);
+            }
+            if (map.Contains("ignoreSSL"))
+            {
+                model.IgnoreSSL = map["ignoreSSL"] == null ? (bool?)null : System.Convert.ToBoolean(map["ignoreSSL"]);
+            }
+            if (map.Contains("key"))
             {
                 model.Key = (string)map["key"];
             }
-
-            if (map.ContainsKey("cert"))
+            if (map.Contains("cert"))
             {
                 model.Cert = (string)map["cert"];
             }
-
-            if (map.ContainsKey("ca"))
+            if (map.Contains("ca"))
             {
                 model.Ca = (string)map["ca"];
             }
-
-            if (map.ContainsKey("max_attempts"))
+            if (map.Contains("maxAttempts"))
             {
-                model.MaxAttempts = (int?)map["max_attempts"];
+                model.MaxAttempts = map["maxAttempts"] == null ? (int?)null : System.Convert.ToInt32(map["maxAttempts"]);
             }
-
-            if (map.ContainsKey("backoff_policy"))
+            if (map.Contains("backoffPolicy"))
             {
-                model.BackoffPolicy = (string)map["backoff_policy"];
+                model.BackoffPolicy = (string)map["backoffPolicy"];
             }
-
-            if (map.ContainsKey("backoff_period"))
+            if (map.Contains("backoffPeriod"))
             {
-                model.BackoffPeriod = (int?)map["backoff_period"];
+                model.BackoffPeriod = map["backoffPeriod"] == null ? (int?)null : System.Convert.ToInt32(map["backoffPeriod"]);
             }
-
-            if (map.ContainsKey("readTimeout"))
+            if (map.Contains("readTimeout"))
             {
-                model.ReadTimeout = (int?)map["readTimeout"];
+                model.ReadTimeout = map["readTimeout"] == null ? (int?)null : System.Convert.ToInt32(map["readTimeout"]);
             }
-
-            if (map.ContainsKey("connectTimeout"))
+            if (map.Contains("connectTimeout"))
             {
-                model.ConnectTimeout = (int?)map["connectTimeout"];
+                model.ConnectTimeout = map["connectTimeout"] == null ? (int?)null : System.Convert.ToInt32(map["connectTimeout"]);
             }
-
-            if (map.ContainsKey("httpProxy"))
+            if (map.Contains("httpProxy"))
             {
                 model.HttpProxy = (string)map["httpProxy"];
             }
-
-            if (map.ContainsKey("httpsProxy"))
+            if (map.Contains("httpsProxy"))
             {
                 model.HttpsProxy = (string)map["httpsProxy"];
             }
-
-            if (map.ContainsKey("noProxy"))
+            if (map.Contains("noProxy"))
             {
                 model.NoProxy = (string)map["noProxy"];
             }
-
-            if (map.ContainsKey("maxIdleConns"))
+            if (map.Contains("maxIdleConns"))
             {
-                model.MaxIdleConns = (int?)map["maxIdleConns"];
+                model.MaxIdleConns = map["maxIdleConns"] == null ? (int?)null : System.Convert.ToInt32(map["maxIdleConns"]);
             }
-
-            if (map.ContainsKey("localAddr"))
+            if (map.Contains("localAddr"))
             {
                 model.LocalAddr = (string)map["localAddr"];
             }
-
-            if (map.ContainsKey("socks5Proxy"))
+            if (map.Contains("socks5Proxy"))
             {
                 model.Socks5Proxy = (string)map["socks5Proxy"];
             }
-
-            if (map.ContainsKey("socks5NetWork"))
+            if (map.Contains("socks5NetWork"))
             {
                 model.Socks5NetWork = (string)map["socks5NetWork"];
             }
-
-            if (map.ContainsKey("keepAlive"))
+            if (map.Contains("keepAlive"))
             {
-                model.KeepAlive = (bool?)map["keepAlive"];
+                model.KeepAlive = map["keepAlive"] == null ? (bool?)null : System.Convert.ToBoolean(map["keepAlive"]);
             }
-
-            if (map.ContainsKey("extendsParameters"))
+            if (map.Contains("extendsParameters"))
             {
-                var temp = (Dictionary<string, object>)map["extendsParameters"];
-                model.ExtendsParameters = ExtendsParameters.FromMap(temp);
+                model.ExtendsParameters = map["extendsParameters"] == null ? null : Darabonba.Models.ExtendsParameters.FromMap((IDictionary)map["extendsParameters"]);
             }
-
             return model;
+        }
+
+        public static RuntimeOptions FromMap(Dictionary<string, object> map)
+        {
+            return FromMap((IDictionary)map);
         }
     }
 }

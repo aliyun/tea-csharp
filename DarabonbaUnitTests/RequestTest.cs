@@ -27,8 +27,14 @@ namespace DaraUnitTests
             request.Protocol = "https";
             Assert.Equal("https", request.Protocol);
 
-            Assert.Empty(request.ToMap());
-            Assert.Empty(request.ToMap(true));
+            var map = request.ToMap();
+            Assert.Equal("https", map["protocol"]);
+            Assert.Equal("POST", map["method"]);
+            Assert.False(map.ContainsKey("body"));
+            var copy = Request.FromMap(map);
+            Assert.Equal(request.Protocol, copy.Protocol);
+            Assert.Equal(request.Method, copy.Method);
+            Assert.Empty(copy.Query);
             Assert.NotNull(Request.FromMap(new System.Collections.Generic.Dictionary<string, object>()));
         }
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Darabonba;
 
@@ -22,7 +23,7 @@ namespace Darabonba.Models
             return copy;
         }
 
-        public Dictionary<string, object> ToMap(bool noStream = false)
+        public override Dictionary<string, object> ToMapCore(bool noStream = false)
         {
             var map = new Dictionary<string, object>();
             if (Data != null)
@@ -44,26 +45,40 @@ namespace Darabonba.Models
             return map;
         }
 
-        public static SSEEvent FromMap(Dictionary<string, object> map)
+        public Dictionary<string, object> ToMap(bool noStream = false)
         {
+            return ToMapCore(noStream);
+        }
+
+        public new static SSEEvent FromMap(IDictionary map)
+        {
+            if (map == null)
+            {
+                return null;
+            }
             var model = new SSEEvent();
-            if (map.ContainsKey("data"))
+            if (map.Contains("data"))
             {
                 model.Data = (string)map["data"];
             }
-            if (map.ContainsKey("id"))
+            if (map.Contains("id"))
             {
                 model.Id = (string)map["id"];
             }
-            if (map.ContainsKey("event"))
+            if (map.Contains("event"))
             {
                 model.Event = (string)map["event"];
             }
-            if (map.ContainsKey("retry"))
+            if (map.Contains("retry"))
             {
-                model.Retry = (int?)map["retry"];
+                model.Retry = map["retry"] == null ? (int?)null : System.Convert.ToInt32(map["retry"]);
             }
             return model;
+        }
+
+        public static SSEEvent FromMap(Dictionary<string, object> map)
+        {
+            return FromMap((IDictionary)map);
         }
     }
 }
