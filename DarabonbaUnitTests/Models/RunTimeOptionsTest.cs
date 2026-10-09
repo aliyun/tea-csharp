@@ -121,6 +121,30 @@ namespace DaraUnitTests.Models
             Assert.Null(partial.ExtendsParameters);
         }
 
+        [Fact]
+        public void Test_Ipv4Only_ToMap_FromMap_Copy()
+        {
+            var defaults = new RuntimeOptions();
+            Assert.Null(defaults.Ipv4Only);
+            Assert.False(defaults.ToMap().ContainsKey("ipv4Only"));
+            Assert.Null(RuntimeOptions.FromMap(new Dictionary<string, object>()).Ipv4Only);
+
+            var enabled = new RuntimeOptions { Ipv4Only = true, KeepAlive = false };
+            var map = enabled.ToMap();
+            Assert.Equal(true, map["ipv4Only"]);
+            Assert.True(RuntimeOptions.FromMap(map).Ipv4Only);
+            Assert.True(enabled.Copy().Ipv4Only);
+            Assert.True(enabled.CopyWithoutStream().Ipv4Only);
+
+            var disabled = new RuntimeOptions { Ipv4Only = false };
+            Assert.Equal(false, disabled.ToMap()["ipv4Only"]);
+            Assert.False(RuntimeOptions.FromMap(disabled.ToMap()).Ipv4Only);
+            Assert.Null(RuntimeOptions.FromMap(new Dictionary<string, object> { { "ipv4Only", null } }).Ipv4Only);
+
+            RuntimeOptions converted = new AlibabaCloud.TeaUtil.Models.RuntimeOptions { KeepAlive = true };
+            Assert.Null(converted.Ipv4Only);
+        }
+
         private static RuntimeOptions Test(RuntimeOptions runtimeOptions)
         {
             return runtimeOptions;

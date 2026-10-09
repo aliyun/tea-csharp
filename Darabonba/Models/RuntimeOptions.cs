@@ -61,6 +61,11 @@ namespace Darabonba.Models
         public string Socks5Proxy { get; set; }
         public string Socks5NetWork { get; set; }
         public bool? KeepAlive { get; set; }
+        /// <summary>
+        /// When true, connections opened for this runtime only use IPv4 and hostnames resolve to A records only.
+        /// Requires .NET 5 or later; on other runtimes requests fail with NotSupportedException.
+        /// </summary>
+        public bool? Ipv4Only { get; set; }
         public ExtendsParameters ExtendsParameters { get; set; }
 
         public new void Validate()
@@ -178,6 +183,11 @@ namespace Darabonba.Models
                 map["keepAlive"] = KeepAlive;
             }
 
+            if (Ipv4Only != null)
+            {
+                map["ipv4Only"] = Ipv4Only;
+            }
+
             if (ExtendsParameters != null)
             {
                 map["extendsParameters"] = ExtendsParameters != null ? ExtendsParameters.ToMap(noStream) : null;
@@ -283,6 +293,11 @@ namespace Darabonba.Models
             if (map.ContainsKey("keepAlive"))
             {
                 model.KeepAlive = (bool?)map["keepAlive"];
+            }
+
+            if (map.ContainsKey("ipv4Only"))
+            {
+                model.Ipv4Only = (bool?)map["ipv4Only"];
             }
 
             if (map.ContainsKey("extendsParameters"))

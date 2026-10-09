@@ -30,6 +30,10 @@ namespace Darabonba.Utils
             {
                 key = string.Format("{0}:{1}:{2}", protocol, host, port);
             }
+            if (IsIpv4Only(options))
+            {
+                key += ":ipv4Only";
+            }
             HttpClient httpClient = (HttpClient)httpClients.Get(key);
 
             if(httpClient == null)
@@ -48,6 +52,10 @@ namespace Darabonba.Utils
             bool ignoreSSL = options.Get("ignoreSSL").ToSafeBool(false);
 
 #if NET45
+            if (IsIpv4Only(options))
+            {
+                throw new NotSupportedException("ipv4Only requires .NET 5 or later (SocketsHttpHandler.ConnectCallback) and cannot be enforced on .NET Framework, so the request is refused instead of falling back to dual-stack.");
+            }
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
                                        | SecurityProtocolType.Tls
                                        | SecurityProtocolType.Tls11
@@ -91,6 +99,11 @@ namespace Darabonba.Utils
 
             httpClient = new HttpClient(handler);
 #else
+            if (IsIpv4Only(options))
+            {
+                string ipv4OnlyCa = options.Get("ca").ToSafeString();
+                return new HttpClient(Ipv4OnlyHandlerFactory.Create(proxyUrl, ignoreSSL, ipv4OnlyCa));
+            }
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             if (!string.IsNullOrWhiteSpace(proxyUrl))
             {
@@ -132,6 +145,11 @@ namespace Darabonba.Utils
 #endif
             return httpClient;
 
+        }
+
+        internal static bool IsIpv4Only(Dictionary<string, object> options)
+        {
+            return options.Get("ipv4Only").ToSafeBool(false);
         }
 
 
