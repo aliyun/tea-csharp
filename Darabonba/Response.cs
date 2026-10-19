@@ -37,6 +37,13 @@ namespace Darabonba
                 StatusCode = (int)response.StatusCode;
                 StatusMessage = "";
                 Headers = Core.ConvertHeaders(response.Headers);
+                if (response.Content != null)
+                {
+                    foreach (var header in Core.ConvertHeaders(response.Content.Headers))
+                    {
+                        Headers[header.Key] = header.Value;
+                    }
+                }
                 _responseAsync = response;
             }
         }

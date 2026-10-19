@@ -19,10 +19,12 @@ namespace DaraUnitTests
                 StatusCode = HttpStatusCode.OK,
                 Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes("test")))
             };
+            httpResponseMessage.Content.Headers.TryAddWithoutValidation("Content-Type", "text/xml;charset=utf-8");
             Response response = new Response(httpResponseMessage);
             Assert.NotNull(response);
             Assert.Equal(200, response.StatusCode);
             Assert.Equal("", response.StatusMessage);
+            Assert.Equal(httpResponseMessage.Content.Headers.ContentType.ToString(), response.Headers["content-type"]);
 
             Response responseNull = new Response(null);
             Assert.Null(responseNull.Body);

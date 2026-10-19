@@ -19,10 +19,14 @@
     <LangVersion>5</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard2.1' ">
     <LangVersion>8.0</LangVersion>
-    <DefineConstants>$(DefineConstants);NETSTANDARD2_1</DefineConstants>
+    <DefineConstants>$(DefineConstants);DARA_ASYNC_ENUMERABLES_API</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+  </ItemGroup>
 
   <!-- Conditionally obtain references for the .NET Framework 4.5 target -->
   <!-- .NET 4.5 references, compilation flags and build options -->

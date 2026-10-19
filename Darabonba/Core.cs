@@ -194,7 +194,7 @@ namespace Darabonba
             return result;
         }
 
-        internal static Dictionary<string, string> ConvertHeaders(HttpResponseHeaders headers)
+        internal static Dictionary<string, string> ConvertHeaders(HttpHeaders headers)
         {
             var result = new Dictionary<string, string>();
             var enumerator = headers.GetEnumerator();
