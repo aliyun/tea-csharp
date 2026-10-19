@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Darabonba;
 using DaraUnitTests.Models;
@@ -19,6 +20,40 @@ namespace DaraUnitTests
             [NameInMap("ListNestedList")]
             public List<List<IDictionary>> listNestedList { get; set; }
 
+        }
+
+        public class ScalarModel : Model
+        {
+            public int Count { get; set; }
+
+            public Stream Body { get; set; }
+        }
+
+        [Fact]
+        public void TestToMapOmitsStreamProperties()
+        {
+            using (var body = new MemoryStream(new byte[] { 1, 2, 3 }))
+            {
+                var model = new ScalarModel { Count = 42, Body = body };
+                var map = model.ToMap();
+
+                Assert.Equal(42, map["Count"]);
+                Assert.False(map.ContainsKey("Body"));
+                Assert.True(body.CanRead);
+                Assert.Equal(0L, body.Position);
+            }
+        }
+
+        [Fact]
+        public void TestToObjectMapsInt64ToInt32AndRejectsOverflow()
+        {
+            Assert.Null(Model.ToObject(null, new ScalarModel()));
+
+            var map = new Dictionary<string, object> { { "Count", 42L } };
+            Assert.Equal(42, Model.ToObject<ScalarModel>(map).Count);
+
+            map["Count"] = (long)int.MaxValue + 1;
+            Assert.Throws<OverflowException>(() => Model.ToObject<ScalarModel>(map));
         }
 
         [Fact]

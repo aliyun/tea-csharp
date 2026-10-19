@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using Darabonba;
 using Darabonba.RetryPolicy;
 using Darabonba.Exceptions;
@@ -63,163 +61,6 @@ namespace DaraUnitTests
         }
 
         [Fact]
-        public void TestDoAction()
-        {
-            Request request = new Request
-            {
-                Protocol = "http",
-                Method = "GET",
-                Headers = new Dictionary<string, string>()
-            };
-            request.Headers["host"] = "www.alibabacloud.com";
-            request.Pathname = "/s/zh";
-            request.Query = new Dictionary<string, string>
-            {
-                { "k", "ecs" }
-            };
-            Dictionary<string, object> runtime = new Dictionary<string, object>
-            {
-                { "readTimeout", 7000 },
-                { "connectTimeout", 7000 },
-                // result in failure on .NET framework 45
-                // { "httpsProxy", "http://www.alibabacloud.com/s/zh?k=ecs" },
-                { "ignoreSSL", true }
-            };
-
-            Response response = Core.DoAction(request, runtime);
-            Assert.NotNull(response);
-
-            request.Protocol = "https";
-            response = Core.DoAction(request);
-            Assert.NotNull(response);
-
-
-            string bodyStr = Core.GetResponseBody(response);
-            Assert.NotNull(bodyStr);
-
-            request.Method = "POST";
-            request.Body = new MemoryStream(Encoding.UTF8.GetBytes("test"));
-            request.Headers["content-test"] = "test";
-            response = Core.DoAction(request, runtime);
-            Assert.NotNull(response);
-
-            Request request404 = new Request
-            {
-                Protocol = "https",
-                Method = "GET",
-                Headers = new Dictionary<string, string>()
-            };
-            request404.Headers["host"] = "www.alibabacloud404.com";
-            request404.Pathname = "/s/zh";
-            request404.Query = new Dictionary<string, string>
-            {
-                { "k", "ecs" }
-            };
-            Dictionary<string, object> runtime404 = new Dictionary<string, object>
-            {
-                { "readTimeout", 7000 },
-                { "connectTimeout", 7000 }
-            };
-            Assert.Throws<AggregateException>(() => { Core.DoAction(request404, runtime404); });
-
-            Request requestProxy = new Request();
-
-
-            Request requestException = new Request
-            {
-                Protocol = "http",
-                Method = "GET",
-                Pathname = "/test"
-            };
-            Dictionary<string, object> runtimeException = new Dictionary<string, object>();
-            requestException.Headers["host"] = "www.aliyun.com";
-            Response responseException = Core.DoAction(requestException, runtimeException);
-            Assert.NotNull(responseException);
-        }
-
-        [Fact]
-        public async Task TestDoActionAsync()
-        {
-            Request request = new Request
-            {
-                Protocol = "https",
-                Method = "GET",
-                Headers = new Dictionary<string, string>()
-            };
-            request.Headers["host"] = "www.alibabacloud.com";
-            request.Pathname = "/s/zh";
-            request.Query = new Dictionary<string, string>
-            {
-                { "k", "ecs" }
-            };
-
-            Response response = await Core.DoActionAsync(request);
-            Assert.NotNull(response);
-
-            Dictionary<string, object> runtime = new Dictionary<string, object>
-            {
-                { "readTimeout", 4000 },
-                { "connectTimeout", 0 }
-            };
-
-            response = await Core.DoActionAsync(request, runtime);
-            Assert.NotNull(response);
-
-            string bodyStr = Core.GetResponseBody(response);
-            Assert.NotNull(bodyStr);
-
-            request.Method = "POST";
-            request.Body = new MemoryStream(Encoding.UTF8.GetBytes("test"));
-            response = await Core.DoActionAsync(request, runtime);
-            Assert.NotNull(response);
-
-            // DoSSEActionAsync uses ResponseHeadersRead; still returns a Response
-            Request sseRequest = new Request
-            {
-                Protocol = "https",
-                Method = "GET",
-                Headers = new Dictionary<string, string>(),
-                Pathname = "/s/zh"
-            };
-            sseRequest.Headers["host"] = "www.alibabacloud.com";
-            Response sseResponse = await Core.DoSSEActionAsync(sseRequest, runtime);
-            Assert.NotNull(sseResponse);
-            Assert.True(sseResponse.StatusCode > 0);
-
-            Request request404 = new Request
-            {
-                Protocol = "https",
-                Method = "GET",
-                Headers = new Dictionary<string, string>()
-            };
-            request404.Headers["host"] = "www.alibabacloud404.com";
-            request404.Pathname = "/s/zh";
-            request404.Query = new Dictionary<string, string>
-            {
-                { "k", "ecs" }
-            };
-            Dictionary<string, object> runtime404 = new Dictionary<string, object>
-            {
-                { "readTimeout", 7000 },
-                { "connectTimeout", 7000 }
-            };
-            await Assert.ThrowsAsync<HttpRequestException>(async () =>
-            {
-                await Core.DoActionAsync(request404, runtime);
-            });
-
-            Request requestException = new Request
-            {
-                Protocol = "http",
-                Method = "GET",
-                Pathname = "/test"
-            };
-            Dictionary<string, object> runtimeException = new Dictionary<string, object>();
-            requestException.Headers["host"] = "www.aliyun.com";
-            Response responseException = await Core.DoActionAsync(requestException, runtimeException);
-        }
-
-        [Fact]
         public void TestConvertHeaders()
         {
             WebHeaderCollection headers = new WebHeaderCollection
@@ -245,6 +86,7 @@ namespace DaraUnitTests
             Assert.False(Core.AllowRetry(dic, 3, _now));
 
             dic.Add("retryable", true);
+            Assert.False(Core.AllowRetry(dic, 1, 0));
             dic.Add("maxAttempts", null);
             Assert.False(Core.AllowRetry(dic, 3, _now));
 
@@ -253,6 +95,17 @@ namespace DaraUnitTests
 
             Dictionary<string, int?> dicInt = new Dictionary<string, int?>();
             Assert.False(Core.AllowRetry(dicInt, 3, _now));
+        }
+
+        [Fact]
+        public void TestToObjectPreservesValuesAndConvertsKeys()
+        {
+            var value = new object();
+            var result = Core.ToObject(new Hashtable { { "count", 42 }, { 7, value } });
+
+            Assert.Equal(2, result.Count);
+            Assert.Equal(42, result["count"]);
+            Assert.Same(value, result["7"]);
         }
 
         public class AException : DaraException

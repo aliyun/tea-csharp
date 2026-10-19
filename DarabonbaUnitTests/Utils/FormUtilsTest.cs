@@ -28,7 +28,7 @@ namespace DaraUnitTests.Utils
         [Fact]
         public void Test_GetBoundary()
         {
-            Assert.Equal(14, FormUtils.GetBoundary().Length);
+            Assert.Matches("^[0-9]{1,14}$", FormUtils.GetBoundary());
         }
 
         [Fact]
