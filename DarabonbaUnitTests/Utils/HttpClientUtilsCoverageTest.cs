@@ -171,8 +171,12 @@ namespace DaraUnitTests.Utils
                 names.AddIpAddress(IPAddress.Loopback);
                 request.CertificateExtensions.Add(names.Build());
                 request.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, false, 0, true));
-                return request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-5),
-                    DateTimeOffset.UtcNow.AddDays(1));
+                using (var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-5),
+                    DateTimeOffset.UtcNow.AddDays(1)))
+                {
+                    // Schannel needs a provider-backed private key instead of an ephemeral key.
+                    return new X509Certificate2(certificate.Export(X509ContentType.Pfx));
+                }
             }
         }
 
