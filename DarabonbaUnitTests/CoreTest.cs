@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -245,6 +246,7 @@ namespace DaraUnitTests
             Assert.False(Core.AllowRetry(dic, 3, _now));
 
             dic.Add("retryable", true);
+            Assert.False(Core.AllowRetry(dic, 1, 0));
             dic.Add("maxAttempts", null);
             Assert.False(Core.AllowRetry(dic, 3, _now));
 
@@ -253,6 +255,17 @@ namespace DaraUnitTests
 
             Dictionary<string, int?> dicInt = new Dictionary<string, int?>();
             Assert.False(Core.AllowRetry(dicInt, 3, _now));
+        }
+
+        [Fact]
+        public void TestToObjectPreservesValuesAndConvertsKeys()
+        {
+            var value = new object();
+            var result = Core.ToObject(new Hashtable { { "count", 42 }, { 7, value } });
+
+            Assert.Equal(2, result.Count);
+            Assert.Equal(42, result["count"]);
+            Assert.Same(value, result["7"]);
         }
 
         public class AException : DaraException
@@ -965,21 +978,23 @@ namespace DaraUnitTests
         [Fact]
         public void TestSleep()
         {
-            TimeSpan tsBefore = new TimeSpan(DateTime.Now.Ticks);
+            var stopwatch = Stopwatch.StartNew();
             Core.Sleep(1000);
-            TimeSpan tsAfter = new TimeSpan(DateTime.Now.Ticks);
-            TimeSpan tsSubtract = tsBefore.Subtract(tsAfter).Duration();
-            Assert.InRange(tsSubtract.TotalMilliseconds, 990, 1100);
+            stopwatch.Stop();
+            // Allow Windows timer granularity; scheduling delays do not impose an upper bound.
+            Assert.True(stopwatch.ElapsedMilliseconds >= 980,
+                "Sleep returned too early: " + stopwatch.ElapsedMilliseconds + " ms.");
         }
 
         [Fact]
-        public async void TestSleepAsync()
+        public async Task TestSleepAsync()
         {
-            TimeSpan tsBefore = new TimeSpan(DateTime.Now.Ticks);
+            var stopwatch = Stopwatch.StartNew();
             await Core.SleepAsync(1000);
-            TimeSpan tsAfter = new TimeSpan(DateTime.Now.Ticks);
-            TimeSpan tsSubtract = tsBefore.Subtract(tsAfter).Duration();
-            Assert.InRange(tsSubtract.TotalMilliseconds, 990, 1000000);
+            stopwatch.Stop();
+            // Allow Windows timer granularity; scheduling delays do not impose an upper bound.
+            Assert.True(stopwatch.ElapsedMilliseconds >= 980,
+                "SleepAsync returned too early: " + stopwatch.ElapsedMilliseconds + " ms.");
         }
 
         [Fact]

@@ -34,6 +34,19 @@ namespace DaraUnitTests
         }
 
         [Fact]
+        public void MetadataRefreshesAfterFileIsRecreated()
+        {
+            _file.Close();
+            System.IO.File.Delete(tempTestFile);
+            _file._fileInfo.Refresh();
+            Assert.False(_file._fileInfo.Exists);
+
+            System.IO.File.WriteAllText(tempTestFile, "replacement");
+            Assert.Equal(11, _file.Length());
+            Assert.True(_file._fileInfo.Exists);
+        }
+
+        [Fact]
         public async Task Test_All()
         {
             TestPath();

@@ -8,6 +8,18 @@ namespace DaraUnitTests
     public class ValidatorTest
     {
         [Fact]
+        public void TestMinimumListLength()
+        {
+            var validator = new Validator(new ValidationAttribute { MinLength = 2 }, "items");
+            var items = new List<string> { "first", "second" };
+            validator.ValidateMinLength(items);
+
+            items.RemoveAt(1);
+            Assert.Equal("items is less than min-length: 2",
+                Assert.Throws<ArgumentException>(() => validator.ValidateMinLength(items)).Message);
+        }
+
+        [Fact]
         public void TestDaraValidator()
         {
             Validator validator = new Validator(null, "propertyName");
