@@ -31,7 +31,11 @@ jobs:
       env:
         CA: ${{ secrets.CA }}
     - name: CodeCov
-      run: bash <(curl -s https://codecov.io/bash)
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./DarabonbaUnitTests/coverage.netcoreapp3.1.xml
+        fail_ci_if_error: true
 
   test-windows:
     runs-on: windows-2022
