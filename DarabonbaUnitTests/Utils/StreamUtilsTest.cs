@@ -538,7 +538,7 @@ namespace DaraUnitTests.Utils
             }
         }
 
-#if NETCOREAPP3_1_OR_GREATER || NETSTANDARD2_1 || NET5_0_OR_GREATER
+#if DARA_ASYNC_ENUMERABLES_API
         [Fact]
         public async Task Test_ReadAsSSEAsync_FromMemory()
         {

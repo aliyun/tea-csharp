@@ -260,7 +260,7 @@ namespace Darabonba.Utils
             }
         }
 
-#if NETSTANDARD2_1 || NETCOREAPP3_1_OR_GREATER || NET5_0_OR_GREATER
+#if DARA_ASYNC_ENUMERABLES_API
         public static async IAsyncEnumerable<SSEEvent> ReadAsSSEAsync(
             Stream stream,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
