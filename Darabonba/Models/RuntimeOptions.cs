@@ -17,8 +17,13 @@ namespace Darabonba.Models
             {
                 return null;
             }
+            // 通过已有序列化接口兼容尚未包含新字段的 TeaUtil 版本。
+            object ossPrivateUrl;
+            var map = AlibabaCloud.TeaUtil.Common.ToMap(options);
+            map.TryGetValue("ossPrivateUrl", out ossPrivateUrl);
             return new RuntimeOptions
             {
+                OssPrivateUrl = (string)ossPrivateUrl,
                 Autoretry = options.Autoretry,
                 IgnoreSSL = options.IgnoreSSL,
                 Key = options.Key,
@@ -41,6 +46,12 @@ namespace Darabonba.Models
                 RetryOptions = null
             };
         }
+
+        /// <summary>
+        /// OSS PrivateLink 上传地址（包含 http:// 或 https://），非空时优先于 Config。
+        /// </summary>
+        [NameInMap("ossPrivateUrl")]
+        public string OssPrivateUrl { get; set; }
 
         public RetryOptions RetryOptions { get; set; }
         public bool? Autoretry { get; set; }
@@ -82,6 +93,11 @@ namespace Darabonba.Models
         public Dictionary<string, object> ToMap(bool noStream = false)
         {
             var map = new Dictionary<string, object>();
+
+            if (OssPrivateUrl != null)
+            {
+                map["ossPrivateUrl"] = OssPrivateUrl;
+            }
 
             if (RetryOptions != null)
             {
@@ -189,6 +205,11 @@ namespace Darabonba.Models
         public static RuntimeOptions FromMap(Dictionary<string, object> map)
         {
             var model = new RuntimeOptions();
+
+            if (map.ContainsKey("ossPrivateUrl"))
+            {
+                model.OssPrivateUrl = (string)map["ossPrivateUrl"];
+            }
 
             if (map.ContainsKey("retryOptions"))
             {

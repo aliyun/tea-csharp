@@ -121,6 +121,33 @@ namespace DaraUnitTests.Models
             Assert.Null(partial.ExtendsParameters);
         }
 
+        [Theory]
+        [InlineData("")]
+        [InlineData("http://localhost:8080/prefix")]
+        [InlineData("https://oss.example.test")]
+        public void Test_OssPrivateUrl_RoundTrip(string endpoint)
+        {
+            Assert.False(new RuntimeOptions().ToMap().ContainsKey("ossPrivateUrl"));
+            var options = new RuntimeOptions { OssPrivateUrl = endpoint };
+            Assert.Equal(endpoint, options.ToMap()["ossPrivateUrl"]);
+            Assert.Equal(endpoint, RuntimeOptions.FromMap(options.ToMap()).OssPrivateUrl);
+            Assert.Equal(endpoint, options.Copy().OssPrivateUrl);
+            Assert.Equal(endpoint, options.CopyWithoutStream().OssPrivateUrl);
+            Assert.Equal(endpoint, Darabonba.Model.ToObject<RuntimeOptions>(options.ToMap()).OssPrivateUrl);
+
+            // 模拟已增加字段的 TeaUtil，测试仍可使用旧版依赖编译。
+            RuntimeOptions converted = new TeaRuntimeWithPrivateUrl { OssPrivateUrl = endpoint };
+            Assert.Equal(endpoint, converted.OssPrivateUrl);
+            RuntimeOptions legacy = new AlibabaCloud.TeaUtil.Models.RuntimeOptions();
+            Assert.Null(legacy.OssPrivateUrl);
+        }
+
+        private class TeaRuntimeWithPrivateUrl : AlibabaCloud.TeaUtil.Models.RuntimeOptions
+        {
+            [Tea.NameInMap("ossPrivateUrl")]
+            public new string OssPrivateUrl { get; set; }
+        }
+
         private static RuntimeOptions Test(RuntimeOptions runtimeOptions)
         {
             return runtimeOptions;
