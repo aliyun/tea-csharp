@@ -1,3 +1,6 @@
+### 2026-11-24 Version 1.0.3
+* 新增可选 `RuntimeOptions.OssPrivateUrl`，支持 OSS PrivateLink 上传地址及模型序列化往返。
+
 ### 2026-07-23 Version 1.0.2
 * feat: add DoSSEActionAsync and ReadAsSSEAsync (netstandard2.1+)
 * feat: add netstandard2.1 target framework
